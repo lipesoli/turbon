@@ -598,6 +598,21 @@ else{tp="Potencial de expans\u00e3o";ic="ti-package";bg="var(--blu2)";cl="var(--
 var det="Fat "+M(o.f)+" \u00b7 Ped "+M(o.p)+" \u00b7 SO "+M(o.s)+" \u00b7 ST "+o.ab+"% \u00b7 Cart "+M(o.c);
 el.innerHTML+="<div class=\"opp\"><div class=\"oi\" style=\"background:"+bg+"\"><i class=\"ti "+ic+"\" style=\"color:"+cl+"\"></i></div><div class=\"ob\"><div class=\"ot\">"+o.g+" <span style=\"font-size:10px;color:var(--t3)\">\u00b7 "+o.r+"</span> \u2014 "+tp+"</div><div class=\"od\">"+det+"</div></div><div class=\"ov\"><span class=\"badge "+bc+"\">"+bd+"</span></div></div>";});}
 
+
+function buildCartCards(totDispVl,totMesVl,totPr,totPendVl){
+  var h='<div style="display:flex;align-items:center;gap:0;margin-top:12px;flex-wrap:wrap;overflow-x:auto">';
+  h+='<div style="padding:10px 14px;background:var(--grn2);border-radius:8px;min-width:110px"><div style="font-size:9px;font-weight:700;color:var(--grn3);text-transform:uppercase">Faturar agora</div><div style="font-size:18px;font-weight:800;font-family:DM Mono,monospace;color:var(--grn3)">'+M(totDispVl)+'</div><div style="font-size:9px;color:var(--t3);margin-top:2px">estoque hoje</div></div>';
+  h+='<div style="padding:0 10px;font-size:22px;font-weight:200;color:var(--t3)">+</div>';
+  h+='<div style="padding:10px 14px;background:var(--amb2);border-radius:8px;min-width:110px"><div style="font-size:9px;font-weight:700;color:var(--amb3);text-transform:uppercase">+ Chegadas/mês</div><div style="font-size:18px;font-weight:800;font-family:DM Mono,monospace;color:var(--amb3)">'+M(totMesVl)+'</div><div style="font-size:9px;color:var(--t3);margin-top:2px">incremental</div></div>';
+  h+='<div style="padding:0 10px;font-size:22px;font-weight:200;color:var(--t3)">=</div>';
+  h+='<div style="padding:10px 14px;background:var(--blu2);border-radius:8px;border:2px solid var(--blu);min-width:120px"><div style="font-size:9px;font-weight:700;color:var(--blu3);text-transform:uppercase">Total faturável/mês</div><div style="font-size:18px;font-weight:800;font-family:DM Mono,monospace;color:var(--blu3)">'+M(totDispVl+totMesVl)+'</div><div style="font-size:9px;color:var(--t3);margin-top:2px">soma dos dois</div></div>';
+  h+='<div style="flex:1;min-width:16px"></div>';
+  h+='<div style="padding:10px 14px;background:var(--bg);border:1px solid var(--brd);border-radius:8px;min-width:110px"><div style="font-size:9px;font-weight:700;color:var(--t3);text-transform:uppercase">Programada Jul+</div><div style="font-size:18px;font-weight:800;font-family:DM Mono,monospace;color:var(--t1)">'+M(totPr)+'</div><div style="font-size:9px;color:var(--t3);margin-top:2px">pedidos futuros</div></div>';
+  h+='<div style="padding:10px 14px;background:var(--red2);border-radius:8px;min-width:110px"><div style="font-size:9px;font-weight:700;color:var(--red3);text-transform:uppercase">Sem cobertura</div><div style="font-size:18px;font-weight:800;font-family:DM Mono,monospace;color:var(--red3)">'+M(totPendVl)+'</div><div style="font-size:9px;color:var(--t3);margin-top:2px">sem estoque previsto</div></div>';
+  h+='</div>';
+  return h;
+}
+
 function rCartTop(fR,fC,fS){var el=$("cart-top10");if(!el)return;el.innerHTML="";
 var sgMap={},sqMap={};
 var grps=fC?[fC]:(fR?AG.filter(function(g){return G2R[g]===fR;}):AG);
@@ -661,16 +676,7 @@ h+="<td style=\"text-align:right;font-family:DM Mono,monospace;color:var(--grn3)
 h+="<td style=\"text-align:right;font-family:DM Mono,monospace;color:var(--amb)\">"+M(totMesVl)+"</td>";
 h+="<td style=\"text-align:right;font-family:DM Mono,monospace;color:var(--red)\">"+M(totPendVl)+"</td>";
 h+="</tr></tbody></table></div>";
-h+="<div style=\"display:flex;align-items:center;gap:0;margin-top:12px;flex-wrap:nowrap;overflow-x:auto\">";
-h+="<div style=\"padding:10px 14px;background:var(--grn2);border-radius:8px;min-width:110px\"><div style=\"font-size:9px;font-weight:700;color:var(--grn3);text-transform:uppercase\">Faturar agora</div><div style=\"font-size:18px;font-weight:800;font-family:DM Mono,monospace;color:var(--grn3)\">"+M(totDispVl)+"</div><div style=\"font-size:9px;color:var(--t3);margin-top:2px\">estoque hoje</div></div>";
-h+="<div style=\"padding:0 10px;font-size:22px;font-weight:200;color:var(--t3)\">+</div>";
-h+="<div style=\"padding:10px 14px;background:var(--amb2);border-radius:8px;min-width:110px\"><div style=\"font-size:9px;font-weight:700;color:var(--amb3);text-transform:uppercase\">+ Chegadas/mês</div><div style=\"font-size:18px;font-weight:800;font-family:DM Mono,monospace;color:var(--amb3)\">"+M(totMesVl)+"</div><div style=\"font-size:9px;color:var(--t3);margin-top:2px\">incremental</div></div>";
-h+="<div style=\"padding:0 10px;font-size:22px;font-weight:200;color:var(--t3)\">=</div>";
-h+="<div style=\"padding:10px 14px;background:var(--blu2);border-radius:8px;border:2px solid var(--blu);min-width:120px\"><div style=\"font-size:9px;font-weight:700;color:var(--blu3);text-transform:uppercase\">Total faturável/mês</div><div style=\"font-size:18px;font-weight:800;font-family:DM Mono,monospace;color:var(--blu3)\">"+M(totDispVl+totMesVl)+"</div><div style=\"font-size:9px;color:var(--t3);margin-top:2px\">soma dos dois</div></div>";
-h+="<div style=\"flex:1;min-width:16px\"></div>";
-h+="<div style=\"padding:10px 14px;background:var(--bg);border:1px solid var(--brd);border-radius:8px;min-width:110px\"><div style=\"font-size:9px;font-weight:700;color:var(--t3);text-transform:uppercase\">Programada Jul+</div><div style=\"font-size:18px;font-weight:800;font-family:DM Mono,monospace;color:var(--t1)\">"+M(totPr)+"</div><div style=\"font-size:9px;color:var(--t3);margin-top:2px\">pedidos futuros</div></div>";
-h+="<div style=\"padding:10px 14px;background:var(--red2);border-radius:8px;min-width:110px\"><div style=\"font-size:9px;font-weight:700;color:var(--red3);text-transform:uppercase\">Sem cobertura</div><div style=\"font-size:18px;font-weight:800;font-family:DM Mono,monospace;color:var(--red3)\">"+M(totPendVl)+"</div><div style=\"font-size:9px;color:var(--t3);margin-top:2px\">sem estoque previsto</div></div>";
-h+="</div>";
+h+=buildCartCards(totDispVl,totMesVl,totPr,totPendVl);
 el.innerHTML=h;}
 function rMatrix(fR,fC,ms){var el={"ok":$("mx-ok"),"alto":$("mx-alto"),"risco":$("mx-risco"),"sem":$("mx-sem")};
 if(!el.ok)return;
@@ -1010,6 +1016,7 @@ function rCliMain(fR,fC,fS,ms){
       var cChQt=Math.min(chegaQt,pendQ1); var cChVl=Math.round(cChQt*tk);
       var pQt=cQt-dQt-cChQt; var pVl=Math.round(pQt*tk);
       _uTotDisp+=dVl; _uTotChega+=cChVl; _uTotPend+=pVl;
+      var _prVlSg=0;Object.entries(CGSPR[fC]||{}).forEach(function(kv){var _isg=(ITEM_SG&&ITEM_SG[kv[0].toUpperCase()])||kv[0];if(_isg===sg)_prVlSg+=kv[1].vl;});_uTotPr+=_prVlSg;
       var rowBg=dQt>=cQt?"var(--grn2)":dQt>0?"var(--amb2)":"";
       var stIcon=dQt>=cQt?"\u2705":dQt>0?"\u26a0":"\u274c";
       _uRows+="<tr style='background:"+rowBg+";font-weight:600'>";
@@ -1043,27 +1050,7 @@ function rCliMain(fR,fC,fS,ms){
       uHtml+="<td style='text-align:right;font-family:DM Mono,monospace;color:var(--amb)'>"+M(_uTotChega)+"</td>";
       uHtml+="<td style='text-align:right;font-family:DM Mono,monospace;color:var(--red)'>"+M(_uTotPend)+"</td>";
       uHtml+="</tr></tbody></table></div>";
-      uHtml+="<div style=\'display:flex;align-items:center;gap:0;margin-top:14px;overflow-x:auto\'>";
-      uHtml+="<div style=\'padding:12px 16px;background:var(--grn2);border-radius:8px;min-width:120px\'>";
-      uHtml+="<div style=\'font-size:9px;font-weight:700;color:var(--grn3);text-transform:uppercase\'>Pode faturar agora</div>";
-      uHtml+="<div style=\'font-size:20px;font-weight:800;font-family:DM Mono,monospace;color:var(--grn3);margin-top:4px\'>"+M(_uTotDisp)+"</div>";
-      uHtml+="<div style=\'font-size:9px;color:var(--grn3);opacity:.7;margin-top:2px\'>estoque hoje</div></div>";
-      uHtml+="<div style=\'padding:0 12px;font-size:24px;font-weight:200;color:var(--t3)\'>+</div>";
-      uHtml+="<div style=\'padding:12px 16px;background:var(--amb2);border-radius:8px;min-width:120px\'>";
-      uHtml+="<div style=\'font-size:9px;font-weight:700;color:var(--amb3);text-transform:uppercase\'>Chegadas do m\u00eas</div>";
-      uHtml+="<div style=\'font-size:20px;font-weight:800;font-family:DM Mono,monospace;color:var(--amb3);margin-top:4px\'>"+M(_uTotChega)+"</div>";
-      uHtml+="<div style=\'font-size:9px;color:var(--amb3);opacity:.7;margin-top:2px\'>incremental</div></div>";
-      uHtml+="<div style=\'padding:0 12px;font-size:24px;font-weight:200;color:var(--t3)\'>=</div>";
-      uHtml+="<div style=\'padding:12px 16px;background:var(--blu2);border-radius:8px;border:2px solid var(--blu);min-width:130px\'>";
-      uHtml+="<div style=\'font-size:9px;font-weight:700;color:var(--blu3);text-transform:uppercase\'>Total faturável/mês</div>";
-      uHtml+="<div style=\'font-size:20px;font-weight:800;font-family:DM Mono,monospace;color:var(--blu3);margin-top:4px\'>"+M(_uTotDisp+_uTotChega)+"</div>";
-      uHtml+="<div style=\'font-size:9px;color:var(--blu3);opacity:.7;margin-top:2px\'>soma dos dois</div></div>";
-      uHtml+="<div style=\'flex:1;min-width:20px\'></div>";
-      uHtml+="<div style=\'padding:12px 16px;background:var(--red2);border-radius:8px;min-width:120px\'>";
-      uHtml+="<div style=\'font-size:9px;font-weight:700;color:var(--red3);text-transform:uppercase\'>Sem cobertura</div>";
-      uHtml+="<div style=\'font-size:20px;font-weight:800;font-family:DM Mono,monospace;color:var(--red3);margin-top:4px\'>"+M(_uTotPend)+"</div>";
-      uHtml+="<div style=\'font-size:9px;color:var(--red3);opacity:.7;margin-top:2px\'>sem estoque previsto</div></div>";
-      uHtml+="</div>";
+      uHtml+=buildCartCards(_uTotDisp,_uTotChega,_uTotPr,_uTotPend);
     } else {
       uHtml="<div class='ce' style='color:var(--t3)'>Sem carteira em aberto</div>";
     }
@@ -1281,7 +1268,8 @@ function rProdMain(fR,fC,fS,ms){
     // Media mensal qtd
     var mediaMensal=ms.length>0?Math.round(fq26/ms.length):0;
     // Carteira total deste SG
-    var cartSgTotal=Object.values(SP.sg_cart[fS]||{}).reduce(function(a,v){return a+v.vl;},0);
+    var _sgCart=(SP[fS]||{}).sg_cart||{};
+    var cartSgTotal=Object.values(_sgCart).reduce(function(a,v){return a+v.vl;},0);
 
     // ── KPIs ──
     var kpis=
@@ -1293,7 +1281,7 @@ function rProdMain(fR,fC,fS,ms){
       "<div class='kpi' style='border-left:3px solid var(--amb)'><div class='kl'>Ticket m\u00e9dio</div><div class='kv'>"+M(ticketMed)+"</div><div class='ks nt'>por unidade</div></div>";
 
     // ── Clientes que compram (com YoY) ──
-    var cliData=Object.entries(SP.sg_cli_ytd[fS]||{})
+    var cliData=Object.entries((SP[fS]||{}).sg_cli_ytd||{})
       .filter(function(e){return !fR||e[1].rep===fR;})
       .filter(function(e){return !fC||e[0]===fC;})
       .map(function(e){
@@ -1303,8 +1291,8 @@ function rProdMain(fR,fC,fS,ms){
         var pDyn=qFP(PED,G2R[g]||v.rep,g,fS,2026,ms);
         var fDyn25=qFP(FAT,G2R[g]||v.rep,g,fS,2025,ms);
         var yoyDyn=fDyn25>0?Math.round((fDyn-fDyn25)/fDyn25*100):0;
-        var cartV=(SP.sg_cart[fS]||{})[g]?SP.sg_cart[fS][g].vl:0;
-        var cartQt=(SP.sg_cart[fS]||{})[g]?SP.sg_cart[fS][g].qt:0;
+        var cartV=(_sgCart)[g]?_sgCart[g].vl:0;
+        var cartQt=(_sgCart)[g]?_sgCart[g].qt:0;
         return{g:g,rep:v.rep||G2R[g]||"",fat:fDyn,ped:pDyn,yoy:yoyDyn,cart:cartV,cartQt:cartQt};
       })
       .filter(function(x){return x.fat>0||x.ped>0;})
@@ -1321,7 +1309,7 @@ function rProdMain(fR,fC,fS,ms){
         "<td style='text-align:right;font-family:DM Mono,monospace;color:var(--t3)'>"+M(c.ped)+"</td>"+
         "<td style='text-align:right'><span class='badge b-"+yoyC+"'>"+yoyIcon+(c.yoy>=0?"+":"")+c.yoy+"%</span></td>"+
         "<td style='text-align:right;font-family:DM Mono,monospace;color:"+(c.cart>0?"var(--red)":"var(--t3)")+"'>"+(c.cart>0?M(c.cart):"—")+"</td>"+
-        "<td><div style='height:4px;background:var(--bg);border-radius:2px;width:80px'><div style='height:100%;width:"+w+"%;background:#1856a3;border-radius:2px'></div></div></td>"+(SP.sg_cart&&SP.sg_cart[fS]?"<td style='text-align:right;font-family:DM Mono,monospace;color:"+(SP.sg_cart[fS][c.g]?"var(--amb)":"var(--t3)")+"'>"+(SP.sg_cart[fS][c.g]?SP.sg_cart[fS][c.g].qt.toLocaleString('pt-BR')+" un":"\u2014")+"</td>":"<td>\u2014</td>")+"</tr>";
+        "<td><div style='height:4px;background:var(--bg);border-radius:2px;width:80px'><div style='height:100%;width:"+w+"%;background:#1856a3;border-radius:2px'></div></div></td>"+(Object.keys(_sgCart).length>0?"<td style='text-align:right;font-family:DM Mono,monospace;color:"+(_sgCart[c.g]?"var(--amb)":"var(--t3)")+"'>"+(_sgCart[c.g]?_sgCart[c.g].qt.toLocaleString('pt-BR')+" un":"\u2014")+"</td>":"<td>\u2014</td>")+"</tr>";
     }).join("");
 
     // ── Clientes em queda (YoY < -15%) ──
@@ -1332,7 +1320,7 @@ function rProdMain(fR,fC,fS,ms){
     if(!quedaRows)quedaRows="<div class='ce' style='color:var(--grn3)'>Nenhum cliente com queda significativa</div>";
 
     // ── Clientes que nunca compraram ──
-    var neverList=SP.sg_never[fS]||[];
+    var neverList=(SP[fS]||{}).sg_never||[];
     if(fR)neverList=neverList.filter(function(g){return G2R[g]===fR;});
     var neverScored=neverList.map(function(g){
       var so=qSS(G2R[g]||"",g,fS,2026,ms);
@@ -1409,16 +1397,31 @@ function rProdMain(fR,fC,fS,ms){
       "<div class='cd'><div class='ct2' style='color:var(--red3)'><i class='ti ti-trending-down'></i>Clientes em queda \u2014 oportunidade de reativa\u00e7\u00e3o</div>"+quedaRows+"</div>"+
       "<div class='cd'><div class='ct2' style='color:var(--blu3)'><i class='ti ti-user-plus'></i>Potencial inexplorado \u2014 clientes que nunca compraram este subgrupo</div>"+neverRows+"</div>";
 
-    // ── Carteira em aberto ──
-    var cartItems=Object.entries(SP.sg_cart[fS]||{})
-      .filter(function(e){return !fR||G2R[e[0]]===fR;})
-      .filter(function(e){return !fC||e[0]===fC;})
-      .sort(function(a,b){return b[1].vl-a[1].vl;});
+    // ── Carteira em aberto — construída de CGSIM/CGSPR direto (inclui clientes sem fat) ──
+    var _cartMap={};
+    AG.forEach(function(g){
+      if(fR&&G2R[g]!==fR)return;
+      if(fC&&g!==fC)return;
+      // somar imediata para itens que mapeiam para fS
+      var imVl=0,imQt=0,prVl=0;
+      Object.entries(CGSIM[g]||{}).forEach(function(e){
+        var itemSg=(ITEM_SG&&ITEM_SG[e[0].toUpperCase()])||e[0];
+        if(itemSg===fS){imVl+=e[1].vl;imQt+=e[1].qt;}
+      });
+      Object.entries(CGSPR[g]||{}).forEach(function(e){
+        var itemSg=(ITEM_SG&&ITEM_SG[e[0].toUpperCase()])||e[0];
+        if(itemSg===fS)prVl+=e[1].vl;
+      });
+      if(imVl>0||prVl>0) _cartMap[g]={vl:imVl+prVl,qt:imQt,imVl:imVl,imQt:imQt,prVl:prVl};
+    });
+    var cartItems=Object.entries(_cartMap)
+      .sort(function(a,b){return (b[1].imVl+b[1].prVl)-(a[1].imVl+a[1].prVl);});
     var _cTotDisp=0,_cTotChega=0,_cTotPend=0,_cTotIm=0,_cTotPr=0;
     var cartRows=cartItems.map(function(e){
-      var g=e[0];var cQt=e[1].qt;var cVl=e[1].vl;var tk=cQt>0?cVl/cQt:0;
-      var imDP=(CGSIM[g]||{})[fS]||{qt:0,vl:0};
-      var prDP=(CGSPR[g]||{})[fS]||{qt:0,vl:0};
+      var g=e[0];var cQt=e[1].imQt||0;var cVl=e[1].imVl||0;var tk=cQt>0?cVl/cQt:0;
+      // imDP/prDP: somar via ITEM_SG (CGSIM usa item individual)
+      var imDP={qt:e[1].imQt||0,vl:e[1].imVl||0};
+      var prDP={vl:e[1].prVl||0};
       var imQtP=imDP.qt;var imVlP=imDP.vl;var prVlP=prDP.vl;
       // Alocacao inteligente: se estoque >= carteira total, cada cliente recebe o que precisa
       var totCartQt=cartItems.reduce(function(a,e2){return a+((CGSIM[e2[0]]||{})[fS]||{qt:0}).qt;},0);
@@ -1484,17 +1487,9 @@ function rProdMain(fR,fC,fS,ms){
           +"<td style='text-align:right;font-family:DM Mono,monospace;color:var(--amb)'>"+M(_cTotChega)+"</td>"
           +"<td style='text-align:right;font-family:DM Mono,monospace;color:var(--red)'>"+M(_cTotPend)+"</td>"
           +"</tr></tbody></table>"
-          +"<div style=\'display:flex;align-items:center;gap:0;margin-top:12px\'>"
-          +"<div style=\'padding:10px 14px;background:var(--grn2);border-radius:8px;min-width:110px\'><div style=\'font-size:9px;font-weight:700;color:var(--grn3);text-transform:uppercase\'>Faturar agora</div><div style=\'font-size:18px;font-weight:800;font-family:DM Mono,monospace;color:var(--grn3)\'>"+M(_cTotDisp)+"</div></div>"
-          +"<div style=\'padding:0 10px;font-size:22px;font-weight:200;color:var(--t3)\'>+</div>"
-          +"<div style=\'padding:10px 14px;background:var(--amb2);border-radius:8px;min-width:110px\'><div style=\'font-size:9px;font-weight:700;color:var(--amb3);text-transform:uppercase\'>Chegadas/mês</div><div style=\'font-size:18px;font-weight:800;font-family:DM Mono,monospace;color:var(--amb3)\'>"+M(_cTotChega)+"</div></div>"
-          +"<div style=\'padding:0 10px;font-size:22px;font-weight:200;color:var(--t3)\'>=</div>"
-          +"<div style=\'padding:10px 14px;background:var(--blu2);border-radius:8px;border:2px solid var(--blu);min-width:110px\'><div style=\'font-size:9px;font-weight:700;color:var(--blu3);text-transform:uppercase\'>Total faturável</div><div style=\'font-size:18px;font-weight:800;font-family:DM Mono,monospace;color:var(--blu3)\'>"+M(_cTotDisp+_cTotChega)+"</div></div>"
-          +"<div style=\'flex:1;min-width:16px\'></div>"
-          +"<div style=\'padding:10px 14px;background:var(--red2);border-radius:8px;min-width:110px\'><div style=\'font-size:9px;font-weight:700;color:var(--red3);text-transform:uppercase\'>Sem cobertura</div><div style=\'font-size:18px;font-weight:800;font-family:DM Mono,monospace;color:var(--red3)\'>"+M(_cTotPend)+"</div></div>"
-          +"</div>"
-          :"<div class=\'ce\' style=\'color:var(--grn3)\'>Sem carteira em aberto para este subgrupo</div>")+
-      "</div>";
+          +buildCartCards(_cTotDisp,_cTotChega,_cTotPr,_cTotPend)
+        :"<div class='ce' style='color:var(--t3)'>Sem carteira em aberto para este subgrupo</div>")
+    ;
 
     // Chart data for trend
     var m12=["2025-7","2025-8","2025-9","2025-10","2025-11","2025-12","2026-1","2026-2","2026-3","2026-4","2026-5","2026-6"];
@@ -1534,7 +1529,7 @@ function calcMetaUnit(val,fS){
   if(!meta||meta<=0){el.innerHTML="";return;}
   // Use FQ cube (real quantities) for distribution
   var ytdAll=[1,2,3,4,5,6];
-  var cliQtd=Object.keys(SP.sg_cli_ytd[fS]||{}).map(function(g){
+  var cliQtd=Object.keys((SP[fS]||{}).sg_cli_ytd||{}).map(function(g){
     var rep=G2R[g]||'';
     var qtd=qFP(FQ,rep,g,fS,2026,ytdAll);
     return{g:g,rep:rep,qtd:qtd};
@@ -1841,8 +1836,15 @@ function rRepMain(fR,fC,fS,ms){
           var sg=e[0];
           var imVl=0,imQt=0,prVl=0;
           _repCartGrps.forEach(function(g){
-            var im=(CGSIM[g]||{})[sg];var pr=(CGSPR[g]||{})[sg];
-            if(im){imVl+=im.vl;imQt+=im.qt;}if(pr)prVl+=pr.vl;
+            // CGSIM usa item individual — somar todos que mapeiam para este sg
+            Object.entries(CGSIM[g]||{}).forEach(function(e){
+              var itemSg=(ITEM_SG&&ITEM_SG[e[0].toUpperCase()])||e[0];
+              if(itemSg===sg){imVl+=e[1].vl;imQt+=e[1].qt;}
+            });
+            Object.entries(CGSPR[g]||{}).forEach(function(e){
+              var itemSg=(ITEM_SG&&ITEM_SG[e[0].toUpperCase()])||e[0];
+              if(itemSg===sg)prVl+=e[1].vl;
+            });
           });
           var estKey=(ITEM_SG&&ITEM_SG[sg.toUpperCase()])||sg;
           var est=EST_SG[estKey]||EST_SG[sg]||{};
@@ -1879,6 +1881,7 @@ function rRepMain(fR,fC,fS,ms){
           "<td style='text-align:right;font-family:DM Mono,monospace;color:var(--amb)'>"+M(_rTotCh)+"</td>"+
           "<td style='text-align:right;font-family:DM Mono,monospace;color:var(--red)'>"+M(_rTotPend)+"</td>"+
           "</tr></tbody></table></div>";
+      html+=buildCartCards(_rTotDVl,_rTotCh,_rTotPr,_rTotPend);
       } else {
         html+="<div style='color:var(--t3);padding:8px 0'>Nenhuma carteira em aberto</div>";
       }

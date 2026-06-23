@@ -606,7 +606,7 @@ grps.forEach(function(g){
     if(fS&&r.sg!==fS)return;sgMap[r.sg]=(sgMap[r.sg]||0)+r.vl;sqMap[r.sg]=(sqMap[r.sg]||0)+r.qt;
   });
 });
-var items=Object.entries(sgMap).sort(function(a,b){return b[1]-a[1];}).slice(0,fC?100:10);
+var imMap={};Object.keys(sgMap).forEach(function(sg){var imV=0;grps.forEach(function(g){var im=(CGSIM[g]||{})[sg];if(im)imV+=im.vl||0;});imMap[sg]=imV;});var items=Object.entries(sgMap).sort(function(a,b){return (imMap[b[0]]||0)-(imMap[a[0]]||0);});
 if(!items.length){el.innerHTML="<div class=\"ce\">Sem carteira para o filtro</div>";return;}
 var tV=items.reduce(function(a,r){return a+r[1];},0);
 var totIm=0,totPr=0,totDispVl=0,totMesVl=0,totPendVl=0;

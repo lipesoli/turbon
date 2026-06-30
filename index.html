@@ -908,8 +908,14 @@ function buildCartTable(grps,fS,currMk,byClient){
         var iDVl=Math.round(dQt*ticket);
         var chegaQ=estMq>0?Math.min(estMq,Math.max(0,iImQt-dQt)):0;
         var iCChVl=Math.round(chegaQ*ticket);
-        var saldoJun=Math.max(0,estH-dQt);
-        var chegaJunRestante=Math.max(0,(estMq||0)-chegaQ);
+        // Estoque é compartilhado entre TODOS os clientes -- a carteira imediata de quem
+        // está fora deste cliente/filtro também consome o estoque físico do item
+        var imQtGlobalItem=0;
+        AG.forEach(function(g2){var imG=(CGSIM[g2]||{})[item];if(imG)imQtGlobalItem+=imG.qt||0;});
+        var dQtGlobal=Math.min(estH,imQtGlobalItem);
+        var saldoJun=Math.max(0,estH-dQtGlobal);
+        var chegaQGlobal=estMq>0?Math.min(estMq,Math.max(0,imQtGlobalItem-dQtGlobal)):0;
+        var chegaJunRestante=Math.max(0,(estMq||0)-chegaQGlobal);
         var dispParaAntecipar=saldoJun+chegaJunRestante;
         var iPrQt=iPrQtReal>0?iPrQtReal:(iPr>0&&ticket>0?Math.round(iPr/ticket):0);
         var nxtQt=Math.min(dispParaAntecipar,iPrQt);
@@ -985,13 +991,20 @@ function buildCartTable(grps,fS,currMk,byClient){
   var totIm=0,totPr=0,totDVl=0,totChVl=0,totNxtVl=0,totPend=0;
 
   items.forEach(function(item){
-    var imVl=0,imQt=0,prVl=0,prQtReal=0;
+    var imVl=0,imQt=0,prVl=0,prQtReal=0,imQtGlobal=0,imQtFiltro=0;
     grps.forEach(function(g){
       var im=(CGSIM[g]||{})[item];
       var pr=(CGSPR[g]||{})[item];
       if(im){imVl+=im.vl||0;imQt+=im.qt||0;}
       if(pr){prVl+=pr.vl||0;prQtReal+=pr.qt||0;}
     });
+    // Estoque é compartilhado entre TODOS os clientes (não só os do filtro) -- 
+    // a carteira imediata de quem está FORA do filtro também consome o estoque físico
+    AG.forEach(function(g){
+      var imG=(CGSIM[g]||{})[item];
+      if(imG)imQtGlobal+=imG.qt||0;
+    });
+    imQtFiltro=imQt; // guardar a parcela do filtro para referência
 
     // Estoque por item individual (EST[item]) com fallback para EST_SG
     var est=EST[item]||{};
@@ -1006,17 +1019,20 @@ function buildCartTable(grps,fS,currMk,byClient){
     var estNxt=est.nxt||0; // chegadas previstas para próx. mês (jul)
     var ticket=imQt>0?imVl/imQt:(prQtReal>0?prVl/prQtReal:0);
 
-    // Fat. Imediato: min(estH, imQt) × ticket
+    // Fat. Imediato: min(estH, imQt) × ticket (só a parte do filtro)
     var dQt=Math.min(estH,imQt);
     var dVl=Math.round(dQt*ticket);
 
-    // Fat. c/chegada: se estH=0 e mq>0, usa mq; senão max(0, mq - imQt já atendido)
+    // Fat. c/chegada: usa imQt do filtro
     var chegaQ=estMq>0?Math.min(estMq,Math.max(0,imQt-dQt)):0;
     var cChVl=Math.round(chegaQ*ticket);
 
-    // Fat. próx. mês: saldo de estH após imediata + chegadas de jul, contra carteira programada
-    var saldoJun=Math.max(0,estH-dQt);                    // sobra estoque hoje após atender imediata
-    var chegaJunRestante=Math.max(0,(estMq||0)-chegaQ);   // chegadas jun que sobraram após cobrir imediata
+    // Fat. próx. mês: o estoque já é consumido pela imediata GLOBAL (todos os clientes,
+    // não só os do filtro) -- o saldo sobrando é o que dá pra antecipar
+    var dQtGlobal=Math.min(estH,imQtGlobal);
+    var saldoJun=Math.max(0,estH-dQtGlobal);               // sobra estoque hoje após TODA a imediata (global)
+    var chegaQGlobal=estMq>0?Math.min(estMq,Math.max(0,imQtGlobal-dQtGlobal)):0;
+    var chegaJunRestante=Math.max(0,(estMq||0)-chegaQGlobal); // chegadas jun que sobraram após cobrir imediata global
     var dispParaAntecipar=saldoJun+chegaJunRestante;       // disponível para antecipar jul
     var prQt=prQtReal>0?prQtReal:(prVl>0&&ticket>0?Math.round(prVl/ticket):0);  // carteira programada jul+ (qtd real, com fallback via ticket)
     var nxtQt=Math.min(dispParaAntecipar,prQt);            // antecipação possível

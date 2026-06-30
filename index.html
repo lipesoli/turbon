@@ -115,9 +115,9 @@ html,body{height:100%;overflow:hidden;background:var(--sb)}
   cursor:pointer;outline:none}
 .cf-input::placeholder{color:var(--t3)}
 .cf-input:focus{border-color:rgba(255,255,255,.3);background:rgba(255,255,255,.1)}
-.cf-dropdown{display:none;position:absolute;top:calc(100% + 2px);left:0;right:0;
+.cf-dropdown{display:none;position:fixed;
   background:#1e2a3a;border:1px solid rgba(255,255,255,.15);border-radius:6px;
-  max-height:220px;overflow-y:auto;z-index:999;box-shadow:0 8px 24px rgba(0,0,0,.4)}
+  max-height:min(400px,70vh);overflow-y:auto;z-index:9999;box-shadow:0 12px 32px rgba(0,0,0,.5)}
 .cf-dropdown.open{display:block}
 .cf-search{position:sticky;top:0;padding:6px 8px;background:#1e2a3a;border-bottom:1px solid rgba(255,255,255,.1)}
 .cf-search input{width:100%;box-sizing:border-box;padding:5px 8px;background:rgba(255,255,255,.1);
@@ -150,10 +150,12 @@ html,body{height:100%;overflow:hidden;background:var(--sb)}
 .pbtn2.clr-btn{background:rgba(239,68,68,.1);color:#f87171;font-size:9px}
 .pbtn2.clr-btn:hover{background:rgba(239,68,68,.2)}
 /* ── Botão limpar filtros ──────────────────────────────── */
-.clr-filters{display:none;margin-top:8px;width:100%;padding:5px;font-size:10px;
-  background:rgba(239,68,68,.1);color:#f87171;border:1px solid rgba(239,68,68,.2);
-  border-radius:5px;cursor:pointer;text-align:center;transition:all .2s}
-.clr-filters.visible{display:block}
+.clr-filters{display:block;margin:10px 0 14px;width:100%;padding:7px;font-size:10.5px;font-weight:600;
+  background:rgba(255,255,255,.04);color:var(--sbt);border:1px solid rgba(255,255,255,.08);
+  border-radius:6px;cursor:pointer;text-align:center;transition:all .2s}
+.clr-filters:hover{background:rgba(255,255,255,.08);color:var(--sbta)}
+.clr-filters.visible{background:rgba(239,68,68,.12);color:#f87171;border-color:rgba(239,68,68,.3)}
+.clr-filters.visible:hover{background:rgba(239,68,68,.2)}
 
 
 .mx-cell{background:var(--bg);border-radius:8px;padding:12px;min-height:90px}
@@ -210,21 +212,22 @@ html,body{height:100%;overflow:hidden;background:var(--sb)}
     <button class="pbtn2" id="pb2-12" onclick="clickMes(12,this)">Dez</button>
   </div>
 </div>
+<button class="clr-filters" id="clr-filters-btn" onclick="clrFilters()">✕ Limpar filtros</button>
 <div class="fl">Representante</div>
 <div class="cf-wrap" id="cfw-rep">
   <div class="cf-input" id="cfi-rep" onclick="cfOpen('rep')">Todos</div>
   <div class="cf-chips" id="cfc-rep"></div>
   <div class="cf-dropdown" id="cfd-rep" data-multi="true">
     <div class="cf-search"><input type="text" placeholder="Buscar representante..." oninput="cfSearch('rep',this.value)" onclick="event.stopPropagation()"></div>
-<div class="cf-opt" data-val="AMARAL" onclick="cfClick(this,'rep')"><span class="cf-ck"></span>AMARAL</div>
-<div class="cf-opt" data-val="BALDISSERA" onclick="cfClick(this,'rep')"><span class="cf-ck"></span>BALDISSERA</div>
-<div class="cf-opt" data-val="EQUIPA" onclick="cfClick(this,'rep')"><span class="cf-ck"></span>EQUIPA</div>
 <div class="cf-opt" data-val="FASOLI" onclick="cfClick(this,'rep')"><span class="cf-ck"></span>FASOLI</div>
 <div class="cf-opt" data-val="LOUISE" onclick="cfClick(this,'rep')"><span class="cf-ck"></span>LOUISE</div>
-<div class="cf-opt" data-val="ROBERTA 1P" onclick="cfClick(this,'rep')"><span class="cf-ck"></span>ROBERTA 1P</div>
 <div class="cf-opt" data-val="ROBERTA 3P" onclick="cfClick(this,'rep')"><span class="cf-ck"></span>ROBERTA 3P</div>
-<div class="cf-opt" data-val="SDM" onclick="cfClick(this,'rep')"><span class="cf-ck"></span>SDM</div>
+<div class="cf-opt" data-val="ROBERTA 1P" onclick="cfClick(this,'rep')"><span class="cf-ck"></span>ROBERTA 1P</div>
 <div class="cf-opt" data-val="TRIAD" onclick="cfClick(this,'rep')"><span class="cf-ck"></span>TRIAD</div>
+<div class="cf-opt" data-val="AMARAL" onclick="cfClick(this,'rep')"><span class="cf-ck"></span>AMARAL</div>
+<div class="cf-opt" data-val="SDM" onclick="cfClick(this,'rep')"><span class="cf-ck"></span>SDM</div>
+<div class="cf-opt" data-val="BALDISSERA" onclick="cfClick(this,'rep')"><span class="cf-ck"></span>BALDISSERA</div>
+<div class="cf-opt" data-val="EQUIPA" onclick="cfClick(this,'rep')"><span class="cf-ck"></span>EQUIPA</div>
 
   </div>
 </div>
@@ -234,72 +237,72 @@ html,body{height:100%;overflow:hidden;background:var(--sb)}
   <div class="cf-chips" id="cfc-cli"></div>
   <div class="cf-dropdown" id="cfd-cli" data-multi="true">
     <div class="cf-search"><input type="text" placeholder="Buscar cliente..." oninput="cfSearch('cli',this.value)" onclick="event.stopPropagation()"></div>
-<div class="cf-opt" data-val="2D MARKETPLACE LTDA" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>2D MARKETPLACE LTDA</div>
-<div class="cf-opt" data-val="2ELETRO" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>2ELETRO</div>
-<div class="cf-opt" data-val="A REDE MARKETPLACE" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>A REDE MARKETPLACE</div>
 <div class="cf-opt" data-val="ACME" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>ACME</div>
-<div class="cf-opt" data-val="AGEX GROUP" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>AGEX GROUP</div>
+<div class="cf-opt" data-val="REABILIT MAIS" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>REABILIT MAIS</div>
+<div class="cf-opt" data-val="DERMOMED" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>DERMOMED</div>
+<div class="cf-opt" data-val="MATREN" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>MATREN</div>
+<div class="cf-opt" data-val="MANOCHIO" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>MANOCHIO</div>
+<div class="cf-opt" data-val="MAGAZINE BRASILEIRO" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>MAGAZINE BRASILEIRO</div>
 <div class="cf-opt" data-val="AMAZON B2B" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>AMAZON B2B</div>
-<div class="cf-opt" data-val="BEL MICRO" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>BEL MICRO</div>
-<div class="cf-opt" data-val="BEM ESTAR WEB" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>BEM ESTAR WEB</div>
-<div class="cf-opt" data-val="BFMED" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>BFMED</div>
+<div class="cf-opt" data-val="TT IMPORTS" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>TT IMPORTS</div>
+<div class="cf-opt" data-val="WEBCONTINENTAL" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>WEBCONTINENTAL</div>
+<div class="cf-opt" data-val="HENRY SCHEIN" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>HENRY SCHEIN</div>
+<div class="cf-opt" data-val="MERCADO LIVRE" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>MERCADO LIVRE</div>
+<div class="cf-opt" data-val="TUDAO TECH" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>TUDAO TECH</div>
+<div class="cf-opt" data-val="A REDE MARKETPLACE" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>A REDE MARKETPLACE</div>
+<div class="cf-opt" data-val="MAX FERRAMENTAS" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>MAX FERRAMENTAS</div>
+<div class="cf-opt" data-val="MOSHEE" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>MOSHEE</div>
+<div class="cf-opt" data-val="KIPMED" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>KIPMED</div>
+<div class="cf-opt" data-val="EASY MAGAZINE" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>EASY MAGAZINE</div>
 <div class="cf-opt" data-val="BUMBER MAGAZINE" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>BUMBER MAGAZINE</div>
-<div class="cf-opt" data-val="BWG SHOP" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>BWG SHOP</div>
+<div class="cf-opt" data-val="SGOBE" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>SGOBE</div>
+<div class="cf-opt" data-val="AGEX GROUP" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>AGEX GROUP</div>
+<div class="cf-opt" data-val="VANTTO IMPORT LTDA" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>VANTTO IMPORT LTDA</div>
+<div class="cf-opt" data-val="JLM DISTRIBUIDORA LTDA" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>JLM DISTRIBUIDORA LTDA</div>
+<div class="cf-opt" data-val="SMART CHOICE" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>SMART CHOICE</div>
+<div class="cf-opt" data-val="LOJAS CAMPANA LTDA" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>LOJAS CAMPANA LTDA</div>
+<div class="cf-opt" data-val="F2SELL" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>F2SELL</div>
+<div class="cf-opt" data-val="RIBERMEDICA" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>RIBERMEDICA</div>
+<div class="cf-opt" data-val="SOMA SAUDE" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>SOMA SAUDE</div>
+<div class="cf-opt" data-val="MARCA MEDICA" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>MARCA MEDICA</div>
+<div class="cf-opt" data-val="FELIPE FASOLI HORN" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>FELIPE FASOLI HORN</div>
+<div class="cf-opt" data-val="2D MARKETPLACE LTDA" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>2D MARKETPLACE LTDA</div>
+<div class="cf-opt" data-val="BEL MICRO" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>BEL MICRO</div>
+<div class="cf-opt" data-val="BFMED" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>BFMED</div>
 <div class="cf-opt" data-val="CASA DE VO" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>CASA DE VO</div>
 <div class="cf-opt" data-val="CENTRO ESPIRITA AS ESTRELAS DOURADAS DO SENHOR" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>CENTRO ESPIRITA AS ESTRELAS DOURADAS DO SENHOR</div>
 <div class="cf-opt" data-val="COMERCIAL PENA E LOPES - DULAR" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>COMERCIAL PENA E LOPES - DULAR</div>
-<div class="cf-opt" data-val="DERMOMED" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>DERMOMED</div>
 <div class="cf-opt" data-val="DIRECTIVA PRODUTOS DISTRIBUIDORA LTDA" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>DIRECTIVA PRODUTOS DISTRIBUIDORA LTDA</div>
 <div class="cf-opt" data-val="DORMED" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>DORMED</div>
 <div class="cf-opt" data-val="DROGARIAS NHA CHICA" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>DROGARIAS NHA CHICA</div>
 <div class="cf-opt" data-val="E. ROCHA DA SILVA - PRO ELETRO LTDA" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>E. ROCHA DA SILVA - PRO ELETRO LTDA</div>
-<div class="cf-opt" data-val="EASY MAGAZINE" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>EASY MAGAZINE</div>
-<div class="cf-opt" data-val="ELETRONORTE" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>ELETRONORTE</div>
 <div class="cf-opt" data-val="ENGAGE ELETRO" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>ENGAGE ELETRO</div>
-<div class="cf-opt" data-val="F2SELL" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>F2SELL</div>
-<div class="cf-opt" data-val="FELIPE FASOLI HORN" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>FELIPE FASOLI HORN</div>
-<div class="cf-opt" data-val="GALPAO 12" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>GALPAO 12</div>
-<div class="cf-opt" data-val="HENRY SCHEIN" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>HENRY SCHEIN</div>
 <div class="cf-opt" data-val="IDEAL BRANDS" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>IDEAL BRANDS</div>
 <div class="cf-opt" data-val="IMPACTO III" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>IMPACTO III</div>
 <div class="cf-opt" data-val="INFINITY COMERCIO" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>INFINITY COMERCIO</div>
 <div class="cf-opt" data-val="J S DE CARVALHO - TEM DE TUDO BRASIL" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>J S DE CARVALHO - TEM DE TUDO BRASIL</div>
 <div class="cf-opt" data-val="JANNOTTI E OLIVEIRA" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>JANNOTTI E OLIVEIRA</div>
-<div class="cf-opt" data-val="JLM DISTRIBUIDORA LTDA" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>JLM DISTRIBUIDORA LTDA</div>
 <div class="cf-opt" data-val="KARZEN" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>KARZEN</div>
-<div class="cf-opt" data-val="KIPMED" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>KIPMED</div>
 <div class="cf-opt" data-val="LE MEDICAL" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>LE MEDICAL</div>
-<div class="cf-opt" data-val="LOJAS CAMPANA LTDA" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>LOJAS CAMPANA LTDA</div>
 <div class="cf-opt" data-val="LOJAS MINEIRAS" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>LOJAS MINEIRAS</div>
 <div class="cf-opt" data-val="LOJAS PRESIDENTE LTDA" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>LOJAS PRESIDENTE LTDA</div>
-<div class="cf-opt" data-val="MAGAZINE BRASILEIRO" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>MAGAZINE BRASILEIRO</div>
-<div class="cf-opt" data-val="MANOCHIO" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>MANOCHIO</div>
-<div class="cf-opt" data-val="MARCA MEDICA" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>MARCA MEDICA</div>
-<div class="cf-opt" data-val="MATREN" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>MATREN</div>
-<div class="cf-opt" data-val="MAX FERRAMENTAS" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>MAX FERRAMENTAS</div>
 <div class="cf-opt" data-val="MEGAMOBILY" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>MEGAMOBILY</div>
-<div class="cf-opt" data-val="MERCADO LIVRE" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>MERCADO LIVRE</div>
 <div class="cf-opt" data-val="MOSHE" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>MOSHE</div>
-<div class="cf-opt" data-val="MOSHEE" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>MOSHEE</div>
 <div class="cf-opt" data-val="MPS" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>MPS</div>
 <div class="cf-opt" data-val="NANEX" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>NANEX</div>
 <div class="cf-opt" data-val="ORTOVAN" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>ORTOVAN</div>
 <div class="cf-opt" data-val="PMM NEGOCIOS" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>PMM NEGOCIOS</div>
-<div class="cf-opt" data-val="REABILIT MAIS" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>REABILIT MAIS</div>
-<div class="cf-opt" data-val="RIBERMEDICA" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>RIBERMEDICA</div>
-<div class="cf-opt" data-val="SGOBE" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>SGOBE</div>
-<div class="cf-opt" data-val="SMART CHOICE" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>SMART CHOICE</div>
 <div class="cf-opt" data-val="SNG SUPLEMENTOS" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>SNG SUPLEMENTOS</div>
-<div class="cf-opt" data-val="SOMA SAUDE" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>SOMA SAUDE</div>
 <div class="cf-opt" data-val="SUPERCOMM" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>SUPERCOMM</div>
-<div class="cf-opt" data-val="TAMBASA ATACADISTAS" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>TAMBASA ATACADISTAS</div>
-<div class="cf-opt" data-val="TT IMPORTS" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>TT IMPORTS</div>
-<div class="cf-opt" data-val="TUDAO TECH" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>TUDAO TECH</div>
 <div class="cf-opt" data-val="USEE" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>USEE</div>
-<div class="cf-opt" data-val="VANTTO IMPORT LTDA" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>VANTTO IMPORT LTDA</div>
 <div class="cf-opt" data-val="VCVALENTE" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>VCVALENTE</div>
-<div class="cf-opt" data-val="WEBCONTINENTAL" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>WEBCONTINENTAL</div>
 <div class="cf-opt" data-val="ZANLINE" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>ZANLINE</div>
+<div class="cf-opt" data-val="BEM ESTAR WEB" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>BEM ESTAR WEB</div>
+<div class="cf-opt" data-val="TAMBASA ATACADISTAS" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>TAMBASA ATACADISTAS</div>
+<div class="cf-opt" data-val="GALPAO 12" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>GALPAO 12</div>
+<div class="cf-opt" data-val="2ELETRO" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>2ELETRO</div>
+<div class="cf-opt" data-val="ELETRONORTE" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>ELETRONORTE</div>
+<div class="cf-opt" data-val="BWG SHOP" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>BWG SHOP</div>
 
   </div>
 </div>
@@ -309,154 +312,153 @@ html,body{height:100%;overflow:hidden;background:var(--sb)}
   <div class="cf-chips" id="cfc-sg"></div>
   <div class="cf-dropdown" id="cfd-sg" data-multi="false">
     <div class="cf-search"><input type="text" placeholder="Buscar produto..." oninput="cfSearch('sg',this.value)" onclick="event.stopPropagation()"></div>
-<div class="cf-opt" data-val="ALIMENTADOR PARA BEBES" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>ALIMENTADOR PARA BEBES</div>
-<div class="cf-opt" data-val="ALMOFADA AIR BASIC" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>ALMOFADA AIR BASIC</div>
-<div class="cf-opt" data-val="ALMOFADA AIR CELL" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>ALMOFADA AIR CELL</div>
-<div class="cf-opt" data-val="ANDADOR D10" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>ANDADOR D10</div>
-<div class="cf-opt" data-val="ANDADOR D10 POP" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>ANDADOR D10 POP</div>
-<div class="cf-opt" data-val="ANDADOR D11" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>ANDADOR D11</div>
-<div class="cf-opt" data-val="ANDADOR D12" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>ANDADOR D12</div>
-<div class="cf-opt" data-val="ANDADOR D14" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>ANDADOR D14</div>
-<div class="cf-opt" data-val="ANDADOR D15" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>ANDADOR D15</div>
-<div class="cf-opt" data-val="ASPIRAMED" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>ASPIRAMED</div>
-<div class="cf-opt" data-val="BALANÇA DE BIOIMPEDANCIA" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>BALANÇA DE BIOIMPEDANCIA</div>
-<div class="cf-opt" data-val="BALANÇA DIGITAL" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>BALANÇA DIGITAL</div>
-<div class="cf-opt" data-val="BANDAGEM ELÁSTICA TORNOZELO AJUSTÁVEL" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>BANDAGEM ELÁSTICA TORNOZELO AJUSTÁVEL</div>
-<div class="cf-opt" data-val="BANQUETA D1" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>BANQUETA D1</div>
-<div class="cf-opt" data-val="BANQUETA D2" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>BANQUETA D2</div>
-<div class="cf-opt" data-val="BANQUETA D3" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>BANQUETA D3</div>
-<div class="cf-opt" data-val="BENGALA 4 PONTAS D9" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>BENGALA 4 PONTAS D9</div>
-<div class="cf-opt" data-val="BENGALA TIPO T D8" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>BENGALA TIPO T D8</div>
-<div class="cf-opt" data-val="BOLSA DE GELO" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>BOLSA DE GELO</div>
-<div class="cf-opt" data-val="BOLSA TERMICA GEL M" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>BOLSA TERMICA GEL M</div>
-<div class="cf-opt" data-val="BOLSA TERMICA GEL P" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>BOLSA TERMICA GEL P</div>
-<div class="cf-opt" data-val="BOLSA ÁGUA QUENTE" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>BOLSA ÁGUA QUENTE</div>
-<div class="cf-opt" data-val="BOMBA TIRA LEITE ELETRICA" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>BOMBA TIRA LEITE ELETRICA</div>
-<div class="cf-opt" data-val="BOMBA TIRA LEITE MANUAL" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>BOMBA TIRA LEITE MANUAL</div>
-<div class="cf-opt" data-val="BOTA CURTA PLASTICO" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>BOTA CURTA PLASTICO</div>
-<div class="cf-opt" data-val="BOTA CURTA SUPORTE ALUMINIO" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>BOTA CURTA SUPORTE ALUMINIO</div>
-<div class="cf-opt" data-val="BOTA LONGA PLASTICO" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>BOTA LONGA PLASTICO</div>
-<div class="cf-opt" data-val="BOTA LONGA SUPORTE ALUMINIO" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>BOTA LONGA SUPORTE ALUMINIO</div>
-<div class="cf-opt" data-val="BOTA PNEUMATICA AIR RECOVERY" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>BOTA PNEUMATICA AIR RECOVERY</div>
-<div class="cf-opt" data-val="BOTA PNEUMATICA AIR RECOVERY LIGHT" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>BOTA PNEUMATICA AIR RECOVERY LIGHT</div>
-<div class="cf-opt" data-val="CADEIRA DE HIG D75" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>CADEIRA DE HIG D75</div>
-<div class="cf-opt" data-val="CADEIRA DE RODAS D100" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>CADEIRA DE RODAS D100</div>
-<div class="cf-opt" data-val="CADEIRA DE RODAS D100 LIGHT" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>CADEIRA DE RODAS D100 LIGHT</div>
-<div class="cf-opt" data-val="CADEIRA DE RODAS D100 POP" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>CADEIRA DE RODAS D100 POP</div>
-<div class="cf-opt" data-val="CADEIRA DE RODAS D1000" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>CADEIRA DE RODAS D1000</div>
 <div class="cf-opt" data-val="CADEIRA DE RODAS D400" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>CADEIRA DE RODAS D400</div>
-<div class="cf-opt" data-val="CADEIRA DE RODAS D500" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>CADEIRA DE RODAS D500</div>
-<div class="cf-opt" data-val="CADEIRA DE RODAS D600" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>CADEIRA DE RODAS D600</div>
-<div class="cf-opt" data-val="CADEIRA DE RODAS D600 POP T44" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>CADEIRA DE RODAS D600 POP T44</div>
-<div class="cf-opt" data-val="CADEIRA DE RODAS D700" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>CADEIRA DE RODAS D700</div>
-<div class="cf-opt" data-val="CADEIRA DE RODAS D700 LIGHT" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>CADEIRA DE RODAS D700 LIGHT</div>
+<div class="cf-opt" data-val="COLCHAO AIR PLUS" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>COLCHAO AIR PLUS</div>
+<div class="cf-opt" data-val="CADEIRA HIG D30" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>CADEIRA HIG D30</div>
+<div class="cf-opt" data-val="CADEIRA DE RODAS D100" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>CADEIRA DE RODAS D100</div>
+<div class="cf-opt" data-val="CADEIRA HIG D60" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>CADEIRA HIG D60</div>
 <div class="cf-opt" data-val="CADEIRA DE RODAS D800" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>CADEIRA DE RODAS D800</div>
 <div class="cf-opt" data-val="CADEIRA DE RODAS D900" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>CADEIRA DE RODAS D900</div>
+<div class="cf-opt" data-val="CADEIRA MOTORIZADA EM AÇO D750" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>CADEIRA MOTORIZADA EM AÇO D750</div>
+<div class="cf-opt" data-val="GUINCHO D5000" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>GUINCHO D5000</div>
+<div class="cf-opt" data-val="BOTA PNEUMATICA AIR RECOVERY" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>BOTA PNEUMATICA AIR RECOVERY</div>
+<div class="cf-opt" data-val="CADEIRA DE RODAS D600" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>CADEIRA DE RODAS D600</div>
+<div class="cf-opt" data-val="CADEIRA DE RODAS D100 POP" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>CADEIRA DE RODAS D100 POP</div>
+<div class="cf-opt" data-val="ANDADOR D10" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>ANDADOR D10</div>
+<div class="cf-opt" data-val="CADEIRA DE TRANSPORTE D90" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>CADEIRA DE TRANSPORTE D90</div>
+<div class="cf-opt" data-val="ANDADOR D12" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>ANDADOR D12</div>
+<div class="cf-opt" data-val="CADEIRA HIG D40" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>CADEIRA HIG D40</div>
+<div class="cf-opt" data-val="SCOOTER LB" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>SCOOTER LB</div>
+<div class="cf-opt" data-val="CADEIRA HIG D55" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>CADEIRA HIG D55</div>
+<div class="cf-opt" data-val="CADEIRA DE RODAS D700" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>CADEIRA DE RODAS D700</div>
+<div class="cf-opt" data-val="CAMA 3 MOVIMENTOS DX3" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>CAMA 3 MOVIMENTOS DX3</div>
+<div class="cf-opt" data-val="CADEIRA HIG D45" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>CADEIRA HIG D45</div>
+<div class="cf-opt" data-val="CAMA 2 MOVIMENTOS DX2" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>CAMA 2 MOVIMENTOS DX2</div>
+<div class="cf-opt" data-val="CADEIRA DE RODAS D600 POP T44" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>CADEIRA DE RODAS D600 POP T44</div>
+<div class="cf-opt" data-val="ANDADOR D10 POP" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>ANDADOR D10 POP</div>
+<div class="cf-opt" data-val="CADEIRA DE RODAS D500" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>CADEIRA DE RODAS D500</div>
+<div class="cf-opt" data-val="CADEIRA HIG D65" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>CADEIRA HIG D65</div>
+<div class="cf-opt" data-val="MULETA AXILAR D7" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>MULETA AXILAR D7</div>
+<div class="cf-opt" data-val="CADEIRA DE RODAS D1000" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>CADEIRA DE RODAS D1000</div>
+<div class="cf-opt" data-val="ANDADOR D15" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>ANDADOR D15</div>
+<div class="cf-opt" data-val="MASSAGEADOR SHIATSU PÉS" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>MASSAGEADOR SHIATSU PÉS</div>
+<div class="cf-opt" data-val="CADEIRA HIG D70" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>CADEIRA HIG D70</div>
+<div class="cf-opt" data-val="BANQUETA D1" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>BANQUETA D1</div>
+<div class="cf-opt" data-val="MASSAGEADOR ALMOFADA" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>MASSAGEADOR ALMOFADA</div>
+<div class="cf-opt" data-val="CAMA 2 MOVIMENTOS DX" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>CAMA 2 MOVIMENTOS DX</div>
+<div class="cf-opt" data-val="ANDADOR D14" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>ANDADOR D14</div>
+<div class="cf-opt" data-val="CADEIRA MOTORIZADA D3000 SUPER LIGHT" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>CADEIRA MOTORIZADA D3000 SUPER LIGHT</div>
+<div class="cf-opt" data-val="CADEIRA HIG D50" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>CADEIRA HIG D50</div>
+<div class="cf-opt" data-val="NEBULIZADOR MESH" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>NEBULIZADOR MESH</div>
+<div class="cf-opt" data-val="ANDADOR D11" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>ANDADOR D11</div>
 <div class="cf-opt" data-val="CADEIRA DE RODAS MONOBLOCO" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>CADEIRA DE RODAS MONOBLOCO</div>
+<div class="cf-opt" data-val="BANQUETA D3" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>BANQUETA D3</div>
+<div class="cf-opt" data-val="OXIMETRO SEM ALARME" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>OXIMETRO SEM ALARME</div>
+<div class="cf-opt" data-val="ALMOFADA AIR CELL" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>ALMOFADA AIR CELL</div>
+<div class="cf-opt" data-val="UMIDIFICADOR POP" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>UMIDIFICADOR POP</div>
+<div class="cf-opt" data-val="OXIMETRO COM ALARME" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>OXIMETRO COM ALARME</div>
+<div class="cf-opt" data-val="BALANÇA DIGITAL" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>BALANÇA DIGITAL</div>
+<div class="cf-opt" data-val="ASPIRAMED" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>ASPIRAMED</div>
+<div class="cf-opt" data-val="TIPÓIA VELPEAU" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>TIPÓIA VELPEAU</div>
+<div class="cf-opt" data-val="UMIDIFICADOR STAR" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>UMIDIFICADOR STAR</div>
+<div class="cf-opt" data-val="CADEIRA DE TRANSFERENCIA D80" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>CADEIRA DE TRANSFERENCIA D80</div>
+<div class="cf-opt" data-val="COLCHAO AIR TUBE" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>COLCHAO AIR TUBE</div>
+<div class="cf-opt" data-val="CADEIRA HIG CONCHA INFANTIL" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>CADEIRA HIG CONCHA INFANTIL</div>
+<div class="cf-opt" data-val="MASSAGEADOR HUGMED" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>MASSAGEADOR HUGMED</div>
+<div class="cf-opt" data-val="BANQUETA D2" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>BANQUETA D2</div>
+<div class="cf-opt" data-val="TERMOMETRO INFRAVERMELHO" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>TERMOMETRO INFRAVERMELHO</div>
+<div class="cf-opt" data-val="ESTETOSCOPIO RAPPAPORT" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>ESTETOSCOPIO RAPPAPORT</div>
+<div class="cf-opt" data-val="MASSAGEADOR ESTEIRA" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>MASSAGEADOR ESTEIRA</div>
+<div class="cf-opt" data-val="UMIDIFICADOR ULTRA" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>UMIDIFICADOR ULTRA</div>
+<div class="cf-opt" data-val="NEBULIZADOR COMPRESSOR" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>NEBULIZADOR COMPRESSOR</div>
+<div class="cf-opt" data-val="MASSAGEADOR ORBITAL" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>MASSAGEADOR ORBITAL</div>
+<div class="cf-opt" data-val="FITA KO" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>FITA KO</div>
+<div class="cf-opt" data-val="COLETE PUTTI COR NORMAL BAIXO DELLAMED" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>COLETE PUTTI COR NORMAL BAIXO DELLAMED</div>
+<div class="cf-opt" data-val="COLETE MAX PUTTI CINZA ESCURO BAIXO DELL" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>COLETE MAX PUTTI CINZA ESCURO BAIXO DELL</div>
+<div class="cf-opt" data-val="COLETE MAX PUTTI CINZA ESCURO ALTO DELLA" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>COLETE MAX PUTTI CINZA ESCURO ALTO DELLA</div>
+<div class="cf-opt" data-val="MASSAGEADOR PISTOLA" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>MASSAGEADOR PISTOLA</div>
+<div class="cf-opt" data-val="MASSAGEADOR HAMMER" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>MASSAGEADOR HAMMER</div>
+<div class="cf-opt" data-val="ALMOFADA AIR BASIC" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>ALMOFADA AIR BASIC</div>
+<div class="cf-opt" data-val="BALANÇA DE BIOIMPEDANCIA" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>BALANÇA DE BIOIMPEDANCIA</div>
+<div class="cf-opt" data-val="FAIXA 5 PAINÉIS" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>FAIXA 5 PAINÉIS</div>
+<div class="cf-opt" data-val="JOELHEIRA ARTICULADA COM CINTAS CRUZADAS" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>JOELHEIRA ARTICULADA COM CINTAS CRUZADAS</div>
+<div class="cf-opt" data-val="TIPÓIA SIMPLES DELLAMED" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>TIPÓIA SIMPLES DELLAMED</div>
+<div class="cf-opt" data-val="JOELHEIRA AJUSTAVEL COM ORIFICIO E REFOR" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>JOELHEIRA AJUSTAVEL COM ORIFICIO E REFOR</div>
+<div class="cf-opt" data-val="FAIXA 4 PAINÉIS" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>FAIXA 4 PAINÉIS</div>
+<div class="cf-opt" data-val="JOELHEIRA KNIT UNITÁRIA" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>JOELHEIRA KNIT UNITÁRIA</div>
+<div class="cf-opt" data-val="FAIXA 3 PAINÉIS" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>FAIXA 3 PAINÉIS</div>
+<div class="cf-opt" data-val="TORNOZELEIRA ELASTICA" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>TORNOZELEIRA ELASTICA</div>
+<div class="cf-opt" data-val="COLETE PUTTI COR NORMAL ALTO DELLAMED" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>COLETE PUTTI COR NORMAL ALTO DELLAMED</div>
+<div class="cf-opt" data-val="JOELHEIRA ARTICULADA AJUSTÁVEL" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>JOELHEIRA ARTICULADA AJUSTÁVEL</div>
+<div class="cf-opt" data-val="JOELHEIRA ELASTICA DELLAMED - PAR" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>JOELHEIRA ELASTICA DELLAMED - PAR</div>
+<div class="cf-opt" data-val="BOTA LONGA SUPORTE ALUMINIO" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>BOTA LONGA SUPORTE ALUMINIO</div>
+<div class="cf-opt" data-val="MULETA CANADENSE D6" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>MULETA CANADENSE D6</div>
+<div class="cf-opt" data-val="BOTA CURTA SUPORTE ALUMINIO" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>BOTA CURTA SUPORTE ALUMINIO</div>
+<div class="cf-opt" data-val="COTOVELEIRA ELÁSTICA" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>COTOVELEIRA ELÁSTICA</div>
+<div class="cf-opt" data-val="FAIXA SUB PATELAR" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>FAIXA SUB PATELAR</div>
+<div class="cf-opt" data-val="TORNOZELEIRA LONGA NEOPRENE" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>TORNOZELEIRA LONGA NEOPRENE</div>
+<div class="cf-opt" data-val="OXIMETRO PEDIÁTRICO" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>OXIMETRO PEDIÁTRICO</div>
+<div class="cf-opt" data-val="ESTETOSCOPIO DUPLO" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>ESTETOSCOPIO DUPLO</div>
+<div class="cf-opt" data-val="COLAR CERVICAL" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>COLAR CERVICAL</div>
+<div class="cf-opt" data-val="TORNOZELEIRA CURTA NEOPRENE" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>TORNOZELEIRA CURTA NEOPRENE</div>
+<div class="cf-opt" data-val="BOLSA TERMICA GEL P" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>BOLSA TERMICA GEL P</div>
+<div class="cf-opt" data-val="ESTETOSCOPIO SIMPLES" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>ESTETOSCOPIO SIMPLES</div>
+<div class="cf-opt" data-val="BOLSA TERMICA GEL M" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>BOLSA TERMICA GEL M</div>
+<div class="cf-opt" data-val="BENGALA 4 PONTAS D9" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>BENGALA 4 PONTAS D9</div>
+<div class="cf-opt" data-val="BENGALA TIPO T D8" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>BENGALA TIPO T D8</div>
+<div class="cf-opt" data-val="JOELHEIRA AJUSTÁVEL C/ REFORÇO PATELAR" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>JOELHEIRA AJUSTÁVEL C/ REFORÇO PATELAR</div>
+<div class="cf-opt" data-val="BOLSA DE GELO" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>BOLSA DE GELO</div>
+<div class="cf-opt" data-val="MUNHEQUEIRA AJUSTAVEL" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>MUNHEQUEIRA AJUSTAVEL</div>
+<div class="cf-opt" data-val="PROTETOR DE PUNHO" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>PROTETOR DE PUNHO</div>
+<div class="cf-opt" data-val="BOLSA ÁGUA QUENTE" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>BOLSA ÁGUA QUENTE</div>
+<div class="cf-opt" data-val="TORNOZELEIRA AJUSTAVEL NEOPRENE" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>TORNOZELEIRA AJUSTAVEL NEOPRENE</div>
+<div class="cf-opt" data-val="JOELHEIRA AJUSTAVEL COM ORIFICIO, REFORÇ" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>JOELHEIRA AJUSTAVEL COM ORIFICIO, REFORÇ</div>
+<div class="cf-opt" data-val="TALA LONGA BILATERAL DE PUNHO" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>TALA LONGA BILATERAL DE PUNHO</div>
+<div class="cf-opt" data-val="TERMOMETRO CLINICO" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>TERMOMETRO CLINICO</div>
+<div class="cf-opt" data-val="ALIMENTADOR PARA BEBES" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>ALIMENTADOR PARA BEBES</div>
+<div class="cf-opt" data-val="BANDAGEM ELÁSTICA TORNOZELO AJUSTÁVEL" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>BANDAGEM ELÁSTICA TORNOZELO AJUSTÁVEL</div>
+<div class="cf-opt" data-val="BOMBA TIRA LEITE MANUAL" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>BOMBA TIRA LEITE MANUAL</div>
+<div class="cf-opt" data-val="BOTA CURTA PLASTICO" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>BOTA CURTA PLASTICO</div>
+<div class="cf-opt" data-val="BOTA LONGA PLASTICO" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>BOTA LONGA PLASTICO</div>
+<div class="cf-opt" data-val="BOTA PNEUMATICA AIR RECOVERY LIGHT" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>BOTA PNEUMATICA AIR RECOVERY LIGHT</div>
+<div class="cf-opt" data-val="CADEIRA DE HIG D75" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>CADEIRA DE HIG D75</div>
+<div class="cf-opt" data-val="CADEIRA DE RODAS D100 LIGHT" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>CADEIRA DE RODAS D100 LIGHT</div>
+<div class="cf-opt" data-val="CADEIRA DE RODAS D700 LIGHT" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>CADEIRA DE RODAS D700 LIGHT</div>
 <div class="cf-opt" data-val="CADEIRA DE RODAS MOTORIZADA PRIME" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>CADEIRA DE RODAS MOTORIZADA PRIME</div>
 <div class="cf-opt" data-val="CADEIRA DE RODAS TILT OPTIMUSMED" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>CADEIRA DE RODAS TILT OPTIMUSMED</div>
-<div class="cf-opt" data-val="CADEIRA DE TRANSFERENCIA D80" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>CADEIRA DE TRANSFERENCIA D80</div>
 <div class="cf-opt" data-val="CADEIRA DE TRANSFERENCIA D80 MANUAL" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>CADEIRA DE TRANSFERENCIA D80 MANUAL</div>
-<div class="cf-opt" data-val="CADEIRA DE TRANSPORTE D90" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>CADEIRA DE TRANSPORTE D90</div>
-<div class="cf-opt" data-val="CADEIRA HIG CONCHA INFANTIL" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>CADEIRA HIG CONCHA INFANTIL</div>
-<div class="cf-opt" data-val="CADEIRA HIG D30" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>CADEIRA HIG D30</div>
 <div class="cf-opt" data-val="CADEIRA HIG D35" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>CADEIRA HIG D35</div>
-<div class="cf-opt" data-val="CADEIRA HIG D40" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>CADEIRA HIG D40</div>
-<div class="cf-opt" data-val="CADEIRA HIG D45" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>CADEIRA HIG D45</div>
-<div class="cf-opt" data-val="CADEIRA HIG D50" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>CADEIRA HIG D50</div>
-<div class="cf-opt" data-val="CADEIRA HIG D55" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>CADEIRA HIG D55</div>
-<div class="cf-opt" data-val="CADEIRA HIG D60" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>CADEIRA HIG D60</div>
-<div class="cf-opt" data-val="CADEIRA HIG D65" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>CADEIRA HIG D65</div>
-<div class="cf-opt" data-val="CADEIRA HIG D70" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>CADEIRA HIG D70</div>
 <div class="cf-opt" data-val="CADEIRA MOTORIZADA D1000 POWER FORCE" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>CADEIRA MOTORIZADA D1000 POWER FORCE</div>
-<div class="cf-opt" data-val="CADEIRA MOTORIZADA D3000 SUPER LIGHT" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>CADEIRA MOTORIZADA D3000 SUPER LIGHT</div>
-<div class="cf-opt" data-val="CADEIRA MOTORIZADA EM AÇO D750" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>CADEIRA MOTORIZADA EM AÇO D750</div>
-<div class="cf-opt" data-val="CAMA 2 MOVIMENTOS DX" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>CAMA 2 MOVIMENTOS DX</div>
-<div class="cf-opt" data-val="CAMA 2 MOVIMENTOS DX2" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>CAMA 2 MOVIMENTOS DX2</div>
-<div class="cf-opt" data-val="CAMA 3 MOVIMENTOS DX3" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>CAMA 3 MOVIMENTOS DX3</div>
 <div class="cf-opt" data-val="CINTA LOMBAR COM HASTES FLEXIVEIS DELLAM" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>CINTA LOMBAR COM HASTES FLEXIVEIS DELLAM</div>
-<div class="cf-opt" data-val="COLAR CERVICAL" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>COLAR CERVICAL</div>
-<div class="cf-opt" data-val="COLCHAO AIR PLUS" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>COLCHAO AIR PLUS</div>
 <div class="cf-opt" data-val="COLCHAO AIR PLUS AVULSO" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>COLCHAO AIR PLUS AVULSO</div>
-<div class="cf-opt" data-val="COLCHAO AIR TUBE" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>COLCHAO AIR TUBE</div>
 <div class="cf-opt" data-val="COLCHÃO AIR PLUS LIGHT" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>COLCHÃO AIR PLUS LIGHT</div>
-<div class="cf-opt" data-val="COLETE MAX PUTTI CINZA ESCURO ALTO DELLA" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>COLETE MAX PUTTI CINZA ESCURO ALTO DELLA</div>
-<div class="cf-opt" data-val="COLETE MAX PUTTI CINZA ESCURO BAIXO DELL" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>COLETE MAX PUTTI CINZA ESCURO BAIXO DELL</div>
-<div class="cf-opt" data-val="COLETE PUTTI COR NORMAL ALTO DELLAMED" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>COLETE PUTTI COR NORMAL ALTO DELLAMED</div>
-<div class="cf-opt" data-val="COLETE PUTTI COR NORMAL BAIXO DELLAMED" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>COLETE PUTTI COR NORMAL BAIXO DELLAMED</div>
 <div class="cf-opt" data-val="CORRETOR POSTURAL DELLAMED" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>CORRETOR POSTURAL DELLAMED</div>
 <div class="cf-opt" data-val="CORRETOR POSTURAL ERGONÔMICO DELLAMED" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>CORRETOR POSTURAL ERGONÔMICO DELLAMED</div>
 <div class="cf-opt" data-val="COTOVELEIRA AJUSTAVEL DELLAMED" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>COTOVELEIRA AJUSTAVEL DELLAMED</div>
-<div class="cf-opt" data-val="COTOVELEIRA ELÁSTICA" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>COTOVELEIRA ELÁSTICA</div>
 <div class="cf-opt" data-val="ESPAÇADOR DELLAMED" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>ESPAÇADOR DELLAMED</div>
-<div class="cf-opt" data-val="ESTETOSCOPIO DUPLO" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>ESTETOSCOPIO DUPLO</div>
-<div class="cf-opt" data-val="ESTETOSCOPIO RAPPAPORT" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>ESTETOSCOPIO RAPPAPORT</div>
-<div class="cf-opt" data-val="ESTETOSCOPIO SIMPLES" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>ESTETOSCOPIO SIMPLES</div>
-<div class="cf-opt" data-val="FAIXA 3 PAINÉIS" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>FAIXA 3 PAINÉIS</div>
-<div class="cf-opt" data-val="FAIXA 4 PAINÉIS" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>FAIXA 4 PAINÉIS</div>
-<div class="cf-opt" data-val="FAIXA 5 PAINÉIS" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>FAIXA 5 PAINÉIS</div>
 <div class="cf-opt" data-val="FAIXA ELÁSTICA DE PULSO DELLAMED" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>FAIXA ELÁSTICA DE PULSO DELLAMED</div>
-<div class="cf-opt" data-val="FAIXA SUB PATELAR" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>FAIXA SUB PATELAR</div>
-<div class="cf-opt" data-val="FITA KO" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>FITA KO</div>
-<div class="cf-opt" data-val="GUINCHO D5000" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>GUINCHO D5000</div>
 <div class="cf-opt" data-val="IMOBILIZADOR" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>IMOBILIZADOR</div>
-<div class="cf-opt" data-val="JOELHEIRA AJUSTAVEL COM ORIFICIO E REFOR" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>JOELHEIRA AJUSTAVEL COM ORIFICIO E REFOR</div>
-<div class="cf-opt" data-val="JOELHEIRA AJUSTAVEL COM ORIFICIO, REFORÇ" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>JOELHEIRA AJUSTAVEL COM ORIFICIO, REFORÇ</div>
-<div class="cf-opt" data-val="JOELHEIRA AJUSTÁVEL C/ REFORÇO PATELAR" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>JOELHEIRA AJUSTÁVEL C/ REFORÇO PATELAR</div>
-<div class="cf-opt" data-val="JOELHEIRA ARTICULADA AJUSTÁVEL" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>JOELHEIRA ARTICULADA AJUSTÁVEL</div>
-<div class="cf-opt" data-val="JOELHEIRA ARTICULADA COM CINTAS CRUZADAS" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>JOELHEIRA ARTICULADA COM CINTAS CRUZADAS</div>
-<div class="cf-opt" data-val="JOELHEIRA ELASTICA DELLAMED - PAR" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>JOELHEIRA ELASTICA DELLAMED - PAR</div>
-<div class="cf-opt" data-val="JOELHEIRA KNIT UNITÁRIA" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>JOELHEIRA KNIT UNITÁRIA</div>
 <div class="cf-opt" data-val="MACA MALETA" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>MACA MALETA</div>
-<div class="cf-opt" data-val="MASSAGEADOR ALMOFADA" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>MASSAGEADOR ALMOFADA</div>
-<div class="cf-opt" data-val="MASSAGEADOR ESTEIRA" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>MASSAGEADOR ESTEIRA</div>
-<div class="cf-opt" data-val="MASSAGEADOR HAMMER" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>MASSAGEADOR HAMMER</div>
-<div class="cf-opt" data-val="MASSAGEADOR HUGMED" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>MASSAGEADOR HUGMED</div>
-<div class="cf-opt" data-val="MASSAGEADOR ORBITAL" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>MASSAGEADOR ORBITAL</div>
-<div class="cf-opt" data-val="MASSAGEADOR PISTOLA" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>MASSAGEADOR PISTOLA</div>
-<div class="cf-opt" data-val="MASSAGEADOR SHIATSU PÉS" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>MASSAGEADOR SHIATSU PÉS</div>
-<div class="cf-opt" data-val="MONITOR DE BRAÇO COM VOZ" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>MONITOR DE BRAÇO COM VOZ</div>
-<div class="cf-opt" data-val="MONITOR DE PULSO" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>MONITOR DE PULSO</div>
-<div class="cf-opt" data-val="MULETA AXILAR D7" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>MULETA AXILAR D7</div>
-<div class="cf-opt" data-val="MULETA CANADENSE D6" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>MULETA CANADENSE D6</div>
-<div class="cf-opt" data-val="MUNHEQUEIRA AJUSTAVEL" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>MUNHEQUEIRA AJUSTAVEL</div>
-<div class="cf-opt" data-val="NEBULIZADOR COMPRESSOR" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>NEBULIZADOR COMPRESSOR</div>
-<div class="cf-opt" data-val="NEBULIZADOR MESH" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>NEBULIZADOR MESH</div>
 <div class="cf-opt" data-val="ORTESE LONGA COM POLEGAR" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>ORTESE LONGA COM POLEGAR</div>
 <div class="cf-opt" data-val="ORTESE LONGA SEM POLEGAR" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>ORTESE LONGA SEM POLEGAR</div>
-<div class="cf-opt" data-val="OXIMETRO COM ALARME" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>OXIMETRO COM ALARME</div>
-<div class="cf-opt" data-val="OXIMETRO PEDIÁTRICO" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>OXIMETRO PEDIÁTRICO</div>
-<div class="cf-opt" data-val="OXIMETRO SEM ALARME" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>OXIMETRO SEM ALARME</div>
 <div class="cf-opt" data-val="PALMILHA (TM 103)" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>PALMILHA (TM 103)</div>
 <div class="cf-opt" data-val="POLTRONA DO VOVO ELEVAMED" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>POLTRONA DO VOVO ELEVAMED</div>
 <div class="cf-opt" data-val="POLTRONA ELEVAMED" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>POLTRONA ELEVAMED</div>
-<div class="cf-opt" data-val="PROTETOR DE PUNHO" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>PROTETOR DE PUNHO</div>
 <div class="cf-opt" data-val="SCOOTER CS" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>SCOOTER CS</div>
 <div class="cf-opt" data-val="SCOOTER DOBRÁVEL E COMPACTA EM AÇO" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>SCOOTER DOBRÁVEL E COMPACTA EM AÇO</div>
-<div class="cf-opt" data-val="SCOOTER LB" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>SCOOTER LB</div>
 <div class="cf-opt" data-val="SCOOTER MED MAX" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>SCOOTER MED MAX</div>
-<div class="cf-opt" data-val="SPACEMED" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>SPACEMED</div>
 <div class="cf-opt" data-val="SUB-GRUPO" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>SUB-GRUPO</div>
-<div class="cf-opt" data-val="TALA LONGA BILATERAL DE PUNHO" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>TALA LONGA BILATERAL DE PUNHO</div>
-<div class="cf-opt" data-val="TERMOMETRO CLINICO" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>TERMOMETRO CLINICO</div>
-<div class="cf-opt" data-val="TERMOMETRO INFRAVERMELHO" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>TERMOMETRO INFRAVERMELHO</div>
-<div class="cf-opt" data-val="TIPÓIA SIMPLES DELLAMED" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>TIPÓIA SIMPLES DELLAMED</div>
-<div class="cf-opt" data-val="TIPÓIA VELPEAU" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>TIPÓIA VELPEAU</div>
-<div class="cf-opt" data-val="TORNOZELEIRA AJUSTAVEL NEOPRENE" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>TORNOZELEIRA AJUSTAVEL NEOPRENE</div>
-<div class="cf-opt" data-val="TORNOZELEIRA CURTA NEOPRENE" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>TORNOZELEIRA CURTA NEOPRENE</div>
-<div class="cf-opt" data-val="TORNOZELEIRA ELASTICA" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>TORNOZELEIRA ELASTICA</div>
-<div class="cf-opt" data-val="TORNOZELEIRA LONGA NEOPRENE" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>TORNOZELEIRA LONGA NEOPRENE</div>
-<div class="cf-opt" data-val="UMIDIFICADOR POP" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>UMIDIFICADOR POP</div>
-<div class="cf-opt" data-val="UMIDIFICADOR STAR" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>UMIDIFICADOR STAR</div>
-<div class="cf-opt" data-val="UMIDIFICADOR ULTRA" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>UMIDIFICADOR ULTRA</div>
+<div class="cf-opt" data-val="MONITOR DE PULSO" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>MONITOR DE PULSO</div>
+<div class="cf-opt" data-val="MONITOR DE BRAÇO COM VOZ" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>MONITOR DE BRAÇO COM VOZ</div>
 <div class="cf-opt" data-val="UMIDIFICADOR UMI LIGHT" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>UMIDIFICADOR UMI LIGHT</div>
+<div class="cf-opt" data-val="SPACEMED" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>SPACEMED</div>
+<div class="cf-opt" data-val="BOMBA TIRA LEITE ELETRICA" onclick="cfClick(this,'sg')"><span class="cf-ck"></span>BOMBA TIRA LEITE ELETRICA</div>
 
   </div>
 </div>
-</div>
+  </div>
 </div>
 <div class="ct">
-  <!-- HEADER -->
   <div class="hdr">
     <div>
       <div class="hdr-t" id="ht">War Room — Jun/26</div>
@@ -465,6 +467,7 @@ html,body{height:100%;overflow:hidden;background:var(--sb)}
     <div class="hdr-b" id="hb">Jun/26</div>
   </div>
   <div class="bd">
+
   <!-- GERAL (WAR ROOM) -->
   <div id="p-geral" class="pnl active">
     <!-- KPIs superiores: grade compacta única -->
@@ -487,7 +490,7 @@ html,body{height:100%;overflow:hidden;background:var(--sb)}
     <!-- Sell-in mensal + Sell-out ML -->
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px">
       <div class="cd">
-        <div class="ct2"><i class="ti ti-chart-bar" style="color:var(--blu)"></i>Sell-in mensal</div>
+        <div class="ct2"><i class="ti ti-chart-bar-2" style="color:var(--blu)"></i>Sell-in mensal</div>
         <div id="lg-si" class="lg"></div>
         <div style="position:relative;height:200px"><canvas id="c-si"></canvas></div>
       </div>
@@ -500,17 +503,15 @@ html,body{height:100%;overflow:hidden;background:var(--sb)}
     <!-- Top clientes + Top subgrupos -->
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px">
       <div class="cd">
-        <div class="ct2"><i class="ti ti-trophy" style="color:var(--amb)"></i>Top clientes</div>
-        <div id="lg-cli" class="lg"><span><div class="ld" style="background:#aaa"></div>Pedido</span><span><div class="ld" style="background:#1856a3"></div>Faturado</span></div>
+        <div class="ct2"><i class="ti ti-trophy" style="color:var(--amb)"></i>Top clientes — Pedido vs Faturado</div>
         <div id="top-cli"></div>
       </div>
       <div class="cd">
         <div class="ct2"><i class="ti ti-chart-bar-2" style="color:var(--blu)"></i>Top subgrupos — Pedido vs Faturado</div>
-        <div id="lg-sg" class="lg"><span><div class="ld" style="background:#aaa"></div>Pedido</span><span><div class="ld" style="background:#1856a3"></div>Faturado</span><span style="font-size:10.5px;color:var(--t3)">ST = Sell-through</span></div>
         <div id="top-sg"></div>
       </div>
     </div>
-    <!-- Sell-out top subgrupos ML -->
+    <!-- Top subgrupos SO + Matriz -->
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px">
       <div class="cd">
         <div class="ct2"><i class="ti ti-brand-apple-arcade" style="color:var(--grn)"></i>Top subgrupos Sell-out ML</div>
@@ -518,8 +519,8 @@ html,body{height:100%;overflow:hidden;background:var(--sb)}
       </div>
       <div class="cd">
         <div class="ct2"><i class="ti ti-circles-relation" style="color:var(--red)"></i>Matriz de performance — Sell-through corrigido (ML=80%)</div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
-          <div class="mx-cell mx-grn"><div class="mx-lbl">● Saudável (ST 60–90%)</div><div id="mx-ok" class="mx-body"></div></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+          <div class="mx-cell mx-grn"><div class="mx-lbl">● Saudável (ST 60-90%)</div><div id="mx-ok" class="mx-body"></div></div>
           <div class="mx-cell mx-amb"><div class="mx-lbl">● Estoque alto (ST &lt;60%)</div><div id="mx-alto" class="mx-body"></div></div>
           <div class="mx-cell mx-red"><div class="mx-lbl">● Ruptura iminente (ST &gt;90%)</div><div id="mx-risco" class="mx-body"></div></div>
           <div class="mx-cell mx-blu"><div class="mx-lbl">● Sem SO mapeado</div><div id="mx-sem" class="mx-body"></div></div>
@@ -559,16 +560,8 @@ html,body{height:100%;overflow:hidden;background:var(--sb)}
     <div id="rep-main"></div>
   </div>
 
-  <!-- OPORTUNIDADES -->
-  <div id="p-opp" class="pnl">
-    <div id="opp-main"></div>
   </div>
-
-  <!-- ESTOQUE & CARTEIRA -->
-  <div id="p-est" class="pnl">
-    <div id="est-sg"></div>
-  </div>
-  </div>
+</div>
 </div>
 
 <script>
@@ -2184,13 +2177,28 @@ var CF = { rep: [], cli: [], sg: [] };
 
 function cfOpen(fid) {
   var dd = document.getElementById('cfd-' + fid);
-  if (!dd) return;
+  var inp = document.getElementById('cfi-' + fid);
+  if (!dd || !inp) return;
   var isOpen = dd.classList.contains('open');
   // Fechar todos
   document.querySelectorAll('.cf-dropdown.open').forEach(function(d) { d.classList.remove('open'); });
   // Limpar busca
   document.querySelectorAll('.cf-search input').forEach(function(i) { i.value = ''; cfSearch(fid, ''); });
   if (!isOpen) {
+    // Posicionar dinamicamente junto ao input (position:fixed escapa do overflow da sidebar)
+    var r = inp.getBoundingClientRect();
+    dd.style.left = r.left + 'px';
+    dd.style.width = r.width + 'px';
+    var spaceBelow = window.innerHeight - r.bottom;
+    var maxH = Math.min(400, window.innerHeight * 0.7);
+    if (spaceBelow < maxH && r.top > spaceBelow) {
+      // Pouco espaço abaixo: abrir para cima
+      dd.style.bottom = (window.innerHeight - r.top + 2) + 'px';
+      dd.style.top = 'auto';
+    } else {
+      dd.style.top = (r.bottom + 2) + 'px';
+      dd.style.bottom = 'auto';
+    }
     dd.classList.add('open');
     var si = dd.querySelector('.cf-search input');
     if (si) setTimeout(function() { si.focus(); }, 50);

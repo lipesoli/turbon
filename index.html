@@ -36,6 +36,9 @@ html,body{height:100%;overflow:hidden;background:var(--sb)}
 .hdr{background:var(--card);padding:14px 22px;border-bottom:1px solid var(--brd);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
 .hdr-t{font-size:17px;font-weight:600;color:var(--t1)}.hdr-s{font-size:11px;color:var(--t3);margin-top:2px}
 .hdr-b{font-size:11px;font-weight:500;background:var(--blu2);color:var(--blu3);padding:4px 12px;border-radius:20px;white-space:nowrap}
+.hdr-pdf-btn{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:600;background:var(--blu);color:#fff;border:none;border-radius:20px;padding:4px 13px 4px 11px;cursor:pointer;transition:all .15s;white-space:nowrap}
+.hdr-pdf-btn:hover{background:var(--blu3);transform:translateY(-1px)}
+.hdr-pdf-btn i{font-size:14px}
 .bd{padding:16px 22px;flex:1;overflow-y:auto}
 .bd::-webkit-scrollbar{width:4px}.bd::-webkit-scrollbar-thumb{background:rgba(0,0,0,.12);border-radius:2px}
 .pnl{display:none}.pnl.active{display:block}
@@ -171,6 +174,47 @@ html,body{height:100%;overflow:hidden;background:var(--sb)}
 .kc{background:var(--card);border-radius:var(--rl);border:1px solid var(--brd);padding:12px 14px;min-width:0}
 
 #pos-linha .pill{justify-content:center;width:100%;box-sizing:border-box}
+.print-hdr{display:none}
+.print-hdr-mini{display:none}
+@media print{
+  @page{size:A4 landscape;margin:1.1cm 1.1cm}
+  html,body{height:auto!important;overflow:visible!important;background:#fff!important;font-size:12px!important}
+  .app{display:block!important;height:auto!important}
+  .sb{display:none!important}
+  .ct{width:100%!important}
+  .hdr{display:none!important}
+  #export-pdf-btn{display:none!important}
+  .print-hdr,.print-hdr-mini{display:block!important;position:static!important;background:#fff;padding:0 0 6px;margin-bottom:8px;border-bottom:2px solid var(--blu)}
+  .print-hdr-mini{break-before:page;padding-top:1px}
+  .print-hdr-brand{font-size:15px;font-weight:600;color:var(--blu);letter-spacing:-.3px}
+  .print-hdr-brand em{font-style:normal;font-weight:300}
+  .print-hdr-brand span{font-size:9.5px;color:var(--t3);font-weight:400;margin-left:10px;letter-spacing:0}
+  .print-hdr-info{font-size:10.5px;color:var(--t2);margin-top:3px}
+  .bd{padding-top:0!important}
+  .pnl{display:none!important}
+  .pnl.active{display:block!important}
+  /* Cartões de KPI pequenos: nunca dividir */
+  .kc,.card,.kpi,.k2{break-inside:avoid;page-break-inside:avoid}
+  /* Blocos grandes (mix/oportunidades/carteira): fluem livres, quem não pode quebrar é a LINHA */
+  .cd,.sc{break-inside:auto;margin-bottom:8px!important}
+  tr{break-inside:avoid;page-break-inside:avoid}
+  thead{display:table-header-group}
+  .chart-wrap{height:105px!important}
+  .chart-wrap canvas{max-height:105px!important}
+  canvas{max-width:100%!important}
+  .ct2,.sc{font-size:12px!important;margin-bottom:6px!important}
+  .cd{padding:8px 10px!important}
+  .ctb{font-size:8.3px!important}
+  .ctb th,.ctb td{padding:2px 4px!important;line-height:1.2!important}
+  table{font-size:8.3px!important}
+  .kg{gap:5px!important}
+  .print-trend-table{display:table!important;font-size:8.5px!important;margin-top:3px!important}
+  .print-trend-table th,.print-trend-table td{padding:2px 4px!important}
+  .lg{display:none!important}
+}
+.print-trend-table{display:none;width:100%;font-size:10px;border-collapse:collapse;margin-top:6px}
+.print-trend-table th,.print-trend-table td{padding:3px 6px;text-align:right;border-top:1px solid var(--brd)}
+.print-trend-table th:first-child,.print-trend-table td:first-child{text-align:left}
 </style>
 </head>
 <body>
@@ -220,15 +264,8 @@ html,body{height:100%;overflow:hidden;background:var(--sb)}
   <div class="cf-chips" id="cfc-rep"></div>
   <div class="cf-dropdown" id="cfd-rep" data-multi="true">
     <div class="cf-search"><input type="text" placeholder="Buscar representante..." oninput="cfSearch('rep',this.value)" onclick="event.stopPropagation()"></div>
-<div class="cf-opt" data-val="FASOLI" onclick="cfClick(this,'rep')"><span class="cf-ck"></span>FASOLI</div>
-<div class="cf-opt" data-val="LOUISE" onclick="cfClick(this,'rep')"><span class="cf-ck"></span>LOUISE</div>
 <div class="cf-opt" data-val="ROBERTA 3P" onclick="cfClick(this,'rep')"><span class="cf-ck"></span>ROBERTA 3P</div>
 <div class="cf-opt" data-val="ROBERTA 1P" onclick="cfClick(this,'rep')"><span class="cf-ck"></span>ROBERTA 1P</div>
-<div class="cf-opt" data-val="TRIAD" onclick="cfClick(this,'rep')"><span class="cf-ck"></span>TRIAD</div>
-<div class="cf-opt" data-val="AMARAL" onclick="cfClick(this,'rep')"><span class="cf-ck"></span>AMARAL</div>
-<div class="cf-opt" data-val="SDM" onclick="cfClick(this,'rep')"><span class="cf-ck"></span>SDM</div>
-<div class="cf-opt" data-val="BALDISSERA" onclick="cfClick(this,'rep')"><span class="cf-ck"></span>BALDISSERA</div>
-<div class="cf-opt" data-val="EQUIPA" onclick="cfClick(this,'rep')"><span class="cf-ck"></span>EQUIPA</div>
 
   </div>
 </div>
@@ -238,72 +275,14 @@ html,body{height:100%;overflow:hidden;background:var(--sb)}
   <div class="cf-chips" id="cfc-cli"></div>
   <div class="cf-dropdown" id="cfd-cli" data-multi="true">
     <div class="cf-search"><input type="text" placeholder="Buscar cliente..." oninput="cfSearch('cli',this.value)" onclick="event.stopPropagation()"></div>
-<div class="cf-opt" data-val="ACME" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>ACME</div>
-<div class="cf-opt" data-val="REABILIT MAIS" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>REABILIT MAIS</div>
-<div class="cf-opt" data-val="DERMOMED" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>DERMOMED</div>
-<div class="cf-opt" data-val="MATREN" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>MATREN</div>
-<div class="cf-opt" data-val="MANOCHIO" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>MANOCHIO</div>
-<div class="cf-opt" data-val="MAGAZINE BRASILEIRO" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>MAGAZINE BRASILEIRO</div>
 <div class="cf-opt" data-val="AMAZON B2B" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>AMAZON B2B</div>
-<div class="cf-opt" data-val="TT IMPORTS" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>TT IMPORTS</div>
-<div class="cf-opt" data-val="WEBCONTINENTAL" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>WEBCONTINENTAL</div>
-<div class="cf-opt" data-val="HENRY SCHEIN" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>HENRY SCHEIN</div>
-<div class="cf-opt" data-val="MERCADO LIVRE" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>MERCADO LIVRE</div>
-<div class="cf-opt" data-val="TUDAO TECH" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>TUDAO TECH</div>
-<div class="cf-opt" data-val="A REDE MARKETPLACE" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>A REDE MARKETPLACE</div>
-<div class="cf-opt" data-val="MAX FERRAMENTAS" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>MAX FERRAMENTAS</div>
-<div class="cf-opt" data-val="MOSHEE" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>MOSHEE</div>
-<div class="cf-opt" data-val="KIPMED" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>KIPMED</div>
-<div class="cf-opt" data-val="EASY MAGAZINE" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>EASY MAGAZINE</div>
-<div class="cf-opt" data-val="BUMBER MAGAZINE" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>BUMBER MAGAZINE</div>
-<div class="cf-opt" data-val="SGOBE" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>SGOBE</div>
-<div class="cf-opt" data-val="AGEX GROUP" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>AGEX GROUP</div>
-<div class="cf-opt" data-val="VANTTO IMPORT LTDA" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>VANTTO IMPORT LTDA</div>
-<div class="cf-opt" data-val="JLM DISTRIBUIDORA LTDA" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>JLM DISTRIBUIDORA LTDA</div>
-<div class="cf-opt" data-val="SMART CHOICE" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>SMART CHOICE</div>
-<div class="cf-opt" data-val="LOJAS CAMPANA LTDA" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>LOJAS CAMPANA LTDA</div>
 <div class="cf-opt" data-val="F2SELL" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>F2SELL</div>
-<div class="cf-opt" data-val="RIBERMEDICA" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>RIBERMEDICA</div>
-<div class="cf-opt" data-val="SOMA SAUDE" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>SOMA SAUDE</div>
-<div class="cf-opt" data-val="MARCA MEDICA" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>MARCA MEDICA</div>
-<div class="cf-opt" data-val="FELIPE FASOLI HORN" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>FELIPE FASOLI HORN</div>
 <div class="cf-opt" data-val="2D MARKETPLACE LTDA" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>2D MARKETPLACE LTDA</div>
-<div class="cf-opt" data-val="BEL MICRO" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>BEL MICRO</div>
-<div class="cf-opt" data-val="BFMED" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>BFMED</div>
-<div class="cf-opt" data-val="CASA DE VO" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>CASA DE VO</div>
-<div class="cf-opt" data-val="CENTRO ESPIRITA AS ESTRELAS DOURADAS DO SENHOR" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>CENTRO ESPIRITA AS ESTRELAS DOURADAS DO SENHOR</div>
 <div class="cf-opt" data-val="COMERCIAL PENA E LOPES - DULAR" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>COMERCIAL PENA E LOPES - DULAR</div>
-<div class="cf-opt" data-val="DIRECTIVA PRODUTOS DISTRIBUIDORA LTDA" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>DIRECTIVA PRODUTOS DISTRIBUIDORA LTDA</div>
-<div class="cf-opt" data-val="DORMED" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>DORMED</div>
-<div class="cf-opt" data-val="DROGARIAS NHA CHICA" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>DROGARIAS NHA CHICA</div>
 <div class="cf-opt" data-val="E. ROCHA DA SILVA - PRO ELETRO LTDA" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>E. ROCHA DA SILVA - PRO ELETRO LTDA</div>
-<div class="cf-opt" data-val="ENGAGE ELETRO" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>ENGAGE ELETRO</div>
-<div class="cf-opt" data-val="IDEAL BRANDS" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>IDEAL BRANDS</div>
-<div class="cf-opt" data-val="IMPACTO III" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>IMPACTO III</div>
-<div class="cf-opt" data-val="INFINITY COMERCIO" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>INFINITY COMERCIO</div>
 <div class="cf-opt" data-val="J S DE CARVALHO - TEM DE TUDO BRASIL" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>J S DE CARVALHO - TEM DE TUDO BRASIL</div>
-<div class="cf-opt" data-val="JANNOTTI E OLIVEIRA" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>JANNOTTI E OLIVEIRA</div>
-<div class="cf-opt" data-val="KARZEN" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>KARZEN</div>
-<div class="cf-opt" data-val="LE MEDICAL" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>LE MEDICAL</div>
-<div class="cf-opt" data-val="LOJAS MINEIRAS" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>LOJAS MINEIRAS</div>
-<div class="cf-opt" data-val="LOJAS PRESIDENTE LTDA" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>LOJAS PRESIDENTE LTDA</div>
-<div class="cf-opt" data-val="MEGAMOBILY" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>MEGAMOBILY</div>
-<div class="cf-opt" data-val="MOSHE" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>MOSHE</div>
-<div class="cf-opt" data-val="MPS" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>MPS</div>
-<div class="cf-opt" data-val="NANEX" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>NANEX</div>
-<div class="cf-opt" data-val="ORTOVAN" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>ORTOVAN</div>
-<div class="cf-opt" data-val="PMM NEGOCIOS" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>PMM NEGOCIOS</div>
-<div class="cf-opt" data-val="SNG SUPLEMENTOS" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>SNG SUPLEMENTOS</div>
-<div class="cf-opt" data-val="SUPERCOMM" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>SUPERCOMM</div>
-<div class="cf-opt" data-val="USEE" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>USEE</div>
-<div class="cf-opt" data-val="VCVALENTE" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>VCVALENTE</div>
-<div class="cf-opt" data-val="ZANLINE" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>ZANLINE</div>
-<div class="cf-opt" data-val="BEM ESTAR WEB" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>BEM ESTAR WEB</div>
-<div class="cf-opt" data-val="TAMBASA ATACADISTAS" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>TAMBASA ATACADISTAS</div>
 <div class="cf-opt" data-val="GALPAO 12" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>GALPAO 12</div>
 <div class="cf-opt" data-val="2ELETRO" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>2ELETRO</div>
-<div class="cf-opt" data-val="ELETRONORTE" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>ELETRONORTE</div>
-<div class="cf-opt" data-val="BWG SHOP" onclick="cfClick(this,'cli')"><span class="cf-ck"></span>BWG SHOP</div>
 
   </div>
 </div>
@@ -460,12 +439,19 @@ html,body{height:100%;overflow:hidden;background:var(--sb)}
   </div>
 </div>
 <div class="ct">
+  <div class="print-hdr" id="print-hdr">
+    <div class="print-hdr-brand">Dell<em>amed</em><span>· TurbOn Canal Online B2B</span></div>
+    <div class="print-hdr-info" id="print-hdr-info"></div>
+  </div>
   <div class="hdr">
     <div>
       <div class="hdr-t" id="ht">War Room — Jun/26</div>
       <div class="hdr-s" id="hs">Todos clientes · Todos produtos · Todos representantes · Canal Online B2B</div>
     </div>
-    <div class="hdr-b" id="hb">Jun/26</div>
+    <div style="display:flex;align-items:center;gap:8px">
+      <div class="hdr-b" id="hb">Jun/26</div>
+      <button id="export-pdf-btn" class="hdr-pdf-btn" onclick="exportPDF()" style="display:none"><i class="ti ti-file-download"></i>Exportar PDF</button>
+    </div>
       <div id="hdr-atu" style="font-size:10px;color:var(--t3);text-align:right;margin-top:3px"></div>
   </div>
   <div class="bd">
@@ -733,6 +719,7 @@ function render(){
   var _labR=fRs?fRs.join(", "):"Todos representantes";
   S("hs",(_labC)+" · "+(fS||"Todos produtos")+" · "+(_labR)+" · Canal Online B2B");
   if($("hdr-atu"))$("hdr-atu").textContent="Última atualização: "+DATA_ATU;
+  if($("export-pdf-btn"))$("export-pdf-btn").style.display=(id==='cli'||id==='rep')?'inline-flex':'none';
 
   var f26=qFP(FAT,fR,fC,fS,2026,ms),f25=qFP(FAT,fR,fC,fS,2025,ms);
   var p26=qFP_PEDH(fR,fC,fS,2026,ms),p25=qFP_PEDH(fR,fC,fS,2025,ms);
@@ -1150,7 +1137,7 @@ function rTopItensCart(fR,fC,fS,grps){
   var mx=items[0][1];
   el.innerHTML=items.map(function(e,i){
     var w=Math.round(e[1]/mx*100);
-    var est=EST[e[0]]||{};
+    var est=EST_SG[e[0]]||EST[e[0]]||{};
     var qt=itemQtMap[e[0]]||0;
     var mpTag=est.h>0?"<span style='color:var(--grn3);font-size:9.5px'>\u2713 dispon\u00edvel</span>":(est.mp?"<span style='color:var(--amb);font-size:9.5px'>Chega "+est.mp+"</span>":"<span style='color:var(--red);font-size:9.5px'>sem previs\u00e3o</span>");
     return "<div class='rr'><div class='rn'>"+(i+1)+"</div><div style='flex:1;min-width:0'><div class='rname'>"+e[0]+"</div>"+
@@ -1501,19 +1488,24 @@ function rCliMain(fR,fC,fS,ms){
       "</div>"+
     "</div>"+
     // Gráfico evolução
-    "<div class='cd'><div class='ct2'><i class='ti ti-chart-line' style='color:var(--blu)'></i>Evolu\u00e7\u00e3o mensal \u2014 Faturado vs Sell-out ML</div>"+
-      "<div class='lg'><span><div class='ld' style='background:rgba(180,180,180,0.7)'></div>Pedido</span><span><div class='ld' style='background:#1856a3'></div>Faturado</span><span><div class='ld' style='background:#0f9e72'></div>Sell-out ML</span></div>"+
-      "<div style='position:relative;height:170px'><canvas id='c-cli-trend-live'></canvas></div></div>"+
+    "<div class='cd'><div class='ct2'><i class='ti ti-chart-line' style='color:var(--blu)'></i>Evolu\u00e7\u00e3o mensal em valor \u2014 Pedido vs Faturado vs Sell-out</div>"+
+      "<div class='chart-wrap' style='position:relative;height:170px'><canvas id='c-cli-trend-vl'></canvas></div>"+
+      "<table class='print-trend-table' id='c-cli-trend-table-vl'></table></div>"+
+    "<div class='cd'><div class='ct2'><i class='ti ti-chart-bar' style='color:#e8912d'></i>Evolu\u00e7\u00e3o mensal em quantidade \u2014 Pedido vs Faturado vs Sell-out</div>"+
+      "<div class='chart-wrap' style='position:relative;height:170px'><canvas id='c-cli-trend-qt'></canvas></div>"+
+      "<table class='print-trend-table' id='c-cli-trend-table-qt'></table></div>"+
     // Mix
+    _printMiniHdr("Cliente: <b>"+fC+"</b> &nbsp;·&nbsp; Período: <b>"+pL()+"</b>")+
     "<div class='cd'><div class='ct2'><i class='ti ti-package' style='color:var(--blu)'></i>Mix de produtos \u2014 performance por subgrupo</div>"+
       "<div style='overflow-x:auto'><table class='ctb'><thead><tr><th>Subgrupo</th><th>Linha</th><th style='text-align:right'>Fat 26</th><th style='text-align:right'>YoY%</th><th style='text-align:right'>Pedido</th><th style='text-align:right'>SO ML</th><th style='text-align:right;color:#0f9e72'>Qtd SO</th><th>% fat</th><th>Tend.</th><th style='text-align:right'>Carteira</th><th>Estoque</th></tr></thead><tbody>"+mixRows+"</tbody></table></div></div>"+
     // Cross-sell
+    _printMiniHdr("Cliente: <b>"+fC+"</b> &nbsp;·&nbsp; Período: <b>"+pL()+"</b>")+
     "<div class='cd'><div class='ct2'><i class='ti ti-sparkles' style='color:var(--amb)'></i>Oportunidades de cross-sell</div>"+crossHtml+"</div>"+
     // Carteira via buildCartTable
     (function(){
     var _grpsCli=[fC];
     var _ct=buildCartTable(_grpsCli,null,CURR_MK);
-    var _cartHdr="<div class='sc'><i class='ti ti-inbox' style='color:var(--blu)'></i>Carteira em aberto</div>";
+    var _cartHdr=_printMiniHdr("Cliente: <b>"+fC+"</b> &nbsp;·&nbsp; Período: <b>"+pL()+"</b>")+"<div class='sc'><i class='ti ti-inbox' style='color:var(--blu)'></i>Carteira em aberto</div>";
     var _cartBody="<div class='cd'>"+_ct.html+buildCartCards(_ct.totDVl,_ct.totChVl,_ct.totPr,_ct.totPend,_ct.totNxtVl)+"</div>";
     return _cartHdr+_cartBody;
     })()+
@@ -1527,24 +1519,76 @@ function rCliMain(fR,fC,fS,ms){
     console.error("rCliMain error:", err);
     return;
   }
-  // Render trend chart (after innerHTML is set, canvas exists)
+  // Render trend charts (after innerHTML is set, canvas exists)
   setTimeout(function(){
-    var ctx2=$("c-cli-trend-live");
-    if(!ctx2)return;
-    if(CH["cli-t"])CH["cli-t"].destroy();
+    if(typeof Chart==="undefined")return;
     var m12=M12S;
     var lbl=M12L;
-    var fd=m12.map(function(k){return (pr.monthly_fat||{})[k]||0;});
-    var sd=m12.map(function(k){var yr=parseInt(k.split("-")[0]),mo=parseInt(k.split("-")[1]);return qSG(rep,fC,yr,[mo]);});
-    var pd=m12.map(function(k){
-      var yr=parseInt(k.split("-")[0]),mo=parseInt(k.split("-")[1]);
-      return qFP_PEDH(rep,fC,"",yr,[mo]);
-    });
-    CH["cli-t"]=new Chart(ctx2,{type:"bar",data:{labels:lbl,datasets:[
-      {label:"Pedido",data:pd,backgroundColor:"rgba(180,180,180,0.5)",borderRadius:3},
-      {label:"Faturado",data:fd,backgroundColor:"#1856a3",borderRadius:3},
-      {type:"line",label:"SO ML",data:sd,borderColor:"#0f9e72",backgroundColor:"rgba(15,158,114,.1)",borderWidth:2,pointRadius:3,tension:0.3,fill:true}
-    ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{font:{size:8},maxRotation:40},grid:{display:false}},y:{ticks:{callback:function(v){return Math.round(v/1e3)+"k";},font:{size:9}},grid:{color:"rgba(0,0,0,.04)"}}}}});
+    function _shiftKeyC(k,n){
+      var p=k.split('-');var y=parseInt(p[0]),mo=parseInt(p[1])+n;
+      while(mo<1){mo+=12;y--;} while(mo>12){mo-=12;y++;}
+      return y+'-'+mo;
+    }
+    function _seriesC(fn){
+      var data=m12.map(function(k){var p=k.split('-');return fn(parseInt(p[0]),parseInt(p[1]));});
+      var mom=m12.map(function(k,i){var pk=_shiftKeyC(k,-1).split('-');var prev=fn(parseInt(pk[0]),parseInt(pk[1]));return prev?Math.round((data[i]-prev)/prev*100):null;});
+      var yoy=m12.map(function(k,i){var yk=_shiftKeyC(k,-12).split('-');var py=fn(parseInt(yk[0]),parseInt(yk[1]));return py?Math.round((data[i]-py)/py*100):null;});
+      return {data:data,mom:mom,yoy:yoy};
+    }
+    function _tipC(fmt){
+      return {callbacks:{label:function(ctx){
+        var ds=ctx.dataset,i=ctx.dataIndex;
+        var mom=ds._mom?ds._mom[i]:null, yoy=ds._yoy?ds._yoy[i]:null;
+        var momS=mom===null||mom===undefined?"s/ comp.":(mom>=0?"+":"")+mom+"%";
+        var yoyS=yoy===null||yoy===undefined?"s/ comp.":(yoy>=0?"+":"")+yoy+"%";
+        return ds.label+": "+fmt(ctx.raw)+"  ·  MoM "+momS+"  ·  YoY "+yoyS;
+      }}};
+    }
+    var pdS=_seriesC(function(a,m){return qFP_PEDH(rep,fC,"",a,[m]);});
+    var fdS=_seriesC(function(a,m){return qFP(FAT,rep,fC,"",a,[m]);});
+    var sdS=_seriesC(function(a,m){return qSG(rep,fC,a,[m]);});
+    var pdQtS=_seriesC(function(a,m){return qFP_PEDH_Q(rep,fC,"",a,[m]);});
+    var fqS=_seriesC(function(a,m){return qFP(FQ,rep,fC,"",a,[m]);});
+    var sqS=_seriesC(function(a,m){return qSGQ(rep,fC,a,[m]);});
+
+    var ctxVl=$("c-cli-trend-vl");
+    if(ctxVl){
+      if(CH["cli-t-vl"])CH["cli-t-vl"].destroy();
+      CH["cli-t-vl"]=new Chart(ctxVl,{type:"bar",data:{labels:lbl,datasets:[
+        {label:"Pedido",data:pdS.data,backgroundColor:"rgba(180,180,180,0.5)",borderRadius:3,_mom:pdS.mom,_yoy:pdS.yoy},
+        {label:"Faturado",data:fdS.data,backgroundColor:"#1856a3",borderRadius:3,_mom:fdS.mom,_yoy:fdS.yoy},
+        {type:"line",label:"Sell-out",data:sdS.data,borderColor:"#0f9e72",backgroundColor:"rgba(15,158,114,.1)",borderWidth:2,pointRadius:3,tension:0.3,fill:true,_mom:sdS.mom,_yoy:sdS.yoy}
+      ]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:"index",intersect:false},
+        plugins:{legend:{display:true,position:"bottom",labels:{font:{size:9},boxWidth:10}},tooltip:_tipC(function(v){return M(v);})},
+        scales:{x:{ticks:{font:{size:8},maxRotation:40},grid:{display:false}},y:{ticks:{callback:function(v){return Math.round(v/1e3)+"k";},font:{size:9}},grid:{color:"rgba(0,0,0,.04)"}}}}});
+    }
+    var ctxQt=$("c-cli-trend-qt");
+    if(ctxQt){
+      if(CH["cli-t-qt"])CH["cli-t-qt"].destroy();
+      CH["cli-t-qt"]=new Chart(ctxQt,{type:"bar",data:{labels:lbl,datasets:[
+        {label:"Qtd Pedido",data:pdQtS.data,backgroundColor:"rgba(244,199,144,0.55)",borderRadius:3,_mom:pdQtS.mom,_yoy:pdQtS.yoy},
+        {label:"Qtd Faturada",data:fqS.data,backgroundColor:"#e8912d",borderRadius:3,_mom:fqS.mom,_yoy:fqS.yoy},
+        {type:"line",label:"Qtd Sell-out",data:sqS.data,borderColor:"#c2410c",backgroundColor:"#c2410c",borderWidth:2.5,pointRadius:3,pointBackgroundColor:"#c2410c",tension:0.3,fill:false,_mom:sqS.mom,_yoy:sqS.yoy}
+      ]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:"index",intersect:false},
+        plugins:{legend:{display:true,position:"bottom",labels:{font:{size:9},boxWidth:10}},tooltip:_tipC(function(v){return Math.round(v).toLocaleString('pt-BR')+" un";})},
+        scales:{x:{ticks:{font:{size:8},maxRotation:40},grid:{display:false}},y:{ticks:{callback:function(v){return v.toLocaleString('pt-BR')+" un";},font:{size:9}},grid:{color:"rgba(232,145,45,.05)"}}}}});
+    }
+    var tblVl=$("c-cli-trend-table-vl");
+    if(tblVl){
+      var hdrVl="<thead><tr><th>Métrica</th>"+lbl.map(function(l){return "<th>"+l+"</th>";}).join("")+"</tr></thead>";
+      var rP="<tr><td>Pedido</td>"+pdS.data.map(function(v){return "<td>"+M(v)+"</td>";}).join("")+"</tr>";
+      var rF="<tr><td>Faturado</td>"+fdS.data.map(function(v){return "<td>"+M(v)+"</td>";}).join("")+"</tr>";
+      var rS="<tr><td>Sell-out</td>"+sdS.data.map(function(v){return "<td>"+M(v)+"</td>";}).join("")+"</tr>";
+      tblVl.innerHTML=hdrVl+"<tbody>"+rP+rF+rS+"</tbody>";
+    }
+    var tblQt=$("c-cli-trend-table-qt");
+    if(tblQt){
+      var hdrQt="<thead><tr><th>Métrica</th>"+lbl.map(function(l){return "<th>"+l+"</th>";}).join("")+"</tr></thead>";
+      var rPQ="<tr><td>Qtd Pedido</td>"+pdQtS.data.map(function(v){return "<td>"+Math.round(v).toLocaleString('pt-BR')+"</td>";}).join("")+"</tr>";
+      var rFQ="<tr><td>Qtd Faturada</td>"+fqS.data.map(function(v){return "<td>"+Math.round(v).toLocaleString('pt-BR')+"</td>";}).join("")+"</tr>";
+      var rSQ="<tr><td>Qtd Sell-out</td>"+sqS.data.map(function(v){return "<td>"+Math.round(v).toLocaleString('pt-BR')+"</td>";}).join("")+"</tr>";
+      tblQt.innerHTML=hdrQt+"<tbody>"+rPQ+rFQ+rSQ+"</tbody>";
+    }
   },50);
 }
 
@@ -1860,8 +1904,10 @@ function rProdMain(fR,fC,fS,ms){
       "</div>"+
       "<div class='kg' style='grid-template-columns:repeat(6,minmax(0,1fr));gap:8px;margin-bottom:12px'>"+kpis+"</div>"+
       estCardHtml+
-      "<div class='cd'><div style='font-size:12px;font-weight:600;color:var(--t3);margin-bottom:8px'>\u2197 Evolu\u00e7\u00e3o mensal \u2014 Pedido vs Faturado vs Sell-out</div>"+
-        "<div style='height:160px;position:relative'><canvas id='c-prod-trend'></canvas></div></div>"+
+      "<div class='cd'><div style='font-size:12px;font-weight:600;color:var(--t3);margin-bottom:8px'>\u2197 Evolu\u00e7\u00e3o mensal em valor \u2014 Pedido vs Faturado vs Sell-out</div>"+
+        "<div class='chart-wrap' style='height:160px;position:relative'><canvas id='c-prod-trend-vl'></canvas></div></div>"+
+      "<div class='cd'><div style='font-size:12px;font-weight:600;color:var(--t3);margin-bottom:8px'>\u2197 Evolu\u00e7\u00e3o mensal em quantidade \u2014 Pedido vs Faturado vs Sell-out</div>"+
+        "<div class='chart-wrap' style='height:160px;position:relative'><canvas id='c-prod-trend-qt'></canvas></div></div>"+
       "<div class='cd'><div style='display:flex;align-items:center;gap:6px;margin-bottom:10px'>"+
         "<i class='ti ti-target' style='color:var(--amb)'></i>"+
         "<div style='font-size:11px;font-weight:600;color:var(--t1)'>Meta de unidades \u2014 distribui\u00e7\u00e3o entre clientes</div></div>"+
@@ -1878,26 +1924,72 @@ function rProdMain(fR,fC,fS,ms){
     var _ctP=buildCartTable(_grpsProd,fS,CURR_MK,true);
     el.innerHTML+='<div class="cd">'+'<div class="ct2"><i class="ti ti-shopping-cart" style="color:var(--amb)"></i>Carteira em aberto</div>'+_ctP.html+buildCartCards(_ctP.totDVl,_ctP.totChVl,_ctP.totPr,_ctP.totPend,_ctP.totNxtVl)+'</div>'
 
-    // Chart data for trend
+    // Chart data for trend — valor e quantidade, com MoM/YoY por ponto
     var m12=M12S;
     var lbl12=M12L;
-    var pdData=m12.map(function(k){var p=k.split('-');return qFP_PEDH(fR,fC,fS,parseInt(p[0]),[parseInt(p[1])]);});
-    var fdData=m12.map(function(k){var p=k.split('-');return qFP(FAT,fR,fC,fS,parseInt(p[0]),[parseInt(p[1])]);});
-    var sdData=m12.map(function(k){var p=k.split('-');return qSS(fR,fC,fS,parseInt(p[0]),[parseInt(p[1])]);});
-    var qtData=m12.map(function(k){var p=k.split('-');return qFP(FQ,fR,fC,fS,parseInt(p[0]),[parseInt(p[1])]);});
-        // Charts
+    function _shiftKey(k,n){
+      var p=k.split('-');var y=parseInt(p[0]),mo=parseInt(p[1])+n;
+      while(mo<1){mo+=12;y--;} while(mo>12){mo-=12;y++;}
+      return y+'-'+mo;
+    }
+    function _series(fn){
+      var data=m12.map(function(k){var p=k.split('-');return fn(parseInt(p[0]),parseInt(p[1]));});
+      var mom=m12.map(function(k,i){
+        var pk=_shiftKey(k,-1).split('-');var prev=fn(parseInt(pk[0]),parseInt(pk[1]));
+        return prev?Math.round((data[i]-prev)/prev*100):null;
+      });
+      var yoy=m12.map(function(k,i){
+        var yk=_shiftKey(k,-12).split('-');var py=fn(parseInt(yk[0]),parseInt(yk[1]));
+        return py?Math.round((data[i]-py)/py*100):null;
+      });
+      return {data:data,mom:mom,yoy:yoy};
+    }
+    var pdS=_series(function(a,m){return qFP_PEDH(fR,fC,fS,a,[m]);});
+    var fdS=_series(function(a,m){return qFP(FAT,fR,fC,fS,a,[m]);});
+    var sdS=_series(function(a,m){return qSS(fR,fC,fS,a,[m]);});
+    var pdQtS=_series(function(a,m){return qFP_PEDH_Q(fR,fC,fS,a,[m]);});
+    var fqS=_series(function(a,m){return qFP(FQ,fR,fC,fS,a,[m]);});
+    var sqS=_series(function(a,m){return qSQ(fR,fC,fS,a,[m]);});
+
+    function _mkTooltip(fmt){
+      return {callbacks:{label:function(ctx){
+        var ds=ctx.dataset,i=ctx.dataIndex;
+        var mom=ds._mom?ds._mom[i]:null, yoy=ds._yoy?ds._yoy[i]:null;
+        var momS=mom===null||mom===undefined?"s/ comp.":(mom>=0?"+":"")+mom+"%";
+        var yoyS=yoy===null||yoy===undefined?"s/ comp.":(yoy>=0?"+":"")+yoy+"%";
+        return ds.label+": "+fmt(ctx.raw)+"  ·  MoM "+momS+"  ·  YoY "+yoyS;
+      }}};
+    }
+    var _fmtM=function(v){return M(v);};
+    var _fmtUn=function(v){return Math.round(v).toLocaleString('pt-BR')+" un";};
+
+    // Charts
     setTimeout(function(){
       if(typeof Chart==="undefined")return;
-      var ctx=$("c-prod-trend");if(!ctx)return;if(CH["prod-t"])CH["prod-t"].destroy();
-      CH["prod-t"]=new Chart(ctx,{type:"bar",data:{labels:lbl12,datasets:[
-        {label:"Pedido",data:pdData,backgroundColor:"rgba(180,180,180,0.5)",borderRadius:3,order:3},
-        {label:"Faturado",data:fdData,backgroundColor:"#1856a3",borderRadius:3,order:3},
-        {type:"line",label:"SO ML",data:sdData,borderColor:"#0f9e72",backgroundColor:"rgba(15,158,114,.1)",borderWidth:2,pointRadius:3,tension:0.3,fill:true,order:2,yAxisID:"y"},
-        {type:"line",label:"Qtd Vendida (un)",data:qtData,borderColor:"#e8912d",backgroundColor:"#e8912d",borderWidth:2.5,pointRadius:3,pointBackgroundColor:"#e8912d",tension:0.3,fill:false,order:1,yAxisID:"y1"}
-      ]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:"index",intersect:false},plugins:{legend:{display:true,position:"bottom",labels:{font:{size:9},boxWidth:10}}},
-        scales:{x:{ticks:{font:{size:8},maxRotation:40},grid:{display:false}},
-                y1:{type:"linear",position:"right",beginAtZero:true,grace:"10%",grid:{display:false},ticks:{font:{size:8},color:"#e8912d",callback:function(v){return v.toLocaleString("pt-BR")+" un";}},title:{display:true,text:"unidades",font:{size:8},color:"#e8912d"}},
-                y:{type:"linear",position:"left",beginAtZero:true,ticks:{callback:function(v){return Math.round(v/1e3)+"k";},font:{size:9}},grid:{color:"rgba(0,0,0,.04)"}}}}});
+      var ctxVl=$("c-prod-trend-vl");
+      if(ctxVl){
+        if(CH["prod-t-vl"])CH["prod-t-vl"].destroy();
+        CH["prod-t-vl"]=new Chart(ctxVl,{type:"bar",data:{labels:lbl12,datasets:[
+          {label:"Pedido",data:pdS.data,backgroundColor:"rgba(180,180,180,0.5)",borderRadius:3,_mom:pdS.mom,_yoy:pdS.yoy},
+          {label:"Faturado",data:fdS.data,backgroundColor:"#1856a3",borderRadius:3,_mom:fdS.mom,_yoy:fdS.yoy},
+          {type:"line",label:"Sell-out",data:sdS.data,borderColor:"#0f9e72",backgroundColor:"rgba(15,158,114,.1)",borderWidth:2,pointRadius:3,tension:0.3,fill:true,_mom:sdS.mom,_yoy:sdS.yoy}
+        ]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:"index",intersect:false},
+          plugins:{legend:{display:true,position:"bottom",labels:{font:{size:9},boxWidth:10}},tooltip:_mkTooltip(_fmtM)},
+          scales:{x:{ticks:{font:{size:8},maxRotation:40},grid:{display:false}},
+                  y:{ticks:{callback:function(v){return Math.round(v/1e3)+"k";},font:{size:9}},grid:{color:"rgba(0,0,0,.04)"}}}}});
+      }
+      var ctxQt=$("c-prod-trend-qt");
+      if(ctxQt){
+        if(CH["prod-t-qt"])CH["prod-t-qt"].destroy();
+        CH["prod-t-qt"]=new Chart(ctxQt,{type:"bar",data:{labels:lbl12,datasets:[
+          {label:"Qtd Pedido",data:pdQtS.data,backgroundColor:"rgba(244,199,144,0.55)",borderRadius:3,_mom:pdQtS.mom,_yoy:pdQtS.yoy},
+          {label:"Qtd Faturada",data:fqS.data,backgroundColor:"#e8912d",borderRadius:3,_mom:fqS.mom,_yoy:fqS.yoy},
+          {type:"line",label:"Qtd Sell-out",data:sqS.data,borderColor:"#c2410c",backgroundColor:"#c2410c",borderWidth:2.5,pointRadius:3,pointBackgroundColor:"#c2410c",tension:0.3,fill:false,_mom:sqS.mom,_yoy:sqS.yoy}
+        ]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:"index",intersect:false},
+          plugins:{legend:{display:true,position:"bottom",labels:{font:{size:9},boxWidth:10}},tooltip:_mkTooltip(_fmtUn)},
+          scales:{x:{ticks:{font:{size:8},maxRotation:40},grid:{display:false}},
+                  y:{ticks:{callback:function(v){return v.toLocaleString('pt-BR')+" un";},font:{size:9}},grid:{color:"rgba(232,145,45,.05)"}}}}});
+      }
     },50);
 
   } catch(err) {
@@ -2106,9 +2198,32 @@ function rRepMain(fR,fC,fS,ms){
     // Monthly chart data
     var m12=M12S;
     var lbl12=M12L;
-    var fdD=m12.map(function(k){var p=k.split('-');return qFP(FAT,fR,fC,fS,parseInt(p[0]),[parseInt(p[1])]);});
-    var pdD=m12.map(function(k){var p=k.split('-');return qFP_PEDH(fR,fC,fS,parseInt(p[0]),[parseInt(p[1])]);});
-    var sdD=m12.map(function(k){var p=k.split('-');return qSS(fR,fC,fS,parseInt(p[0]),[parseInt(p[1])]);});
+    function _shiftKeyR(k,n){
+      var p=k.split('-');var y=parseInt(p[0]),mo=parseInt(p[1])+n;
+      while(mo<1){mo+=12;y--;} while(mo>12){mo-=12;y++;}
+      return y+'-'+mo;
+    }
+    function _seriesR(fn){
+      var data=m12.map(function(k){var p=k.split('-');return fn(parseInt(p[0]),parseInt(p[1]));});
+      var mom=m12.map(function(k,i){var pk=_shiftKeyR(k,-1).split('-');var prev=fn(parseInt(pk[0]),parseInt(pk[1]));return prev?Math.round((data[i]-prev)/prev*100):null;});
+      var yoy=m12.map(function(k,i){var yk=_shiftKeyR(k,-12).split('-');var py=fn(parseInt(yk[0]),parseInt(yk[1]));return py?Math.round((data[i]-py)/py*100):null;});
+      return {data:data,mom:mom,yoy:yoy};
+    }
+    var fdD=_seriesR(function(a,m){return qFP(FAT,fR,fC,fS,a,[m]);});
+    var pdD=_seriesR(function(a,m){return qFP_PEDH(fR,fC,fS,a,[m]);});
+    var sdD=_seriesR(function(a,m){return qSS(fR,fC,fS,a,[m]);});
+    var fqD=_seriesR(function(a,m){return qFP(FQ,fR,fC,fS,a,[m]);});
+    var pdQtD=_seriesR(function(a,m){return qFP_PEDH_Q(fR,fC,fS,a,[m]);});
+    var sqD=_seriesR(function(a,m){return qSQ(fR,fC,fS,a,[m]);});
+    function _tipR(fmt){
+      return {callbacks:{label:function(ctx){
+        var ds=ctx.dataset,i=ctx.dataIndex;
+        var mom=ds._mom?ds._mom[i]:null, yoy=ds._yoy?ds._yoy[i]:null;
+        var momS=mom===null||mom===undefined?"s/ comp.":(mom>=0?"+":"")+mom+"%";
+        var yoyS=yoy===null||yoy===undefined?"s/ comp.":(yoy>=0?"+":"")+yoy+"%";
+        return ds.label+": "+fmt(ctx.raw)+"  ·  MoM "+momS+"  ·  YoY "+yoyS;
+      }}};
+    }
 
     // ── LAYOUT LIMPO: tudo em blocos verticais ──
     var html=
@@ -2171,12 +2286,18 @@ function rRepMain(fR,fC,fS,ms){
 
       // 3. Gráfico evolução
       "<div class='cd'>"+
-        "<div class='ct2'><i class='ti ti-chart-line' style='color:var(--blu)'></i>Evolu\u00e7\u00e3o mensal \u2014 Pedido vs Faturado vs Sell-out</div>"+
-        "<div class='lg'><span><div class='ld' style='background:rgba(180,180,180,0.6)'></div>Pedido</span><span><div class='ld' style='background:#1856a3'></div>Faturado</span><span><div class='ld' style='background:#0f9e72'></div>Sell-out ML</span></div>"+
-        "<div style='position:relative;height:160px'><canvas id='c-rep-trend'></canvas></div>"+
+        "<div class='ct2'><i class='ti ti-chart-line' style='color:var(--blu)'></i>Evolu\u00e7\u00e3o mensal em valor \u2014 Pedido vs Faturado vs Sell-out</div>"+
+        "<div class='chart-wrap' style='position:relative;height:160px'><canvas id='c-rep-trend-vl'></canvas></div>"+
+        "<table class='print-trend-table' id='c-rep-trend-table-vl'></table>"+
+      "</div>"+
+      "<div class='cd'>"+
+        "<div class='ct2'><i class='ti ti-chart-bar' style='color:#e8912d'></i>Evolu\u00e7\u00e3o mensal em quantidade \u2014 Pedido vs Faturado vs Sell-out</div>"+
+        "<div class='chart-wrap' style='position:relative;height:160px'><canvas id='c-rep-trend-qt'></canvas></div>"+
+        "<table class='print-trend-table' id='c-rep-trend-table-qt'></table>"+
       "</div>"+
 
       // 4. Onde buscar
+      _printMiniHdr("Representante: <b>"+fR+"</b> &nbsp;·&nbsp; Período: <b>"+pL()+"</b>")+
       "<div class='sc'><i class='ti ti-bolt' style='color:var(--amb)'></i>Onde buscar "+(gap>0?"os "+M(gap)+" que faltam":"novos volumes")+"</div>"+
       "<div class='cd'>"+
         (gap>0&&potTotal>0?"<div style='font-size:11px;padding:8px 12px;background:var(--amb2);border-radius:6px;margin-bottom:12px;color:var(--amb3)'>"+
@@ -2214,7 +2335,7 @@ function rRepMain(fR,fC,fS,ms){
       "<div class='cd'>"+inatiHtml+"</div>"+
 
     // 8. Carteira em aberto por rep
-      ""+"<div class='sc' style='margin-top:16px'><i class='ti ti-package' style='color:var(--red)'></i>Carteira em aberto</div>";
+      ""+_printMiniHdr("Representante: <b>"+fR+"</b> &nbsp;·&nbsp; Período: <b>"+pL()+"</b>")+"<div class='sc' style='margin-top:16px'><i class='ti ti-package' style='color:var(--red)'></i>Carteira em aberto</div>";
       // Carteira por item individual via buildCartTable
       var _grpsRep=gruposRep.filter(function(g){return(CG[g]||0)>0;});
       var _ct=buildCartTable(_grpsRep,fS,CURR_MK);
@@ -2225,14 +2346,46 @@ function rRepMain(fR,fC,fS,ms){
         // Chart
     setTimeout(function(){
       if(typeof Chart==="undefined")return;
-      var ctx=$("c-rep-trend");if(!ctx)return;if(CH["rep-t"])CH["rep-t"].destroy();
-      CH["rep-t"]=new Chart(ctx,{type:"bar",data:{labels:lbl12,datasets:[
-        {label:"Pedido",data:pdD,backgroundColor:"rgba(180,180,180,0.5)",borderRadius:3},
-        {label:"Faturado",data:fdD,backgroundColor:"#1856a3",borderRadius:3},
-        {label:"Sell-out ML",type:"line",data:sdD,borderColor:"#0f9e72",backgroundColor:"#0f9e72",pointRadius:2,pointBackgroundColor:"#0f9e72",tension:.3,borderWidth:2,fill:false,yAxisID:"y"}
-      ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
-        scales:{x:{ticks:{font:{size:8},maxRotation:40},grid:{display:false}},
-                y:{ticks:{callback:function(v){return Math.round(v/1e3)+"k";},font:{size:9}},grid:{color:"rgba(0,0,0,.04)"}}}}});
+      var ctxVl=$("c-rep-trend-vl");
+      if(ctxVl){
+        if(CH["rep-t-vl"])CH["rep-t-vl"].destroy();
+        CH["rep-t-vl"]=new Chart(ctxVl,{type:"bar",data:{labels:lbl12,datasets:[
+          {label:"Pedido",data:pdD.data,backgroundColor:"rgba(180,180,180,0.5)",borderRadius:3,_mom:pdD.mom,_yoy:pdD.yoy},
+          {label:"Faturado",data:fdD.data,backgroundColor:"#1856a3",borderRadius:3,_mom:fdD.mom,_yoy:fdD.yoy},
+          {label:"Sell-out",type:"line",data:sdD.data,borderColor:"#0f9e72",backgroundColor:"#0f9e72",pointRadius:2,pointBackgroundColor:"#0f9e72",tension:.3,borderWidth:2,fill:false,_mom:sdD.mom,_yoy:sdD.yoy}
+        ]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:"index",intersect:false},
+          plugins:{legend:{display:true,position:"bottom",labels:{font:{size:9},boxWidth:10}},tooltip:_tipR(function(v){return M(v);})},
+          scales:{x:{ticks:{font:{size:8},maxRotation:40},grid:{display:false}},
+                  y:{ticks:{callback:function(v){return Math.round(v/1e3)+"k";},font:{size:9}},grid:{color:"rgba(0,0,0,.04)"}}}}});
+      }
+      var ctxQt=$("c-rep-trend-qt");
+      if(ctxQt){
+        if(CH["rep-t-qt"])CH["rep-t-qt"].destroy();
+        CH["rep-t-qt"]=new Chart(ctxQt,{type:"bar",data:{labels:lbl12,datasets:[
+          {label:"Qtd Pedido",data:pdQtD.data,backgroundColor:"rgba(244,199,144,0.55)",borderRadius:3,_mom:pdQtD.mom,_yoy:pdQtD.yoy},
+          {label:"Qtd Faturada",data:fqD.data,backgroundColor:"#e8912d",borderRadius:3,_mom:fqD.mom,_yoy:fqD.yoy},
+          {label:"Qtd Sell-out",type:"line",data:sqD.data,borderColor:"#c2410c",backgroundColor:"#c2410c",pointRadius:2,pointBackgroundColor:"#c2410c",tension:.3,borderWidth:2,fill:false,_mom:sqD.mom,_yoy:sqD.yoy}
+        ]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:"index",intersect:false},
+          plugins:{legend:{display:true,position:"bottom",labels:{font:{size:9},boxWidth:10}},tooltip:_tipR(function(v){return Math.round(v).toLocaleString('pt-BR')+" un";})},
+          scales:{x:{ticks:{font:{size:8},maxRotation:40},grid:{display:false}},
+                  y:{ticks:{callback:function(v){return v.toLocaleString('pt-BR')+" un";},font:{size:9}},grid:{color:"rgba(232,145,45,.05)"}}}}});
+      }
+      var tblVl=$("c-rep-trend-table-vl");
+      if(tblVl){
+        var hdrVl="<thead><tr><th>Métrica</th>"+lbl12.map(function(l){return "<th>"+l+"</th>";}).join("")+"</tr></thead>";
+        var rowP="<tr><td>Pedido</td>"+pdD.data.map(function(v){return "<td>"+M(v)+"</td>";}).join("")+"</tr>";
+        var rowF="<tr><td>Faturado</td>"+fdD.data.map(function(v){return "<td>"+M(v)+"</td>";}).join("")+"</tr>";
+        var rowS="<tr><td>Sell-out</td>"+sdD.data.map(function(v){return "<td>"+M(v)+"</td>";}).join("")+"</tr>";
+        tblVl.innerHTML=hdrVl+"<tbody>"+rowP+rowF+rowS+"</tbody>";
+      }
+      var tblQt=$("c-rep-trend-table-qt");
+      if(tblQt){
+        var hdrQt="<thead><tr><th>Métrica</th>"+lbl12.map(function(l){return "<th>"+l+"</th>";}).join("")+"</tr></thead>";
+        var rowPQ="<tr><td>Qtd Pedido</td>"+pdQtD.data.map(function(v){return "<td>"+Math.round(v).toLocaleString('pt-BR')+"</td>";}).join("")+"</tr>";
+        var rowFQ="<tr><td>Qtd Faturada</td>"+fqD.data.map(function(v){return "<td>"+Math.round(v).toLocaleString('pt-BR')+"</td>";}).join("")+"</tr>";
+        var rowSQ="<tr><td>Qtd Sell-out</td>"+sqD.data.map(function(v){return "<td>"+Math.round(v).toLocaleString('pt-BR')+"</td>";}).join("")+"</tr>";
+        tblQt.innerHTML=hdrQt+"<tbody>"+rowPQ+rowFQ+rowSQ+"</tbody>";
+      }
     },50);
 
   }catch(err){
@@ -2242,6 +2395,13 @@ function rRepMain(fR,fC,fS,ms){
 }
 
 window.addEventListener("DOMContentLoaded",function(){
+  try{
+    _buildCfOptions('rep', Object.keys(RP).sort());
+    var _agByFat=AG.slice().sort(function(a,b){
+      return qFP(FAT,"",b,"",2026,YTD_M)-qFP(FAT,"",a,"",2026,YTD_M);
+    });
+    _buildCfOptions('cli', _agByFat);
+  }catch(e){console.error("Erro ao popular filtros:",e);}
   // render() without charts first; Chart.js onload will re-render with charts
   try{render();}catch(e){
     document.querySelector(".bd").innerHTML="<div style='padding:30px;color:#d45228;font-family:sans-serif'><h2>Erro ao carregar dashboard</h2><p>"+e.message+"</p></div>";
@@ -2283,6 +2443,38 @@ function rResultMain(){
     "</div>";
 }
 
+function _printMiniHdr(label){
+  return "<div class='print-hdr-mini'><div class='print-hdr-brand'>Dell<em>amed</em><span>· TurbOn Canal Online B2B</span></div><div class='print-hdr-info'>"+label+"</div></div>";
+}
+function exportPDF(){
+  var ap=document.querySelector(".pnl.active");var id=ap&&ap.id?ap.id.replace("p-",""):"geral";
+  var info="";
+  if(id==='rep'){
+    var repSel=(CF.rep&&CF.rep.length===1)?CF.rep[0]:(CF.rep&&CF.rep.length>1?CF.rep.join(", "):"Todos os representantes");
+    info="Representante: <b>"+repSel+"</b> &nbsp;·&nbsp; Período: <b>"+pL()+"</b>";
+  }else if(id==='cli'){
+    var cliSel=(CF.cli&&CF.cli.length===1)?CF.cli[0]:(CF.cli&&CF.cli.length>1?CF.cli.join(", "):"Todos os clientes");
+    info="Cliente: <b>"+cliSel+"</b> &nbsp;·&nbsp; Período: <b>"+pL()+"</b>";
+  }else{
+    info="Período: <b>"+pL()+"</b>";
+  }
+  info+=" &nbsp;·&nbsp; Emitido em "+new Date().toLocaleDateString('pt-BR');
+  if($("print-hdr-info"))$("print-hdr-info").innerHTML=info;
+  window.print();
+}
+window.addEventListener("beforeprint",function(){
+  Object.keys(CH).forEach(function(k){var c=CH[k];if(c&&typeof c.resize==='function'){try{c.resize();}catch(e){}}});
+});
+function _buildCfOptions(fid, values){
+  var dd=document.getElementById('cfd-'+fid);
+  if(!dd)return;
+  var search=dd.querySelector('.cf-search');
+  var opts=values.map(function(v){
+    return "<div class='cf-opt' data-val='"+v+"' onclick=\"cfClick(this,'"+fid+"')\"><span class='cf-ck'></span>"+v+"</div>";
+  }).join('');
+  dd.querySelectorAll('.cf-opt').forEach(function(o){o.remove();});
+  dd.insertAdjacentHTML('beforeend', opts);
+}
 function cfOpen(fid) {
   var dd = document.getElementById('cfd-' + fid);
   var inp = document.getElementById('cfi-' + fid);

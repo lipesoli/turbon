@@ -928,19 +928,20 @@ if(fS){
     return{sg:sg,abs:abs,fq:fq,sq:sq};
   }).filter(function(x){return x;});
   // Selecionar amostra balanceada de todas as faixas -- não só os dois extremos.
-  // Prioridade maior pros críticos (ruptura + super estocado), mas sempre trazendo saudável/confortável também.
-  var ruptura=allSgsAbs.filter(function(x){return x.abs>90;}).sort(function(a,b){return b.abs-a.abs;});
-  var saudavel=allSgsAbs.filter(function(x){return x.abs>60&&x.abs<=90;}).sort(function(a,b){return b.abs-a.abs;});
-  var confortavel=allSgsAbs.filter(function(x){return x.abs>30&&x.abs<=60;}).sort(function(a,b){return b.abs-a.abs;});
-  var estocado=allSgsAbs.filter(function(x){return x.abs<=30;}).sort(function(a,b){return a.abs-b.abs;});
+  // Dentro de cada faixa, prioriza quem tem MAIS sell-out (quantidade vendida no ML) -- não o % mais extremo.
+  // Um item com 19 unidades vendidas não deve aparecer antes de um vendendo centenas, mesmo com % mais crítico.
+  var ruptura=allSgsAbs.filter(function(x){return x.abs>90;}).sort(function(a,b){return b.sq-a.sq;});
+  var saudavel=allSgsAbs.filter(function(x){return x.abs>60&&x.abs<=90;}).sort(function(a,b){return b.sq-a.sq;});
+  var confortavel=allSgsAbs.filter(function(x){return x.abs>30&&x.abs<=60;}).sort(function(a,b){return b.sq-a.sq;});
+  var estocado=allSgsAbs.filter(function(x){return x.abs<=30;}).sort(function(a,b){return b.sq-a.sq;});
   var combined=ruptura.slice(0,6).concat(estocado.slice(0,5)).concat(saudavel.slice(0,3)).concat(confortavel.slice(0,3));
-  // Se alguma faixa não tiver itens (não existe no filtro atual), preenche o espaço sobrando com mais críticos
+  // Se alguma faixa não tiver itens (não existe no filtro atual), preenche o espaço sobrando com quem mais vendeu no restante
   if(combined.length<15){
     var seenX={};combined.forEach(function(x){seenX[x.sg]=true;});
-    var resto=allSgsAbs.filter(function(x){return !seenX[x.sg];}).sort(function(a,b){return Math.abs(b.abs-50)-Math.abs(a.abs-50);});
+    var resto=allSgsAbs.filter(function(x){return !seenX[x.sg];}).sort(function(a,b){return b.sq-a.sq;});
     combined=combined.concat(resto.slice(0,15-combined.length));
   }
-  combined.sort(function(a,b){return b.abs-a.abs;});
+  combined.sort(function(a,b){return b.sq-a.sq;});
   sgs=combined.map(function(x){return x.sg;});
   combined.forEach(function(x){sqMap[x.sg]=x.sq;fqMap[x.sg]=x.fq;});
 }
@@ -976,7 +977,7 @@ function openSTModal(elId){
     var abs=Math.round(sq/0.8/fq*100);
     comSinal.push({sg:sg,abs:abs,fq:fq,sq:sq});
   });
-  comSinal.sort(function(a,b){return b.abs-a.abs||a.sg.localeCompare(b.sg);});
+  comSinal.sort(function(a,b){return b.sq-a.sq||a.sg.localeCompare(b.sg);});
   semSinal.sort(function(a,b){return a.sg.localeCompare(b.sg);});
   var rows=comSinal.map(function(x){
     var c=x.abs>90?"#d45228":x.abs>60?"#0f9e72":x.abs>30?"#e89a20":"#1856a3";

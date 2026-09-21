@@ -486,15 +486,22 @@ html,body{height:100%;overflow:hidden;background:var(--sb)}
       <div class="ct2"><i class="ti ti-chart-pie" style="color:var(--amb)"></i>Positivação por linha</div>
       <div id="pos-linha" class="pp" style="display:grid;grid-template-columns:repeat(4,1fr)"></div>
     </div>
+    <!-- Painel Orto - expansao estrategica (movido para junto de Positivacao por linha em 21/09/26) -->
+    <div class="cd" style="margin-bottom:12px">
+      <div class="ct2"><i class="ti ti-bone" style="color:#7b4bbf"></i>Painel Orto — expansão estratégica</div>
+      <div id="painel-orto"></div>
+    </div>
     <!-- Evolução mensal: valor + quantidade -->
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px">
       <div class="cd">
         <div class="ct2"><i class="ti ti-chart-line" style="color:var(--blu)"></i>Evolução mensal em valor — Pedido vs Faturado vs Sell-out</div>
-        <div style="position:relative;height:200px"><canvas id="c-geral-vl"></canvas></div>
+        <div class="st-chart-wrap" style="position:relative;height:200px" onclick="openGeralModal('vl')"><canvas id="c-geral-vl"></canvas></div>
+        <div style="font-size:10px;color:var(--t3);text-align:right;margin-top:4px">clique no gráfico para ver a tabela mês a mês</div>
       </div>
       <div class="cd">
         <div class="ct2"><i class="ti ti-chart-bar" style="color:#e8912d"></i>Evolução mensal em quantidade — Pedido vs Faturado vs Sell-out</div>
-        <div style="position:relative;height:200px"><canvas id="c-geral-qt"></canvas></div>
+        <div class="st-chart-wrap" style="position:relative;height:200px" onclick="openGeralModal('qt')"><canvas id="c-geral-qt"></canvas></div>
+        <div style="font-size:10px;color:var(--t3);text-align:right;margin-top:4px">clique no gráfico para ver a tabela mês a mês</div>
       </div>
     </div>
     <!-- Sell-through -->
@@ -507,17 +514,6 @@ html,body{height:100%;overflow:hidden;background:var(--sb)}
         <span style="display:flex;align-items:center;gap:3px"><span style="width:8px;height:8px;border-radius:2px;background:#1856a3"></span>&lt;30% super estocado</span>
       </div>
       <div class="st-chart-wrap" style="position:relative;height:210px" onclick="openSTModal('c-abs')"><canvas id="c-abs"></canvas></div><div style="font-size:10px;color:var(--t3);text-align:right;margin-top:4px">clique no gráfico para ver todos os subgrupos</div>
-    </div>
-    <!-- Top clientes + Top subgrupos -->
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px">
-      <div class="cd">
-        <div class="ct2"><i class="ti ti-trophy" style="color:var(--amb)"></i>Top clientes — Pedido vs Faturado</div>
-        <div id="top-cli"></div>
-      </div>
-      <div class="cd">
-        <div class="ct2"><i class="ti ti-chart-bar-2" style="color:var(--blu)"></i>Top subgrupos — Pedido vs Faturado</div>
-        <div id="top-sg"></div>
-      </div>
     </div>
     <!-- Top subgrupos SO + Matriz -->
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px">
@@ -535,6 +531,49 @@ html,body{height:100%;overflow:hidden;background:var(--sb)}
         </div>
       </div>
     </div>
+    <!-- Cobertura de sell-out mapeado (movido para o cluster de sell-out em 21/09/26) -->
+    <div class="cd" style="margin-bottom:12px">
+      <div class="ct2"><i class="ti ti-trending-up" style="color:var(--blu)"></i>Cobertura de sell-out mapeado</div>
+      <div style="font-size:10.5px;color:var(--t3);margin:-6px 0 8px">% de todo o sell-out do Mercado Livre (todos os vendedores) que dá pra atribuir a um cliente conhecido da Dellamed — mede a qualidade do mapeamento, não market share</div>
+      <div id="so-cov-trend"></div>
+    </div>
+    <!-- Destaques do mix: crescimento e atenção (Sell-out) -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px">
+      <div class="cd">
+        <div class="ct2"><i class="ti ti-trending-up" style="color:var(--grn)"></i>Em alta (Sell-out) — maior crescimento YoY</div>
+        <div style="font-size:10.5px;color:var(--t3);margin:-6px 0 8px">Subgrupos com sell-out relevante no Mercado Livre e crescimento acima da média do canal frente a 2025</div>
+        <div id="destaque-so-alta"></div>
+      </div>
+      <div class="cd">
+        <div class="ct2"><i class="ti ti-trending-down" style="color:var(--red)"></i>Atenção (Sell-out) — maior queda YoY</div>
+        <div style="font-size:10.5px;color:var(--t3);margin:-6px 0 8px">Subgrupos com sell-out relevante no Mercado Livre caindo frente ao mesmo período de 2025</div>
+        <div id="destaque-so-baixa"></div>
+      </div>
+    </div>
+    <!-- Top clientes + Top subgrupos -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px">
+      <div class="cd">
+        <div class="ct2"><i class="ti ti-trophy" style="color:var(--amb)"></i>Top clientes — Pedido vs Faturado</div>
+        <div id="top-cli"></div>
+      </div>
+      <div class="cd">
+        <div class="ct2"><i class="ti ti-chart-bar-2" style="color:var(--blu)"></i>Top subgrupos — Pedido vs Faturado</div>
+        <div id="top-sg"></div>
+      </div>
+    </div>
+    <!-- Destaques do mix: crescimento e atenção (Faturamento) -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:4px">
+      <div class="cd">
+        <div class="ct2"><i class="ti ti-trending-up" style="color:var(--grn)"></i>Em alta (Faturamento) — maior crescimento YoY</div>
+        <div style="font-size:10.5px;color:var(--t3);margin:-6px 0 8px">Subgrupos com faturamento relevante no período e crescimento acima da média do canal — oportunidade de empurrar mais</div>
+        <div id="destaque-alta"></div>
+      </div>
+      <div class="cd">
+        <div class="ct2"><i class="ti ti-trending-down" style="color:var(--red)"></i>Atenção (Faturamento) — maior queda YoY</div>
+        <div style="font-size:10.5px;color:var(--t3);margin:-6px 0 8px">Subgrupos com faturamento relevante caindo frente ao mesmo período de 2025 — vale investigar antes que piore</div>
+        <div id="destaque-baixa"></div>
+      </div>
+    </div>
     <!-- Risco de ruptura por cliente + Concentração de carteira -->
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px">
       <div class="cd">
@@ -545,31 +584,6 @@ html,body{height:100%;overflow:hidden;background:var(--sb)}
         <div class="ct2"><i class="ti ti-chart-donut" style="color:var(--amb)"></i>Concentração de faturamento por subgrupo</div>
         <div style="font-size:10.5px;color:var(--t3);margin:-6px 0 8px">% do faturamento 2026 do cliente que vem do subgrupo mais forte dele — quanto maior, mais dependente de um produto só</div>
         <div id="conc-cart"></div>
-      </div>
-    </div>
-    <!-- Painel Orto + Cobertura sell-out mapeado -->
-    <div style="display:grid;grid-template-columns:1.6fr 1fr;gap:12px;margin-bottom:12px">
-      <div class="cd">
-        <div class="ct2"><i class="ti ti-bone" style="color:#7b4bbf"></i>Painel Orto — expansão estratégica</div>
-        <div id="painel-orto"></div>
-      </div>
-      <div class="cd">
-        <div class="ct2"><i class="ti ti-trending-up" style="color:var(--blu)"></i>Cobertura de sell-out mapeado</div>
-        <div style="font-size:10.5px;color:var(--t3);margin:-6px 0 8px">% de todo o sell-out do Mercado Livre (todos os vendedores) que dá pra atribuir a um cliente conhecido da Dellamed — mede a qualidade do mapeamento, não market share</div>
-        <div id="so-cov-trend"></div>
-      </div>
-    </div>
-    <!-- Destaques do mix: crescimento e atenção -->
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px">
-      <div class="cd">
-        <div class="ct2"><i class="ti ti-trending-up" style="color:var(--grn)"></i>Em alta — maior crescimento YoY</div>
-        <div style="font-size:10.5px;color:var(--t3);margin:-6px 0 8px">Subgrupos com faturamento relevante no período e crescimento acima da média do canal — oportunidade de empurrar mais</div>
-        <div id="destaque-alta"></div>
-      </div>
-      <div class="cd">
-        <div class="ct2"><i class="ti ti-trending-down" style="color:var(--red)"></i>Atenção — maior queda YoY</div>
-        <div style="font-size:10.5px;color:var(--t3);margin:-6px 0 8px">Subgrupos com faturamento relevante caindo frente ao mesmo período de 2025 — vale investigar antes que piore</div>
-        <div id="destaque-baixa"></div>
       </div>
     </div>
     <!-- Radar de clientes esfriando -->
@@ -901,6 +915,10 @@ function rGeralEvol(fR,fC,fS,ms){
   var fqS=_seriesG(function(a,m){return qFP(FQ,fR,fC,fS,a,[m]);});
   var sqS=_seriesG(function(a,m){return qSQ(fR,fC,fS,a,[m]);});
 
+  _geralCtx={lbl12:lbl12,fR:fR,fC:fC,fS:fS,
+    vl:{pedido:pdS,faturado:fdS,sellout:sdS},
+    qt:{pedido:pdQtS,faturado:fqS,sellout:sqS}};
+
   var ctxVl=$("c-geral-vl");
   if(ctxVl){
     if(CH["geral-vl"])CH["geral-vl"].destroy();
@@ -942,6 +960,8 @@ function _stLabel(s){
   return l.length>18?l.substring(0,18):l;
 }
 var _absCtx={};
+var _geralCtx={};
+var _destCache={};
 function rAbsChart(elId,fR,fC,fS,ms){if(typeof Chart==="undefined")return;var ctx=$(elId);if(!ctx)return;if(CH[elId])CH[elId].destroy();
 _absCtx[elId]={fR:fR,fC:fC,fS:fS,ms:ms};
 var sgs;
@@ -1026,6 +1046,48 @@ function openSTModal(elId){
 }
 
 function closeSTModal(){ $("st-modal-bg").classList.remove("open"); }
+
+function openGeralModal(tipo){
+  var ctx=_geralCtx; if(!ctx||!ctx.lbl12)return;
+  var d=ctx[tipo]; if(!d)return;
+  var isQt=tipo==="qt";
+  var fmt=isQt?function(v){return Math.round(v).toLocaleString('pt-BR')+" un";}:function(v){return M(v);};
+  var series=[{k:"pedido",l:isQt?"Qtd Pedido":"Pedido"},{k:"faturado",l:isQt?"Qtd Faturada":"Faturado"},{k:"sellout",l:isQt?"Qtd Sell-out":"Sell-out"}];
+  function pctCell(v){
+    if(v===null||v===undefined)return "<td style='text-align:right;color:var(--t3);font-size:10px'>—</td>";
+    var cor=v>=0?"var(--grn)":"var(--red)";
+    return "<td style='text-align:right;color:"+cor+";font-size:10px'>"+(v>=0?"+":"")+v+"%</td>";
+  }
+  var idxOrder=[];for(var ii=ctx.lbl12.length-1;ii>=0;ii--)idxOrder.push(ii); // mês atual primeiro, meses anteriores abaixo
+  var rows=idxOrder.map(function(i,pos){
+    var lbl=ctx.lbl12[i];
+    var cells=series.map(function(s){
+      var arr=d[s.k];
+      return "<td style='text-align:right;font-family:DM Mono,monospace'>"+fmt(arr.data[i])+"</td>"+pctCell(arr.mom[i])+pctCell(arr.yoy[i]);
+    }).join("");
+    var rowStyle=pos===0?" style='background:rgba(24,86,163,.06);font-weight:600'":"";
+    return "<tr"+rowStyle+"><td>"+lbl+(pos===0?" <span style='font-size:9px;color:var(--blu);font-weight:600'>· atual</span>":"")+"</td>"+cells+"</tr>";
+  }).join("");
+  var thead="<tr><th rowspan='2' style='vertical-align:bottom'>Mês</th>"+series.map(function(s){return "<th colspan='3' style='text-align:center'>"+s.l+"</th>";}).join("")+"</tr><tr>"+series.map(function(){return "<th style='text-align:right;font-size:10px'>Valor</th><th style='text-align:right;font-size:10px'>MoM</th><th style='text-align:right;font-size:10px'>YoY</th>";}).join("")+"</tr>";
+  $("st-modal-title").textContent=(isQt?"Evolução mensal em quantidade":"Evolução mensal em valor")+" — detalhamento (12 meses)"+(ctx.fR?" — "+ctx.fR:"")+(ctx.fC?" — "+ctx.fC:"");
+  $("st-modal-body").innerHTML="<table><thead>"+thead+"</thead><tbody>"+rows+"</tbody></table>";
+  $("st-modal-bg").classList.add("open");
+}
+
+function openDestModal(key){
+  var rows=_destCache[key]||[];
+  var isSO=key.indexOf("so-")===0;
+  var isAlta=key.indexOf("alta")>=0;
+  var metric=isSO?"Sell-out":"Faturamento";
+  var titulo=(isAlta?"Em alta":"Atenção")+" ("+metric+") — todos os subgrupos ("+rows.length+")";
+  var rowsHtml=rows.map(function(x){
+    var cor=x.yoy>=0?"var(--grn)":"var(--red)";
+    return "<tr><td class='rname clk-name' style='cursor:pointer' onclick='_quickFilterProd(\""+x.sg.replace(/"/g,'&quot;')+"\");closeSTModal();'>"+x.sg+"</td><td style='text-align:right;font-family:DM Mono,monospace'>"+M(x.v26)+"</td><td style='text-align:right;color:var(--t3)'>"+M(x.v25)+"</td><td style='text-align:right;font-family:DM Mono,monospace;font-weight:700;color:"+cor+"'>"+(x.yoy>=0?"+":"")+x.yoy+"%</td></tr>";
+  }).join("");
+  $("st-modal-title").textContent=titulo;
+  $("st-modal-body").innerHTML="<table><thead><tr><th>Subgrupo</th><th style='text-align:right'>"+metric+" 2026</th><th style='text-align:right'>"+metric+" 2025</th><th style='text-align:right'>YoY</th></tr></thead><tbody>"+(rowsHtml||"<tr><td colspan='4' style='color:var(--t3);text-align:center;padding:12px'>Nenhum subgrupo</td></tr>")+"</tbody></table>";
+  $("st-modal-bg").classList.add("open");
+}
 
 function rDual(el,items,maxV,kind){if(!el)return;el.innerHTML="";items.forEach(function(r,i){
 var wp=Math.round(r.ped/maxV*100),wf=Math.round(r.fat/maxV*100);
@@ -1178,32 +1240,44 @@ function rEsfriando(fR,fC){
       "<span class='badge b-dn' style='white-space:nowrap'>parou h\u00e1 1+ m\u00eas</span></div>";
   }).join("");
 }
-function rDestaques(fR,fC,ms){
-  var alta=$("destaque-alta"), baixa=$("destaque-baixa");
+function _destBoard(qFn,fR,fC,ms,key,elAltaId,elBaixaId){
+  var alta=$(elAltaId), baixa=$(elBaixaId);
   if(!alta&&!baixa)return;
   var dados=AS.map(function(sg){
-    var f26=qFP(FAT,fR,fC,sg,2026,ms);
-    var f25=qFP(FAT,fR,fC,sg,2025,ms);
-    if(f26<=0)return null;
-    var yoy=f25>0?Math.round((f26-f25)/f25*100):null;
-    return{sg:sg,f26:f26,f25:f25,yoy:yoy};
+    var v26=qFn(fR,fC,sg,2026,ms);
+    var v25=qFn(fR,fC,sg,2025,ms);
+    if(v26<=0)return null;
+    var yoy=v25>0?Math.round((v26-v25)/v25*100):null;
+    return{sg:sg,v26:v26,v25:v25,yoy:yoy};
   }).filter(function(x){return x&&x.yoy!==null;});
   if(!dados.length){
     if(alta)alta.innerHTML="<div style='color:var(--t3);padding:8px 0'>Sem dados suficientes no período</div>";
     if(baixa)baixa.innerHTML="<div style='color:var(--t3);padding:8px 0'>Sem dados suficientes no período</div>";
+    _destCache[key+"-alta"]=[];_destCache[key+"-baixa"]=[];
     return;
   }
-  // Só considerar subgrupos com faturamento relevante (acima da mediana) -- evita destacar ruido de subgrupo pequeno com % extremo
-  var ordenadoPorFat=dados.slice().sort(function(a,b){return a.f26-b.f26;});
-  var mediana=ordenadoPorFat[Math.floor(ordenadoPorFat.length/2)].f26;
-  var relevantes=dados.filter(function(x){return x.f26>=mediana;});
-  var emAlta=relevantes.slice().sort(function(a,b){return b.yoy-a.yoy;}).slice(0,5);
-  var emBaixa=relevantes.slice().sort(function(a,b){return a.yoy-b.yoy;}).filter(function(x){return x.yoy<0;}).slice(0,5);
+  // Só considerar subgrupos com volume relevante (acima da mediana) -- evita destacar ruido de subgrupo pequeno com % extremo
+  var ordenadoPorV=dados.slice().sort(function(a,b){return a.v26-b.v26;});
+  var mediana=ordenadoPorV[Math.floor(ordenadoPorV.length/2)].v26;
+  var relevantes=dados.filter(function(x){return x.v26>=mediana;});
+  var todosAlta=relevantes.slice().sort(function(a,b){return b.yoy-a.yoy;}).filter(function(x){return x.yoy>=0;});
+  var todosBaixa=relevantes.slice().sort(function(a,b){return a.yoy-b.yoy;}).filter(function(x){return x.yoy<0;});
+  _destCache[key+"-alta"]=todosAlta;
+  _destCache[key+"-baixa"]=todosBaixa;
+  var emAlta=todosAlta.slice(0,5);
+  var emBaixa=todosBaixa.slice(0,5);
   function linha(x,cor){
-    return "<div class='rr'><div style='flex:1;min-width:0'><div class='rname clk-name' onclick='_quickFilterProd(\""+x.sg.replace(/"/g,'&quot;')+"\")'>"+x.sg+"</div><div style='font-size:9.5px;color:var(--t3);margin-top:1px'>"+M(x.f26)+" no período</div></div><div style='text-align:right;font-family:DM Mono,monospace;font-weight:700;color:"+cor+"'>"+(x.yoy>=0?"+":"")+x.yoy+"%</div></div>";
+    return "<div class='rr'><div style='flex:1;min-width:0'><div class='rname clk-name' onclick='_quickFilterProd(\""+x.sg.replace(/"/g,'&quot;')+"\")'>"+x.sg+"</div><div style='font-size:9.5px;color:var(--t3);margin-top:1px'>"+M(x.v26)+" no período</div></div><div style='text-align:right;font-family:DM Mono,monospace;font-weight:700;color:"+cor+"'>"+(x.yoy>=0?"+":"")+x.yoy+"%</div></div>";
   }
-  if(alta)alta.innerHTML=emAlta.length?emAlta.map(function(x){return linha(x,"var(--grn)");}).join(""):"<div style='color:var(--t3);padding:8px 0'>Nenhum destaque no período</div>";
-  if(baixa)baixa.innerHTML=emBaixa.length?emBaixa.map(function(x){return linha(x,"var(--red)");}).join(""):"<div style='color:var(--t3);padding:8px 0'>Nenhum subgrupo relevante em queda no período — bom sinal</div>";
+  function verTodos(k,total){
+    return total>5?"<div style='text-align:center;padding-top:8px'><span style='font-size:11px;color:var(--blu);cursor:pointer;text-decoration:underline' onclick=\"openDestModal('"+k+"')\">ver todos os "+total+"</span></div>":"";
+  }
+  if(alta)alta.innerHTML=(emAlta.length?emAlta.map(function(x){return linha(x,"var(--grn)");}).join(""):"<div style='color:var(--t3);padding:8px 0'>Nenhum destaque no período</div>")+verTodos(key+"-alta",todosAlta.length);
+  if(baixa)baixa.innerHTML=(emBaixa.length?emBaixa.map(function(x){return linha(x,"var(--red)");}).join(""):"<div style='color:var(--t3);padding:8px 0'>Nenhum subgrupo relevante em queda no período — bom sinal</div>")+verTodos(key+"-baixa",todosBaixa.length);
+}
+function rDestaques(fR,fC,ms){
+  _destBoard(function(r,c,sg,a,m){return qFP(FAT,r,c,sg,a,m);},fR,fC,ms,"fat","destaque-alta","destaque-baixa");
+  _destBoard(qSS,fR,fC,ms,"so","destaque-so-alta","destaque-so-baixa");
 }
 
 function rPainelOrto(fR,fC,ms){

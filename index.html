@@ -515,20 +515,25 @@ html,body{height:100%;overflow:hidden;background:var(--sb)}
       </div>
       <div class="st-chart-wrap" style="position:relative;height:210px" onclick="openSTModal('c-abs')"><canvas id="c-abs"></canvas></div><div style="font-size:10px;color:var(--t3);text-align:right;margin-top:4px">clique no gráfico para ver todos os subgrupos</div>
     </div>
-    <!-- Top subgrupos SO + Matriz -->
+    <!-- Top clientes SO + Top subgrupos SO -->
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px">
+      <div class="cd">
+        <div class="ct2"><i class="ti ti-users" style="color:var(--grn)"></i>Top clientes — Sell-out ML</div>
+        <div id="kpi-so-cli"></div>
+      </div>
       <div class="cd">
         <div class="ct2"><i class="ti ti-brand-apple-arcade" style="color:var(--grn)"></i>Top subgrupos Sell-out ML</div>
         <div id="kpi-so-sg"></div>
       </div>
-      <div class="cd">
-        <div class="ct2"><i class="ti ti-circles-relation" style="color:var(--red)"></i>Matriz de performance — Sell-through corrigido (ML=80%)</div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
-          <div class="mx-cell mx-grn"><div class="mx-lbl">● Saudável (ST 60-90%)</div><div id="mx-ok" class="mx-body"></div></div>
-          <div class="mx-cell mx-amb"><div class="mx-lbl">● Estoque alto (ST &lt;60%)</div><div id="mx-alto" class="mx-body"></div></div>
-          <div class="mx-cell mx-red"><div class="mx-lbl">● Ruptura iminente (ST &gt;90%)</div><div id="mx-risco" class="mx-body"></div></div>
-          <div class="mx-cell mx-blu"><div class="mx-lbl">● Sem SO mapeado</div><div id="mx-sem" class="mx-body"></div></div>
-        </div>
+    </div>
+    <!-- Matriz de performance -- movida para linha própria, cheia largura (21/09/26) -->
+    <div class="cd" style="margin-bottom:12px">
+      <div class="ct2"><i class="ti ti-circles-relation" style="color:var(--red)"></i>Matriz de performance — Sell-through corrigido (ML=80%)</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <div class="mx-cell mx-grn"><div class="mx-lbl">● Saudável (ST 60-90%)</div><div id="mx-ok" class="mx-body"></div></div>
+        <div class="mx-cell mx-amb"><div class="mx-lbl">● Estoque alto (ST &lt;60%)</div><div id="mx-alto" class="mx-body"></div></div>
+        <div class="mx-cell mx-red"><div class="mx-lbl">● Ruptura iminente (ST &gt;90%)</div><div id="mx-risco" class="mx-body"></div></div>
+        <div class="mx-cell mx-blu"><div class="mx-lbl">● Sem SO mapeado</div><div id="mx-sem" class="mx-body"></div></div>
       </div>
     </div>
     <!-- Cobertura de sell-out mapeado (movido para o cluster de sell-out em 21/09/26) -->
@@ -862,7 +867,7 @@ function render(){
 
   rGeralEvol(fR,fC,fS,ms);
   rAbsChart("c-abs",fR,fC,fS,ms);
-  rTopCli(fR,fC,fS,ms);rTopSg(fR,fC,fS,ms);rTopSgSO(fR,fC,fS,ms);
+  rTopCli(fR,fC,fS,ms);rTopSg(fR,fC,fS,ms);rTopSgSO(fR,fC,fS,ms);rTopCliSO(fR,fC,fS,ms);
   rRuptura(fR,fC,ms);rConcentracao(fR,fC,ms);rPainelOrto(fR,fC,ms);rSoCovTrend();rDestaques(fR,fC,ms);rEsfriando(fR,fC);
   rRepBars("rep-bars",fR,fC,fS,ms);rRepBars("rep-bars2",fR,fC,fS,ms);
   rOpps(fR,fC,fS,ms);// Montar grps considerando multi-seleção
@@ -1082,10 +1087,34 @@ function openDestModal(key){
   var titulo=(isAlta?"Em alta":"Atenção")+" ("+metric+") — todos os subgrupos ("+rows.length+")";
   var rowsHtml=rows.map(function(x){
     var cor=x.yoy>=0?"var(--grn)":"var(--red)";
-    return "<tr><td class='rname clk-name' style='cursor:pointer' onclick='_quickFilterProd(\""+x.sg.replace(/"/g,'&quot;')+"\");closeSTModal();'>"+x.sg+"</td><td style='text-align:right;font-family:DM Mono,monospace'>"+M(x.v26)+"</td><td style='text-align:right;color:var(--t3)'>"+M(x.v25)+"</td><td style='text-align:right;font-family:DM Mono,monospace;font-weight:700;color:"+cor+"'>"+(x.yoy>=0?"+":"")+x.yoy+"%</td></tr>";
+    var q26Txt=x.q26>0?Math.round(x.q26).toLocaleString('pt-BR')+" un":"—";
+    var q25Txt=x.q25>0?Math.round(x.q25).toLocaleString('pt-BR')+" un":"—";
+    var sgEsc=x.sg.replace(/"/g,'&quot;');
+    return "<tr><td class='clk-name' title='"+sgEsc+"' style='cursor:pointer;max-width:170px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap' onclick='_quickFilterProd(\""+sgEsc+"\");closeSTModal();'>"+x.sg+"</td><td style='text-align:right;font-family:DM Mono,monospace;white-space:nowrap'>"+M(x.v26)+"</td><td style='text-align:right;color:var(--t3);font-size:11px;white-space:nowrap'>"+q26Txt+"</td><td style='text-align:right;color:var(--t3);white-space:nowrap'>"+M(x.v25)+"</td><td style='text-align:right;color:var(--t3);font-size:11px;white-space:nowrap'>"+q25Txt+"</td><td style='text-align:right;font-family:DM Mono,monospace;font-weight:700;color:"+cor+";white-space:nowrap'>"+(x.yoy>=0?"+":"")+x.yoy+"%</td></tr>";
   }).join("");
   $("st-modal-title").textContent=titulo;
-  $("st-modal-body").innerHTML="<table><thead><tr><th>Subgrupo</th><th style='text-align:right'>"+metric+" 2026</th><th style='text-align:right'>"+metric+" 2025</th><th style='text-align:right'>YoY</th></tr></thead><tbody>"+(rowsHtml||"<tr><td colspan='4' style='color:var(--t3);text-align:center;padding:12px'>Nenhum subgrupo</td></tr>")+"</tbody></table>";
+  $("st-modal-body").innerHTML="<table style='table-layout:fixed'><colgroup><col><col style='width:75px'><col style='width:75px'><col style='width:75px'><col style='width:75px'><col style='width:65px'></colgroup><thead><tr><th>Subgrupo</th><th style='text-align:right'>"+metric+" 2026</th><th style='text-align:right'>Qtd 2026</th><th style='text-align:right'>"+metric+" 2025</th><th style='text-align:right'>Qtd 2025</th><th style='text-align:right'>YoY</th></tr></thead><tbody>"+(rowsHtml||"<tr><td colspan='6' style='color:var(--t3);text-align:center;padding:12px'>Nenhum subgrupo</td></tr>")+"</tbody></table>";
+  $("st-modal-bg").classList.add("open");
+}
+
+function openTopSOModal(key){
+  var rows=_topSOCache[key]||[];
+  var isCli=key==='cli';
+  var label=isCli?"clientes":"subgrupos";
+  var clkFn=isCli?'_quickFilterCli':'_quickFilterProd';
+  var titulo="Top "+label+" — Sell-out ML — detalhamento ("+rows.length+")";
+  var rowsHtml=rows.map(function(x,i){
+    var yoyTxt=x.yoy===null||x.yoy===undefined?"—":(x.yoy>=0?"+":"")+x.yoy+"%";
+    var cor=x.yoy===null||x.yoy===undefined?"var(--t3)":(x.yoy>=0?"var(--grn)":"var(--red)");
+    var nEsc=x.n.replace(/"/g,'&quot;');
+    return "<tr><td>"+(i+1)+"</td><td class='clk-name' title='"+nEsc+"' style='cursor:pointer;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap' onclick='"+clkFn+"(\""+nEsc+"\");closeSTModal();'>"+x.n+"</td>"+
+      "<td style='text-align:right;font-family:DM Mono,monospace;font-weight:600;color:#0f9e72;white-space:nowrap'>"+M(x.v)+"</td>"+
+      "<td style='text-align:right;color:var(--t3);font-size:11px;white-space:nowrap'>"+(x.q>0?x.q.toLocaleString('pt-BR')+" un":"—")+"</td>"+
+      "<td style='text-align:right;font-family:DM Mono,monospace;font-weight:700;color:"+cor+";white-space:nowrap'>"+yoyTxt+"</td>"+
+      "<td style='text-align:right;color:var(--t3);white-space:nowrap'>"+M(x.ytd)+"</td></tr>";
+  }).join("");
+  $("st-modal-title").textContent=titulo;
+  $("st-modal-body").innerHTML="<table style='table-layout:fixed'><colgroup><col style='width:28px'><col><col style='width:80px'><col style='width:80px'><col style='width:70px'><col style='width:80px'></colgroup><thead><tr><th>#</th><th>"+(isCli?"Cliente":"Subgrupo")+"</th><th style='text-align:right' title='Valor no período selecionado no filtro'>Valor</th><th style='text-align:right' title='Quantidade no período selecionado no filtro'>Qtd</th><th style='text-align:right' title='Crescimento vs. mesmo período de 2025'>YoY</th><th style='text-align:right' title='Total acumulado de janeiro até o mês atual em 2026, independente do período selecionado no filtro'>YTD 2026</th></tr></thead><tbody>"+(rowsHtml||"<tr><td colspan='6' style='color:var(--t3);text-align:center;padding:12px'>Sem sell-out no período</td></tr>")+"</tbody></table>";
   $("st-modal-bg").classList.add("open");
 }
 
@@ -1129,20 +1158,54 @@ items.forEach(function(r,i){
     "<div class=\"rv\"><div style=\"color:#888\">"+M(r.ped)+"</div><div style=\"color:#1856a3\">"+M(r.fat)+"</div></div></div>";
 });}
 
+var _topSOCache={sg:[],cli:[]};
+function _ytdMs(){var a=[];for(var i=1;i<=CURR_MES;i++)a.push(i);return a;}
+function _topSORow(r,i,mx,clkFn){
+  var w=Math.round(r.v/mx*100);
+  return "<div class=\"rr\"><div class=\"rn\">"+(i+1)+"</div><div style=\"flex:1;min-width:0\"><div class=\"rname clk-name\" onclick='"+clkFn+"(\""+r.n.replace(/"/g,'&quot;')+"\")'>"+r.n+"</div>"+
+    "<div style=\"height:3px;background:var(--bg);border-radius:2px;overflow:hidden;margin-top:3px\"><div style=\"height:100%;width:"+w+"%;background:#0f9e72;border-radius:2px\"></div></div></div>"+
+    "<div class=\"rv\"><div style=\"color:#0f9e72;font-weight:600\">"+M(r.v)+"</div><div style=\"color:var(--t3);font-size:10px\">"+(r.q>0?r.q.toLocaleString("pt-BR")+" un":"")+"</div></div></div>";
+}
+function _topSOLink(key,total){
+  var txt=total>10?("ver todos os "+total+" + YoY/YTD"):"ver detalhes (qtd, YoY, YTD)";
+  return "<div style=\"text-align:center;padding-top:8px\"><span style=\"font-size:11px;color:var(--blu);cursor:pointer;text-decoration:underline\" onclick=\"openTopSOModal('"+key+"')\">"+txt+"</span></div>";
+}
 function rTopSgSO(fR,fC,fS,ms){
   var el=$("kpi-so-sg");if(!el)return;
   var sgs=fS?[fS]:AS;
-  var items=sgs.map(function(sg){
-    return{n:sg,v:qSS(fR,fC,sg,2026,ms),q:qSQ(fR,fC,sg,2026,ms)};
-  }).filter(function(x){return x.v>0;}).sort(function(a,b){return b.v-a.v;}).slice(0,10);
-  if(!items.length){el.innerHTML="<div style=\"color:var(--t3);padding:16px 0;text-align:center;font-size:12px\">Sem sell-out no per\u00edodo</div>";return;}
+  var ytdMs=_ytdMs();
+  var all=sgs.map(function(sg){
+    var v=qSS(fR,fC,sg,2026,ms),q=qSQ(fR,fC,sg,2026,ms);
+    if(v<=0)return null;
+    var v25=qSS(fR,fC,sg,2025,ms);
+    var yoy=v25>0?Math.round((v-v25)/v25*100):null;
+    var ytd=qSS(fR,fC,sg,2026,ytdMs);
+    return{n:sg,v:v,q:q,yoy:yoy,ytd:ytd};
+  }).filter(function(x){return x;}).sort(function(a,b){return b.v-a.v;});
+  _topSOCache.sg=all;
+  if(!all.length){el.innerHTML="<div style=\"color:var(--t3);padding:16px 0;text-align:center;font-size:12px\">Sem sell-out no per\u00edodo</div>";return;}
+  var items=all.slice(0,10);
   var mx=items[0].v;
-  el.innerHTML=items.map(function(r,i){
-    var w=Math.round(r.v/mx*100);
-    return "<div class=\"rr\"><div class=\"rn\">"+(i+1)+"</div><div style=\"flex:1;min-width:0\"><div class=\"rname clk-name\" onclick='_quickFilterProd(\""+r.n.replace(/"/g,'&quot;')+"\")'>"+r.n+"</div>"+
-      "<div style=\"height:3px;background:var(--bg);border-radius:2px;overflow:hidden;margin-top:3px\"><div style=\"height:100%;width:"+w+"%;background:#0f9e72;border-radius:2px\"></div></div></div>"+
-      "<div class=\"rv\"><div style=\"color:#0f9e72;font-weight:600\">"+M(r.v)+"</div><div style=\"color:var(--t3);font-size:10px\">"+(r.q>0?r.q.toLocaleString("pt-BR")+" un":"")+"</div></div></div>";
-  }).join("");
+  el.innerHTML=items.map(function(r,i){return _topSORow(r,i,mx,'_quickFilterProd');}).join("")+_topSOLink('sg',all.length);
+}
+function rTopCliSO(fR,fC,fS,ms){
+  var el=$("kpi-so-cli");if(!el)return;
+  var gs=fC?[fC]:AG.filter(function(g){return!fR||G2R[g]===fR;});
+  var ytdMs=_ytdMs();
+  var all=gs.map(function(g){
+    var r=G2R[g];
+    var v=qSS(r,g,fS,2026,ms),q=qSQ(r,g,fS,2026,ms);
+    if(v<=0)return null;
+    var v25=qSS(r,g,fS,2025,ms);
+    var yoy=v25>0?Math.round((v-v25)/v25*100):null;
+    var ytd=qSS(r,g,fS,2026,ytdMs);
+    return{n:g,v:v,q:q,yoy:yoy,ytd:ytd};
+  }).filter(function(x){return x;}).sort(function(a,b){return b.v-a.v;});
+  _topSOCache.cli=all;
+  if(!all.length){el.innerHTML="<div style=\"color:var(--t3);padding:16px 0;text-align:center;font-size:12px\">Sem sell-out no per\u00edodo</div>";return;}
+  var items=all.slice(0,10);
+  var mx=items[0].v;
+  el.innerHTML=items.map(function(r,i){return _topSORow(r,i,mx,'_quickFilterCli');}).join("")+_topSOLink('cli',all.length);
 }
 
 var _ruptRowsCache=[];
@@ -1240,7 +1303,7 @@ function rEsfriando(fR,fC){
       "<span class='badge b-dn' style='white-space:nowrap'>parou h\u00e1 1+ m\u00eas</span></div>";
   }).join("");
 }
-function _destBoard(qFn,fR,fC,ms,key,elAltaId,elBaixaId){
+function _destBoard(qFn,fR,fC,ms,key,elAltaId,elBaixaId,qtyFn){
   var alta=$(elAltaId), baixa=$(elBaixaId);
   if(!alta&&!baixa)return;
   var dados=AS.map(function(sg){
@@ -1248,7 +1311,9 @@ function _destBoard(qFn,fR,fC,ms,key,elAltaId,elBaixaId){
     var v25=qFn(fR,fC,sg,2025,ms);
     if(v26<=0)return null;
     var yoy=v25>0?Math.round((v26-v25)/v25*100):null;
-    return{sg:sg,v26:v26,v25:v25,yoy:yoy};
+    var q26=qtyFn?qtyFn(fR,fC,sg,2026,ms):0;
+    var q25=qtyFn?qtyFn(fR,fC,sg,2025,ms):0;
+    return{sg:sg,v26:v26,v25:v25,yoy:yoy,q26:q26,q25:q25};
   }).filter(function(x){return x&&x.yoy!==null;});
   if(!dados.length){
     if(alta)alta.innerHTML="<div style='color:var(--t3);padding:8px 0'>Sem dados suficientes no período</div>";
@@ -1267,7 +1332,8 @@ function _destBoard(qFn,fR,fC,ms,key,elAltaId,elBaixaId){
   var emAlta=todosAlta.slice(0,5);
   var emBaixa=todosBaixa.slice(0,5);
   function linha(x,cor){
-    return "<div class='rr'><div style='flex:1;min-width:0'><div class='rname clk-name' onclick='_quickFilterProd(\""+x.sg.replace(/"/g,'&quot;')+"\")'>"+x.sg+"</div><div style='font-size:9.5px;color:var(--t3);margin-top:1px'>"+M(x.v26)+" no período</div></div><div style='text-align:right;font-family:DM Mono,monospace;font-weight:700;color:"+cor+"'>"+(x.yoy>=0?"+":"")+x.yoy+"%</div></div>";
+    var qtdTxt=x.q26>0?(" · "+Math.round(x.q26).toLocaleString('pt-BR')+" un"):"";
+    return "<div class='rr'><div style='flex:1;min-width:0'><div class='rname clk-name' onclick='_quickFilterProd(\""+x.sg.replace(/"/g,'&quot;')+"\")'>"+x.sg+"</div><div style='font-size:9.5px;color:var(--t3);margin-top:1px'>"+M(x.v26)+qtdTxt+" no período</div></div><div style='text-align:right;font-family:DM Mono,monospace;font-weight:700;color:"+cor+"'>"+(x.yoy>=0?"+":"")+x.yoy+"%</div></div>";
   }
   function verTodos(k,total){
     return total>5?"<div style='text-align:center;padding-top:8px'><span style='font-size:11px;color:var(--blu);cursor:pointer;text-decoration:underline' onclick=\"openDestModal('"+k+"')\">ver todos os "+total+"</span></div>":"";
@@ -1276,8 +1342,9 @@ function _destBoard(qFn,fR,fC,ms,key,elAltaId,elBaixaId){
   if(baixa)baixa.innerHTML=(emBaixa.length?emBaixa.map(function(x){return linha(x,"var(--red)");}).join(""):"<div style='color:var(--t3);padding:8px 0'>Nenhum subgrupo relevante em queda no período — bom sinal</div>")+verTodos(key+"-baixa",todosBaixa.length);
 }
 function rDestaques(fR,fC,ms){
-  _destBoard(function(r,c,sg,a,m){return qFP(FAT,r,c,sg,a,m);},fR,fC,ms,"fat","destaque-alta","destaque-baixa");
-  _destBoard(qSS,fR,fC,ms,"so","destaque-so-alta","destaque-so-baixa");
+  _destBoard(function(r,c,sg,a,m){return qFP(FAT,r,c,sg,a,m);},fR,fC,ms,"fat","destaque-alta","destaque-baixa",
+    function(r,c,sg,a,m){return qFP(FQ,r,c,sg,a,m);});
+  _destBoard(qSS,fR,fC,ms,"so","destaque-so-alta","destaque-so-baixa",qSQ);
 }
 
 function rPainelOrto(fR,fC,ms){
@@ -1682,10 +1749,15 @@ if(!el.ok)return;
 var gs=fC?[fC]:AG.filter(function(g){return!fR||G2R[g]===fR;});
 var calc=gs.map(function(g){var r=G2R[g],f=qFP(FAT,r,g,"",2026,ms),s=qSS(r,g,"",2026,ms),fq=qFP(FQ,r,g,"",2026,ms),sq=qSQ(r,g,"",2026,ms);var ab=fq>0?Math.round(sq/0.8/fq*100):0;return{g:g,f:f,s:s,ab:ab};}).filter(function(x){return x.f>0||x.s>0;});
 function qi(txt,g){return"<div class=\"qi clk-name\" onclick='_quickFilterCli(\""+g.replace(/"/g,'&quot;')+"\")'>"+txt+"</div>";}
-el.ok.innerHTML=calc.filter(function(x){return x.ab>=60&&x.ab<=90;}).sort(function(a,b){return b.f-a.f;}).slice(0,4).map(function(x){return qi(x.g+" \u00b7 Fat "+M(x.f)+" \u00b7 ST "+x.ab+"%",x.g);}).join("")||"<div class=\"qi\">\u2014</div>";
-el.alto.innerHTML=calc.filter(function(x){return x.ab<60&&x.ab>0;}).sort(function(a,b){return b.f-a.f;}).slice(0,4).map(function(x){return qi(x.g+" \u00b7 Fat "+M(x.f)+" \u00b7 ST "+x.ab+"%",x.g);}).join("")||"<div class=\"qi\">\u2014</div>";
-el.risco.innerHTML=calc.filter(function(x){return x.ab>90;}).sort(function(a,b){return b.ab-a.ab;}).slice(0,4).map(function(x){return qi(x.g+" \u00b7 ST "+x.ab+"% \u26a0",x.g);}).join("")||"<div class=\"qi\">\u2014</div>";
-el.sem.innerHTML=calc.filter(function(x){return x.s===0&&x.f>0;}).sort(function(a,b){return b.f-a.f;}).slice(0,4).map(function(x){return qi(x.g+" \u00b7 Fat "+M(x.f),x.g);}).join("")||"<div class=\"qi\">\u2014</div>";}
+function fill(el,list,mapFn){
+  var shown=list.slice(0,8).map(mapFn).join("")||"<div class=\"qi\">\u2014</div>";
+  var rest=list.length-8;
+  el.innerHTML=shown+(rest>0?"<div class=\"qi\" style=\"color:var(--t3);font-size:10.5px\">+"+rest+" mais</div>":"");
+}
+fill(el.ok,calc.filter(function(x){return x.ab>=60&&x.ab<=90;}).sort(function(a,b){return b.f-a.f;}),function(x){return qi(x.g+" \u00b7 Fat "+M(x.f)+" \u00b7 ST "+x.ab+"%",x.g);});
+fill(el.alto,calc.filter(function(x){return x.ab<60&&x.ab>0;}).sort(function(a,b){return b.f-a.f;}),function(x){return qi(x.g+" \u00b7 Fat "+M(x.f)+" \u00b7 ST "+x.ab+"%",x.g);});
+fill(el.risco,calc.filter(function(x){return x.ab>90;}).sort(function(a,b){return b.ab-a.ab;}),function(x){return qi(x.g+" \u00b7 ST "+x.ab+"% \u26a0",x.g);});
+fill(el.sem,calc.filter(function(x){return x.s===0&&x.f>0;}).sort(function(a,b){return b.f-a.f;}),function(x){return qi(x.g+" \u00b7 Fat "+M(x.f),x.g);});}
 
 // ── POR CLIENTE — constrói innerHTML direto, sem toggle de divs ──
 function rCliMain(fR,fC,fS,ms){

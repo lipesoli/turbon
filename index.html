@@ -1090,10 +1090,10 @@ function openDestModal(key){
     var q26Txt=x.q26>0?Math.round(x.q26).toLocaleString('pt-BR')+" un":"—";
     var q25Txt=x.q25>0?Math.round(x.q25).toLocaleString('pt-BR')+" un":"—";
     var sgEsc=x.sg.replace(/"/g,'&quot;');
-    return "<tr><td class='clk-name' title='"+sgEsc+"' style='cursor:pointer;max-width:170px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap' onclick='_quickFilterProd(\""+sgEsc+"\");closeSTModal();'>"+x.sg+"</td><td style='text-align:right;font-family:DM Mono,monospace;white-space:nowrap'>"+M(x.v26)+"</td><td style='text-align:right;color:var(--t3);font-size:11px;white-space:nowrap'>"+q26Txt+"</td><td style='text-align:right;color:var(--t3);white-space:nowrap'>"+M(x.v25)+"</td><td style='text-align:right;color:var(--t3);font-size:11px;white-space:nowrap'>"+q25Txt+"</td><td style='text-align:right;font-family:DM Mono,monospace;font-weight:700;color:"+cor+";white-space:nowrap'>"+(x.yoy>=0?"+":"")+x.yoy+"%</td></tr>";
+    return "<tr><td class='clk-name' title='"+sgEsc+"' style='cursor:pointer;max-width:170px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap' onclick='_quickFilterProd(\""+sgEsc+"\");closeSTModal();'>"+x.sg+"</td><td style='text-align:right;font-family:DM Mono,monospace;white-space:nowrap'>"+M(x.v26)+"</td><td style='text-align:right;color:var(--t3);font-size:11px;white-space:nowrap'>"+q26Txt+"</td><td style='text-align:right;color:var(--t3);white-space:nowrap'>"+M(x.v25)+"</td><td style='text-align:right;color:var(--t3);font-size:11px;white-space:nowrap'>"+q25Txt+"</td><td style='text-align:right;font-family:DM Mono,monospace;font-weight:700;color:"+cor+";white-space:nowrap'>"+(x.yoy>=0?"+":"")+x.yoy+"%</td><td style='text-align:right;color:var(--t3);white-space:nowrap'>"+M(x.ytd)+"</td></tr>";
   }).join("");
   $("st-modal-title").textContent=titulo;
-  $("st-modal-body").innerHTML="<table style='table-layout:fixed'><colgroup><col><col style='width:75px'><col style='width:75px'><col style='width:75px'><col style='width:75px'><col style='width:65px'></colgroup><thead><tr><th>Subgrupo</th><th style='text-align:right'>"+metric+" 2026</th><th style='text-align:right'>Qtd 2026</th><th style='text-align:right'>"+metric+" 2025</th><th style='text-align:right'>Qtd 2025</th><th style='text-align:right'>YoY</th></tr></thead><tbody>"+(rowsHtml||"<tr><td colspan='6' style='color:var(--t3);text-align:center;padding:12px'>Nenhum subgrupo</td></tr>")+"</tbody></table>";
+  $("st-modal-body").innerHTML="<table style='table-layout:fixed'><colgroup><col><col style='width:68px'><col style='width:58px'><col style='width:68px'><col style='width:58px'><col style='width:52px'><col style='width:68px'></colgroup><thead><tr><th>Subgrupo</th><th style='text-align:right'>"+metric+" 2026</th><th style='text-align:right'>Qtd 2026</th><th style='text-align:right'>"+metric+" 2025</th><th style='text-align:right'>Qtd 2025</th><th style='text-align:right' title='Crescimento vs. mesmo período de 2025'>YoY</th><th style='text-align:right' title='Total acumulado de janeiro até o mês atual em 2026, independente do período selecionado no filtro'>YTD 2026</th></tr></thead><tbody>"+(rowsHtml||"<tr><td colspan='7' style='color:var(--t3);text-align:center;padding:12px'>Nenhum subgrupo</td></tr>")+"</tbody></table>";
   $("st-modal-bg").classList.add("open");
 }
 
@@ -1103,18 +1103,22 @@ function openTopSOModal(key){
   var label=isCli?"clientes":"subgrupos";
   var clkFn=isCli?'_quickFilterCli':'_quickFilterProd';
   var titulo="Top "+label+" — Sell-out ML — detalhamento ("+rows.length+")";
-  var rowsHtml=rows.map(function(x,i){
+  var rowsHtml=rows.map(function(x){
     var yoyTxt=x.yoy===null||x.yoy===undefined?"—":(x.yoy>=0?"+":"")+x.yoy+"%";
     var cor=x.yoy===null||x.yoy===undefined?"var(--t3)":(x.yoy>=0?"var(--grn)":"var(--red)");
     var nEsc=x.n.replace(/"/g,'&quot;');
-    return "<tr><td>"+(i+1)+"</td><td class='clk-name' title='"+nEsc+"' style='cursor:pointer;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap' onclick='"+clkFn+"(\""+nEsc+"\");closeSTModal();'>"+x.n+"</td>"+
-      "<td style='text-align:right;font-family:DM Mono,monospace;font-weight:600;color:#0f9e72;white-space:nowrap'>"+M(x.v)+"</td>"+
-      "<td style='text-align:right;color:var(--t3);font-size:11px;white-space:nowrap'>"+(x.q>0?x.q.toLocaleString('pt-BR')+" un":"—")+"</td>"+
+    var q26Txt=x.q>0?x.q.toLocaleString('pt-BR')+" un":"—";
+    var q25Txt=x.q25>0?x.q25.toLocaleString('pt-BR')+" un":"—";
+    return "<tr><td class='clk-name' title='"+nEsc+"' style='cursor:pointer;max-width:170px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap' onclick='"+clkFn+"(\""+nEsc+"\");closeSTModal();'>"+x.n+"</td>"+
+      "<td style='text-align:right;font-family:DM Mono,monospace;white-space:nowrap'>"+M(x.v)+"</td>"+
+      "<td style='text-align:right;color:var(--t3);font-size:11px;white-space:nowrap'>"+q26Txt+"</td>"+
+      "<td style='text-align:right;color:var(--t3);white-space:nowrap'>"+M(x.v25)+"</td>"+
+      "<td style='text-align:right;color:var(--t3);font-size:11px;white-space:nowrap'>"+q25Txt+"</td>"+
       "<td style='text-align:right;font-family:DM Mono,monospace;font-weight:700;color:"+cor+";white-space:nowrap'>"+yoyTxt+"</td>"+
       "<td style='text-align:right;color:var(--t3);white-space:nowrap'>"+M(x.ytd)+"</td></tr>";
   }).join("");
   $("st-modal-title").textContent=titulo;
-  $("st-modal-body").innerHTML="<table style='table-layout:fixed'><colgroup><col style='width:28px'><col><col style='width:80px'><col style='width:80px'><col style='width:70px'><col style='width:80px'></colgroup><thead><tr><th>#</th><th>"+(isCli?"Cliente":"Subgrupo")+"</th><th style='text-align:right' title='Valor no período selecionado no filtro'>Valor</th><th style='text-align:right' title='Quantidade no período selecionado no filtro'>Qtd</th><th style='text-align:right' title='Crescimento vs. mesmo período de 2025'>YoY</th><th style='text-align:right' title='Total acumulado de janeiro até o mês atual em 2026, independente do período selecionado no filtro'>YTD 2026</th></tr></thead><tbody>"+(rowsHtml||"<tr><td colspan='6' style='color:var(--t3);text-align:center;padding:12px'>Sem sell-out no período</td></tr>")+"</tbody></table>";
+  $("st-modal-body").innerHTML="<table style='table-layout:fixed'><colgroup><col><col style='width:68px'><col style='width:58px'><col style='width:68px'><col style='width:58px'><col style='width:52px'><col style='width:68px'></colgroup><thead><tr><th>"+(isCli?"Cliente":"Subgrupo")+"</th><th style='text-align:right'>Sell-out 2026</th><th style='text-align:right'>Qtd 2026</th><th style='text-align:right'>Sell-out 2025</th><th style='text-align:right'>Qtd 2025</th><th style='text-align:right' title='Crescimento vs. mesmo período de 2025'>YoY</th><th style='text-align:right' title='Total acumulado de janeiro até o mês atual em 2026, independente do período selecionado no filtro'>YTD 2026</th></tr></thead><tbody>"+(rowsHtml||"<tr><td colspan='7' style='color:var(--t3);text-align:center;padding:12px'>Sem sell-out no período</td></tr>")+"</tbody></table>";
   $("st-modal-bg").classList.add("open");
 }
 
@@ -1177,10 +1181,10 @@ function rTopSgSO(fR,fC,fS,ms){
   var all=sgs.map(function(sg){
     var v=qSS(fR,fC,sg,2026,ms),q=qSQ(fR,fC,sg,2026,ms);
     if(v<=0)return null;
-    var v25=qSS(fR,fC,sg,2025,ms);
+    var v25=qSS(fR,fC,sg,2025,ms),q25=qSQ(fR,fC,sg,2025,ms);
     var yoy=v25>0?Math.round((v-v25)/v25*100):null;
     var ytd=qSS(fR,fC,sg,2026,ytdMs);
-    return{n:sg,v:v,q:q,yoy:yoy,ytd:ytd};
+    return{n:sg,v:v,q:q,v25:v25,q25:q25,yoy:yoy,ytd:ytd};
   }).filter(function(x){return x;}).sort(function(a,b){return b.v-a.v;});
   _topSOCache.sg=all;
   if(!all.length){el.innerHTML="<div style=\"color:var(--t3);padding:16px 0;text-align:center;font-size:12px\">Sem sell-out no per\u00edodo</div>";return;}
@@ -1196,10 +1200,10 @@ function rTopCliSO(fR,fC,fS,ms){
     var r=G2R[g];
     var v=qSS(r,g,fS,2026,ms),q=qSQ(r,g,fS,2026,ms);
     if(v<=0)return null;
-    var v25=qSS(r,g,fS,2025,ms);
+    var v25=qSS(r,g,fS,2025,ms),q25=qSQ(r,g,fS,2025,ms);
     var yoy=v25>0?Math.round((v-v25)/v25*100):null;
     var ytd=qSS(r,g,fS,2026,ytdMs);
-    return{n:g,v:v,q:q,yoy:yoy,ytd:ytd};
+    return{n:g,v:v,q:q,v25:v25,q25:q25,yoy:yoy,ytd:ytd};
   }).filter(function(x){return x;}).sort(function(a,b){return b.v-a.v;});
   _topSOCache.cli=all;
   if(!all.length){el.innerHTML="<div style=\"color:var(--t3);padding:16px 0;text-align:center;font-size:12px\">Sem sell-out no per\u00edodo</div>";return;}
@@ -1313,7 +1317,8 @@ function _destBoard(qFn,fR,fC,ms,key,elAltaId,elBaixaId,qtyFn){
     var yoy=v25>0?Math.round((v26-v25)/v25*100):null;
     var q26=qtyFn?qtyFn(fR,fC,sg,2026,ms):0;
     var q25=qtyFn?qtyFn(fR,fC,sg,2025,ms):0;
-    return{sg:sg,v26:v26,v25:v25,yoy:yoy,q26:q26,q25:q25};
+    var ytd=qFn(fR,fC,sg,2026,_ytdMs());
+    return{sg:sg,v26:v26,v25:v25,yoy:yoy,q26:q26,q25:q25,ytd:ytd};
   }).filter(function(x){return x&&x.yoy!==null;});
   if(!dados.length){
     if(alta)alta.innerHTML="<div style='color:var(--t3);padding:8px 0'>Sem dados suficientes no período</div>";

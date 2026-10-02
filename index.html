@@ -68,7 +68,7 @@ html,body{height:100%;overflow:hidden;background:var(--sb)}
 .lg{display:flex;gap:12px;margin-bottom:9px;font-size:10.5px;color:var(--t2);flex-wrap:wrap}
 .lg span{display:flex;align-items:center;gap:4px}
 .ld{width:9px;height:9px;border-radius:2px;flex-shrink:0}
-.rr{display:flex;align-items:center;gap:6px;padding:5px 0;border-bottom:1px solid var(--brd);font-size:11.5px}
+.rr{display:flex;align-items:center;gap:6px;padding:5px 0;border-bottom:1px solid var(--brd);font-size:11.5px;break-inside:avoid-column}
 .rr:last-child{border-bottom:none}
 .rn{width:15px;font-size:10px;color:var(--t3);text-align:right;flex-shrink:0}
 .rname{flex:1;color:var(--t1);font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
@@ -217,18 +217,37 @@ html,body{height:100%;overflow:hidden;background:var(--sb)}
 .print-trend-table th:first-child,.print-trend-table td:first-child{text-align:left}
 .st-modal-bg{display:none;position:fixed;inset:0;background:rgba(20,24,40,.55);z-index:2000;align-items:center;justify-content:center;padding:24px}
 .st-modal-bg.open{display:flex}
-.st-modal{background:var(--card);border-radius:14px;max-width:640px;width:100%;max-height:82vh;display:flex;flex-direction:column;box-shadow:0 20px 60px rgba(0,0,0,.3)}
-.st-modal.wide{max-width:860px}
+.st-modal{background:var(--card);border-radius:14px;max-width:720px;width:100%;max-height:82vh;display:flex;flex-direction:column;box-shadow:0 20px 60px rgba(0,0,0,.3)}
+.st-modal.wide{max-width:980px}
 .st-modal-hdr{padding:16px 20px;border-bottom:1px solid var(--brd);display:flex;justify-content:space-between;align-items:center}
 .st-modal-hdr h3{margin:0;font-size:15px;font-weight:700;color:var(--t1)}
 .st-modal-close{cursor:pointer;font-size:20px;color:var(--t3);line-height:1;border:none;background:none;padding:4px}
 .st-modal-body{overflow-y:auto;padding:10px 20px 18px}
-.st-modal table{width:100%;font-size:12px;border-collapse:collapse}
-.st-modal th{position:sticky;top:0;background:var(--card);text-align:left;padding:6px 8px;color:var(--t3);font-size:10.5px;text-transform:uppercase;border-bottom:1px solid var(--brd)}
-.st-modal td{padding:6px 8px;border-bottom:1px solid var(--brd)}
+.st-modal table{width:100%;font-size:11.5px;border-collapse:collapse}
+.st-modal th{position:sticky;top:0;background:var(--card);text-align:left;padding:6px 7px;color:var(--t3);font-size:10px;text-transform:uppercase;border-bottom:1px solid var(--brd)}
+.st-modal td{padding:5px 7px;border-bottom:1px solid var(--brd);vertical-align:top}
 .st-chart-wrap{cursor:pointer}
 .clk-name{cursor:pointer;text-decoration:underline;text-decoration-color:transparent;transition:text-decoration-color .12s}
 .clk-name:hover{text-decoration-color:currentColor}
+.st-modal-actions{display:flex;align-items:center;gap:10px}
+.st-modal-export{cursor:pointer;font-size:11px;color:var(--blu);background:none;border:1px solid var(--blu);border-radius:6px;padding:5px 10px;font-weight:600;white-space:nowrap}
+.st-modal-export:hover{background:var(--blu);color:#fff}
+.st-export-wrap{position:relative;display:inline-block}
+.st-export-menu{display:none;position:absolute;top:calc(100% + 5px);left:0;background:#fff;border:1px solid var(--brd);border-radius:8px;box-shadow:0 6px 20px rgba(0,0,0,.14);min-width:195px;z-index:60;overflow:hidden}
+.st-export-menu.open{display:block}
+.st-export-opt{padding:9px 13px;font-size:12px;color:var(--t1);cursor:pointer;white-space:nowrap;display:flex;align-items:center;gap:8px}
+.st-export-opt:hover{background:var(--bg)}
+.modal-print-hdr{display:none}
+@media print{
+  body.printing-modal .app{display:none!important}
+  body.printing-modal .st-modal-bg{display:block!important;position:static!important;background:#fff!important;padding:0!important;inset:auto!important}
+  body.printing-modal .st-modal{max-width:100%!important;width:100%!important;max-height:none!important;box-shadow:none!important;border-radius:0!important;display:block!important}
+  body.printing-modal .st-modal-hdr{display:none!important}
+  body.printing-modal .st-modal-body{overflow:visible!important;max-height:none!important;padding:0!important}
+  body.printing-modal .modal-print-hdr{display:block!important;border-bottom:2px solid var(--blu);padding-bottom:6px;margin-bottom:10px}
+  body.printing-modal table{font-size:11px!important}
+  body.printing-modal td,body.printing-modal th{padding:4px 6px!important}
+}
 </style>
 </head>
 <body>
@@ -625,21 +644,23 @@ html,body{height:100%;overflow:hidden;background:var(--sb)}
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px">
       <div class="cd">
         <div class="ct2"><i class="ti ti-alert-triangle" style="color:var(--red)"></i>Risco de ruptura por cliente <span id="rupt-count" style="font-size:11px;font-weight:700;margin-left:6px"></span></div>
-        <div style="font-size:10.5px;color:var(--t3);margin:-6px 0 8px">Cliente com menos de 3 meses de cobertura no subgrupo: Faturado (sell-in) e Sell Out (Mercado Livre) seguem o período selecionado no filtro; Cobertura usa o saldo acumulado desde jan/2025 ÷ ritmo do período. Cliente sem sell-out mapeado no Mercado Livre no período selecionado não aparece aqui.</div>
+        <div style="font-size:10.5px;color:var(--t3);margin:-6px 0 8px">Cliente com menos de 3 meses de cobertura no subgrupo: Faturado (sell-in) e Sell Out (Mercado Livre) seguem o período selecionado no filtro; Cobertura usa o saldo acumulado desde jan/2025 ÷ ritmo do período. Cliente sem sell-out mapeado no Mercado Livre no período selecionado, ou com Sell Out abaixo de R$3.000 no período, não aparece aqui.</div>
         <div id="rupt-cli"></div>
       </div>
       <div class="cd">
         <div class="ct2"><i class="ti ti-building-warehouse" style="color:var(--blu)"></i>Super estocados <span id="estoc-count" style="font-size:11px;font-weight:700;margin-left:6px"></span></div>
-        <div style="font-size:10.5px;color:var(--t3);margin:-6px 0 8px">Espelho do board ao lado: cliente com mais de 6 meses de cobertura no subgrupo (mesmo cálculo) — oportunidade de empurrar mais ou reduzir reposição. Cobertura ≥12 meses aparece como "12+ meses". Mesma regra: cliente sem sell-out mapeado no Mercado Livre no período selecionado não aparece aqui.</div>
+        <div style="font-size:10.5px;color:var(--t3);margin:-6px 0 8px">Espelho do board ao lado: cliente com mais de 6 meses de cobertura no subgrupo (mesmo cálculo) — oportunidade de empurrar mais ou reduzir reposição. Cobertura ≥12 meses aparece como "12+ meses". Mesma regra: cliente sem sell-out mapeado no Mercado Livre no período selecionado, ou com Sell Out abaixo de R$3.000 no período, não aparece aqui.</div>
         <div id="estoc-cli"></div>
       </div>
     </div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px">
-      <div class="cd">
-        <div class="ct2"><i class="ti ti-chart-donut" style="color:var(--amb)"></i>Concentração de faturamento por subgrupo</div>
-        <div style="font-size:10.5px;color:var(--t3);margin:-6px 0 8px">% do faturamento 2026 do cliente que vem do subgrupo mais forte dele (nome do subgrupo abaixo do cliente) — quanto maior, mais dependente de um produto só</div>
-        <div id="conc-cart"></div>
-      </div>
+    <!-- Full-width (01/10/26, 2a rodada): antes essa div ficava dentro de um grid 1fr/1fr sozinha,
+         deixando a segunda coluna inteira vazia ao lado - exatamente o "espaço vazio" que o Felipe
+         reportou. Virou card isolado, igual "Carteira em aberto" mais abaixo, e o conteúdo passou a
+         usar 2 colunas internas (CSS columns) pra aproveitar a largura extra. -->
+    <div class="cd" style="margin-bottom:12px">
+      <div class="ct2"><i class="ti ti-chart-donut" style="color:var(--amb)"></i>Concentração de faturamento por subgrupo</div>
+      <div style="font-size:10.5px;color:var(--t3);margin:-6px 0 8px">% do faturamento 2026 do cliente que vem do subgrupo mais forte dele (nome do subgrupo abaixo do cliente) — quanto maior, mais dependente de um produto só. "ver detalhes" abre todos os clientes com o top 5 de subgrupos de cada um.</div>
+      <div id="conc-cart"></div>
     </div>
     <!-- Radar de clientes: em queda / crescendo, sempre visíveis, sem seletor (30/09/26) -->
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px">
@@ -714,6 +735,10 @@ function mkLabel(mk){var p=mk.split('-');return MN_PT[parseInt(p[1])]+'/'+p[0].s
 var SEL=[10],CH={};
 
 function M(v){var a=Math.abs(v);if(a>=1e6)return(v<0?"-":"")+"R$"+Math.round(a/1e5)/10+"M";if(a>=1e3)return(v<0?"-":"")+"R$"+Math.round(a/1e3)+"k";return(v<0?"-":"")+"R$"+Math.round(a);}
+// Ticket médio (valor/unidade) sempre com centavos, nunca abreviado em k/M como M() - pedido do Felipe
+// em 01/10/26 (2a rodada): ticket médio e sua variação PoP nos boards de sell-out de produto.
+function _MTicket(v){return v===null||v===undefined?"—":"R$"+v.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});}
+function _ticketPct(cur,prev){return(cur===null||cur===undefined||!prev)?null:Math.round((cur-prev)/prev*100);}
 function P(v,b){return b>0?Math.round(v/b*100):0;}
 function $(i){return document.getElementById(i);}
 function S(i,v){var e=$(i);if(e)e.textContent=v;}
@@ -1193,26 +1218,44 @@ function openEvolModal(key){
 }
 
 function openDestModal(key){
+  var _sm0=document.querySelector(".st-modal");if(_sm0)_sm0.classList.add("wide"); // mais espaço pra coluna Subgrupo (02/10/26)
   var rows=_destCache[key]||[];
   var isSO=key.indexOf("so-")===0;
   var isAlta=key.indexOf("alta")>=0;
   var metric=isSO?"Sell-out":"Faturamento";
+  // Ticket médio + PoP só existem nas linhas de Sell-out (ver _destBoard/rDestaques, ticketOpt=true só
+  // nessa variante) - Faturamento não ganhou essas colunas (pedido do Felipe era sobre sell-out).
+  var hasTicket=isSO&&rows.length&&rows[0].ticket!==undefined;
   var titulo=(isAlta?"Em alta":"Atenção")+" ("+metric+") — todos os subgrupos ("+rows.length+")";
   var rowsHtml=rows.map(function(x){
     var cor=x.yoy>=0?"var(--grn)":"var(--red)";
     var q26Txt=x.q26>0?Math.round(x.q26).toLocaleString('pt-BR')+" un":"—";
     var q25Txt=x.q25>0?Math.round(x.q25).toLocaleString('pt-BR')+" un":"—";
     var sgEsc=x.sg.replace(/"/g,'&quot;');
-    return "<tr><td class='clk-name' title='"+sgEsc+"' style='cursor:pointer;max-width:170px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap' onclick='_quickFilterProd(\""+sgEsc+"\");closeSTModal();'>"+x.sg+"</td><td style='text-align:right;font-family:DM Mono,monospace;white-space:nowrap'>"+M(x.v26)+"</td><td style='text-align:right;color:var(--t3);font-size:11px;white-space:nowrap'>"+q26Txt+"</td><td style='text-align:right;color:var(--t3);white-space:nowrap'>"+M(x.v25)+"</td><td style='text-align:right;color:var(--t3);font-size:11px;white-space:nowrap'>"+q25Txt+"</td><td style='text-align:right;font-family:DM Mono,monospace;font-weight:700;color:"+cor+";white-space:nowrap'>"+(x.yoy>=0?"+":"")+x.yoy+"%</td><td style='text-align:right;color:var(--t3);white-space:nowrap'>"+M(x.ytd)+"</td></tr>";
+    var ticketCols="";
+    if(hasTicket){
+      var popCor=x.ticketPop===null||x.ticketPop===undefined?"var(--t3)":(x.ticketPop>=0?"var(--grn)":"var(--red)");
+      var popTxt=x.ticketPop===null||x.ticketPop===undefined?"—":(x.ticketPop>=0?"+":"")+x.ticketPop+"%";
+      ticketCols="<td style='text-align:right;font-family:DM Mono,monospace;white-space:nowrap'>"+_MTicket(x.ticket)+"</td><td style='text-align:right;font-family:DM Mono,monospace;color:"+popCor+";white-space:nowrap'>"+popTxt+"</td>";
+    }
+    return "<tr><td class='clk-name' title='"+sgEsc+"' style='cursor:pointer;max-width:260px;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;white-space:normal;word-break:break-word;line-height:1.25' onclick='_quickFilterProd(\""+sgEsc+"\");closeSTModal();'>"+x.sg+"</td><td style='text-align:right;font-family:DM Mono,monospace;white-space:nowrap'>"+M(x.v26)+"</td><td style='text-align:right;color:var(--t3);font-size:11px;white-space:nowrap'>"+q26Txt+"</td><td style='text-align:right;color:var(--t3);white-space:nowrap'>"+M(x.v25)+"</td><td style='text-align:right;color:var(--t3);font-size:11px;white-space:nowrap'>"+q25Txt+"</td><td style='text-align:right;font-family:DM Mono,monospace;font-weight:700;color:"+cor+";white-space:nowrap'>"+(x.yoy>=0?"+":"")+x.yoy+"%</td>"+ticketCols+"<td style='text-align:right;color:var(--t3);white-space:nowrap'>"+M(x.ytd)+"</td></tr>";
   }).join("");
+  var ticketTh=hasTicket?("<th style='text-align:right' title='Sell-out ÷ unidades vendidas, no período selecionado'>Ticket médio</th><th style='text-align:right' title='Ticket médio no período selecionado vs. o intervalo de mesmo tamanho imediatamente anterior (PoP)'>Ticket PoP</th>"):"";
+  var ticketColgroup=hasTicket?"<col style='width:76px'><col style='width:60px'>":"";
+  var colspan=hasTicket?9:7;
   $("st-modal-title").textContent=titulo;
-  $("st-modal-body").innerHTML="<table style='table-layout:fixed'><colgroup><col><col style='width:68px'><col style='width:58px'><col style='width:68px'><col style='width:58px'><col style='width:52px'><col style='width:68px'></colgroup><thead><tr><th>Subgrupo</th><th style='text-align:right'>"+metric+" 2026</th><th style='text-align:right'>Qtd 2026</th><th style='text-align:right'>"+metric+" 2025</th><th style='text-align:right'>Qtd 2025</th><th style='text-align:right' title='Crescimento vs. mesmo período de 2025'>YoY</th><th style='text-align:right' title='Total acumulado de janeiro até o mês atual em 2026, independente do período selecionado no filtro'>YTD 2026</th></tr></thead><tbody>"+(rowsHtml||"<tr><td colspan='7' style='color:var(--t3);text-align:center;padding:12px'>Nenhum subgrupo</td></tr>")+"</tbody></table>";
+  $("st-modal-body").innerHTML="<table style='table-layout:fixed'><colgroup><col><col style='width:92px'><col style='width:58px'><col style='width:92px'><col style='width:58px'><col style='width:52px'>"+ticketColgroup+"<col style='width:68px'></colgroup><thead><tr><th>Subgrupo</th><th style='text-align:right'>"+metric+" 2026</th><th style='text-align:right'>Qtd 2026</th><th style='text-align:right'>"+metric+" 2025</th><th style='text-align:right'>Qtd 2025</th><th style='text-align:right' title='Crescimento vs. mesmo período de 2025'>YoY</th>"+ticketTh+"<th style='text-align:right' title='Total acumulado de janeiro até o mês atual em 2026, independente do período selecionado no filtro'>YTD 2026</th></tr></thead><tbody>"+(rowsHtml||"<tr><td colspan='"+colspan+"' style='color:var(--t3);text-align:center;padding:12px'>Nenhum subgrupo</td></tr>")+"</tbody></table>";
   $("st-modal-bg").classList.add("open");
 }
 
 function openTopSOModal(key){
+  var _sm0=document.querySelector(".st-modal");if(_sm0)_sm0.classList.add("wide"); // mais espaço pra coluna Subgrupo/Cliente (02/10/26)
   var rows=_topSOCache[key]||[];
   var isCli=key==='cli';
+  // Ticket médio + PoP só existem nas linhas de "sg" (produto) - ver rTopSgSO. "cli" não tem esses
+  // campos (ticket por cliente não foi pedido - Felipe pediu especificamente "boards de sell out de
+  // produtos"), então as 2 colunas extras só entram condicionalmente aqui.
+  var hasTicket=rows.length&&rows[0].ticket!==undefined;
   var label=isCli?"clientes":"subgrupos";
   var clkFn=isCli?'_quickFilterCli':'_quickFilterProd';
   var titulo="Top "+label+" — Sell-out ML — detalhamento ("+rows.length+")";
@@ -1222,16 +1265,27 @@ function openTopSOModal(key){
     var nEsc=x.n.replace(/"/g,'&quot;');
     var q26Txt=x.q>0?x.q.toLocaleString('pt-BR')+" un":"—";
     var q25Txt=x.q25>0?x.q25.toLocaleString('pt-BR')+" un":"—";
-    return "<tr><td class='clk-name' title='"+nEsc+"' style='cursor:pointer;max-width:170px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap' onclick='"+clkFn+"(\""+nEsc+"\");closeSTModal();'>"+x.n+"</td>"+
+    var ticketCols="";
+    if(hasTicket){
+      var popCor=x.ticketPop===null||x.ticketPop===undefined?"var(--t3)":(x.ticketPop>=0?"var(--grn)":"var(--red)");
+      var popTxt=x.ticketPop===null||x.ticketPop===undefined?"—":(x.ticketPop>=0?"+":"")+x.ticketPop+"%";
+      ticketCols="<td style='text-align:right;font-family:DM Mono,monospace;white-space:nowrap'>"+_MTicket(x.ticket)+"</td>"+
+        "<td style='text-align:right;font-family:DM Mono,monospace;color:"+popCor+";white-space:nowrap'>"+popTxt+"</td>";
+    }
+    return "<tr><td class='clk-name' title='"+nEsc+"' style='cursor:pointer;max-width:260px;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;white-space:normal;word-break:break-word;line-height:1.25' onclick='"+clkFn+"(\""+nEsc+"\");closeSTModal();'>"+x.n+"</td>"+
       "<td style='text-align:right;font-family:DM Mono,monospace;white-space:nowrap'>"+M(x.v)+"</td>"+
       "<td style='text-align:right;color:var(--t3);font-size:11px;white-space:nowrap'>"+q26Txt+"</td>"+
       "<td style='text-align:right;color:var(--t3);white-space:nowrap'>"+M(x.v25)+"</td>"+
       "<td style='text-align:right;color:var(--t3);font-size:11px;white-space:nowrap'>"+q25Txt+"</td>"+
       "<td style='text-align:right;font-family:DM Mono,monospace;font-weight:700;color:"+cor+";white-space:nowrap'>"+yoyTxt+"</td>"+
+      ticketCols+
       "<td style='text-align:right;color:var(--t3);white-space:nowrap'>"+M(x.ytd)+"</td></tr>";
   }).join("");
+  var ticketTh=hasTicket?("<th style='text-align:right' title='Sell-out ÷ unidades vendidas, no período selecionado'>Ticket médio</th><th style='text-align:right' title='Ticket médio no período selecionado vs. o intervalo de mesmo tamanho imediatamente anterior (PoP)'>Ticket PoP</th>"):"";
+  var ticketColgroup=hasTicket?"<col style='width:76px'><col style='width:60px'>":"";
+  var colspan=hasTicket?9:7;
   $("st-modal-title").textContent=titulo;
-  $("st-modal-body").innerHTML="<table style='table-layout:fixed'><colgroup><col><col style='width:68px'><col style='width:58px'><col style='width:68px'><col style='width:58px'><col style='width:52px'><col style='width:68px'></colgroup><thead><tr><th>"+(isCli?"Cliente":"Subgrupo")+"</th><th style='text-align:right'>Sell-out 2026</th><th style='text-align:right'>Qtd 2026</th><th style='text-align:right'>Sell-out 2025</th><th style='text-align:right'>Qtd 2025</th><th style='text-align:right' title='Crescimento vs. mesmo período de 2025'>YoY</th><th style='text-align:right' title='Total acumulado de janeiro até o mês atual em 2026, independente do período selecionado no filtro'>YTD 2026</th></tr></thead><tbody>"+(rowsHtml||"<tr><td colspan='7' style='color:var(--t3);text-align:center;padding:12px'>Sem sell-out no período</td></tr>")+"</tbody></table>";
+  $("st-modal-body").innerHTML="<table style='table-layout:fixed'><colgroup><col><col style='width:68px'><col style='width:58px'><col style='width:68px'><col style='width:58px'><col style='width:52px'>"+ticketColgroup+"<col style='width:68px'></colgroup><thead><tr><th>"+(isCli?"Cliente":"Subgrupo")+"</th><th style='text-align:right'>Sell-out 2026</th><th style='text-align:right'>Qtd 2026</th><th style='text-align:right'>Sell-out 2025</th><th style='text-align:right'>Qtd 2025</th><th style='text-align:right' title='Crescimento vs. mesmo período de 2025'>YoY</th>"+ticketTh+"<th style='text-align:right' title='Total acumulado de janeiro até o mês atual em 2026, independente do período selecionado no filtro'>YTD 2026</th></tr></thead><tbody>"+(rowsHtml||"<tr><td colspan='"+colspan+"' style='color:var(--t3);text-align:center;padding:12px'>Sem sell-out no período</td></tr>")+"</tbody></table>";
   $("st-modal-bg").classList.add("open");
 }
 
@@ -1282,7 +1336,7 @@ var rowsHtml=rows.map(function(x){
   var q26Txt=x.q>0?Math.round(x.q).toLocaleString('pt-BR')+" un":"—";
   var q25Txt=x.q25>0?Math.round(x.q25).toLocaleString('pt-BR')+" un":"—";
   var nEsc=x.n.replace(/"/g,'&quot;');
-  return "<tr><td class='clk-name' title='"+nEsc+"' style='cursor:pointer;max-width:170px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap' onclick='_quickFilterCli(\""+nEsc+"\");closeSTModal();'>"+x.n+"</td>"+
+  return "<tr><td class='clk-name' title='"+nEsc+"' style='cursor:pointer;max-width:260px;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;white-space:normal;word-break:break-word;line-height:1.25' onclick='_quickFilterCli(\""+nEsc+"\");closeSTModal();'>"+x.n+"</td>"+
     "<td style='text-align:right;font-family:DM Mono,monospace;white-space:nowrap'>"+M(x.v)+"</td>"+
     "<td style='text-align:right;color:var(--t3);font-size:11px;white-space:nowrap'>"+q26Txt+"</td>"+
     "<td style='text-align:right;color:var(--t3);white-space:nowrap'>"+M(x.v25)+"</td>"+
@@ -1304,8 +1358,23 @@ return "<div class=\"rr\"><div class=\"rn\">"+(i+1)+"</div><div style=\"flex:1;m
   "<div class=\"rv\"><div style=\"color:"+color+";font-weight:600\">"+M(r.v)+"</div><div style=\"color:var(--t3);font-size:10px\">"+(r.q>0?Math.round(r.q).toLocaleString("pt-BR")+" un":"")+"</div></div></div>";
 }
 function _topPFLink(key,total,modalFn){
-var txt=total>10?("ver todos os "+total+" + YoY/PoP/YTD"):"ver detalhes (qtd, YoY, PoP, YTD)";
+var txt="ver detalhes (qtd, YoY, PoP, YTD)";
 return "<div style=\"text-align:center;padding-top:8px\"><span style=\"font-size:11px;color:var(--blu);cursor:pointer;text-decoration:underline\" onclick=\""+modalFn+"('"+key+"')\">"+txt+"</span></div>";
+}
+// Link "ver detalhes" pro popup de qualquer board - SEMPRE aparece quando ha pelo menos 1 linha (nunca
+// escondido so por caber tudo no card), pedido do Felipe em 01/10/26: antes, alguns boards so mostravam
+// o link quando o total passava de um limiar (8, 15 etc.), entao com poucos resultados (ex.: 8 clientes
+// crescendo no Q3) nao dava pra abrir o popup de detalhamento nem exportar. CORRIGIDO DE NOVO em 01/10/26
+// (mesmo dia, 2a rodada): a 1a correcao ainda deixava o texto variar pra "ver todos os N" quando N
+// passava de "shown" (ex.: Risco de Ruptura com 300 itens) - Felipe apontou que isso nao tinha sido
+// de fato trocado. Agora o texto e SEMPRE "ver detalhes", nunca menciona a contagem (a contagem ja
+// aparece no badge do cabecalho do board, ex. "#rupt-count"). "shown" fica sem uso (mantido no
+// parametro so pra nao precisar mexer em todos os call sites), "extra" ainda aparece entre parenteses
+// quando informado (ex. "(qtd, YoY, PoP, YTD)"). fnCall e o onclick completo (ex. "openRuptModal()").
+function _verTodosLink(total,shown,fnCall,extra){
+  if(!total)return "";
+  var txt="ver detalhes"+(extra?(" ("+extra+")"):"");
+  return "<div style=\"text-align:center;padding-top:8px\"><span style=\"font-size:11px;color:var(--blu);cursor:pointer;text-decoration:underline\" onclick=\""+fnCall+"\">"+txt+"</span></div>";
 }
 function rTopSgPF(metric,fR,fC,fS,ms){
 var key=metric==='ped'?'ped':'fat';
@@ -1342,7 +1411,7 @@ var rowsHtml=rows.map(function(x){
   var q26Txt=x.q>0?Math.round(x.q).toLocaleString('pt-BR')+" un":"—";
   var q25Txt=x.q25>0?Math.round(x.q25).toLocaleString('pt-BR')+" un":"—";
   var nEsc=x.n.replace(/"/g,'&quot;');
-  return "<tr><td class='clk-name' title='"+nEsc+"' style='cursor:pointer;max-width:170px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap' onclick='_quickFilterProd(\""+nEsc+"\");closeSTModal();'>"+x.n+"</td>"+
+  return "<tr><td class='clk-name' title='"+nEsc+"' style='cursor:pointer;max-width:260px;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;white-space:normal;word-break:break-word;line-height:1.25' onclick='_quickFilterProd(\""+nEsc+"\");closeSTModal();'>"+x.n+"</td>"+
     "<td style='text-align:right;font-family:DM Mono,monospace;white-space:nowrap'>"+M(x.v)+"</td>"+
     "<td style='text-align:right;color:var(--t3);font-size:11px;white-space:nowrap'>"+q26Txt+"</td>"+
     "<td style='text-align:right;color:var(--t3);white-space:nowrap'>"+M(x.v25)+"</td>"+
@@ -1360,25 +1429,38 @@ var _topSOCache={sg:[],cli:[]};
 function _ytdMs(){var a=[];for(var i=1;i<=CURR_MES;i++)a.push(i);return a;}
 function _topSORow(r,i,mx,clkFn){
   var w=Math.round(r.v/mx*100);
+  // Ticket médio + PoP (01/10/26) existem no objeto r (rTopSgSO popula; rTopCliSO não), mas a partir de
+  // 02/10/26 não aparecem mais no card - Felipe achou a linha grande demais com tudo junto no final.
+  // Ticket+PoP seguem disponíveis no detalhamento (ver openTopSOModal, colunas "Ticket médio"/"Ticket PoP"),
+  // mesmo padrão já aplicado aos boards de Ruptura/Estocados (card enxuto, popup com o detalhe completo).
   return "<div class=\"rr\"><div class=\"rn\">"+(i+1)+"</div><div style=\"flex:1;min-width:0\"><div class=\"rname clk-name\" onclick='"+clkFn+"(\""+r.n.replace(/"/g,'&quot;')+"\")'>"+r.n+"</div>"+
     "<div style=\"height:3px;background:var(--bg);border-radius:2px;overflow:hidden;margin-top:3px\"><div style=\"height:100%;width:"+w+"%;background:#0f9e72;border-radius:2px\"></div></div></div>"+
     "<div class=\"rv\"><div style=\"color:#0f9e72;font-weight:600\">"+M(r.v)+"</div><div style=\"color:var(--t3);font-size:10px\">"+(r.q>0?r.q.toLocaleString("pt-BR")+" un":"")+"</div></div></div>";
 }
 function _topSOLink(key,total){
-  var txt=total>10?("ver todos os "+total+" + YoY/YTD"):"ver detalhes (qtd, YoY, YTD)";
+  var txt="ver detalhes (qtd, YoY, YTD)";
   return "<div style=\"text-align:center;padding-top:8px\"><span style=\"font-size:11px;color:var(--blu);cursor:pointer;text-decoration:underline\" onclick=\"openTopSOModal('"+key+"')\">"+txt+"</span></div>";
 }
 function rTopSgSO(fR,fC,fS,ms){
   var el=$("kpi-so-sg");if(!el)return;
   var sgs=fS?[fS]:AS;
   var ytdMs=_ytdMs();
+  var prevPeriod=_prevPeriodMonths(ms);
   var all=sgs.map(function(sg){
     var v=qSS(fR,fC,sg,2026,ms),q=qSQ(fR,fC,sg,2026,ms);
     if(v<=0)return null;
     var v25=qSS(fR,fC,sg,2025,ms),q25=qSQ(fR,fC,sg,2025,ms);
     var yoy=v25>0?Math.round((v-v25)/v25*100):null;
     var ytd=qSS(fR,fC,sg,2026,ytdMs);
-    return{n:sg,v:v,q:q,v25:v25,q25:q25,yoy:yoy,ytd:ytd};
+    // Ticket médio (valor/unidade) do período selecionado, e sua variação PoP contra o intervalo de
+    // mesmo tamanho imediatamente anterior (mesma janela já usada pro PoP de valor nos Top clientes/
+    // subgrupos Pedido/Faturado - função _prevPeriodMonths, Seção "Top clientes/subgrupos" do manual).
+    var ticket=q>0?v/q:null;
+    var vPrev=0,qPrev=0;
+    prevPeriod.forEach(function(pm){vPrev+=qSS(fR,fC,sg,pm.y,[pm.m]);qPrev+=qSQ(fR,fC,sg,pm.y,[pm.m]);});
+    var ticketPrev=qPrev>0?vPrev/qPrev:null;
+    var ticketPop=_ticketPct(ticket,ticketPrev);
+    return{n:sg,v:v,q:q,v25:v25,q25:q25,yoy:yoy,ytd:ytd,ticket:ticket,ticketPop:ticketPop};
   }).filter(function(x){return x;}).sort(function(a,b){return b.v-a.v;});
   _topSOCache.sg=all;
   if(!all.length){el.innerHTML="<div style=\"color:var(--t3);padding:16px 0;text-align:center;font-size:12px\">Sem sell-out no per\u00edodo</div>";return;}
@@ -1408,12 +1490,16 @@ function rTopCliSO(fR,fC,fS,ms){
 
 var _ruptRowsCache=[];
 var _estocRowsCache=[];
-// Helpers de layout pras tabelas densas dos modais "ver todos" (Ruptura/Super Estocados):
-// evita que nome de cliente/subgrupo longo quebre linha de forma feia dentro de coluna estreita.
+// Helpers de layout pras tabelas densas dos modais "ver todos" (Ruptura/Super Estocados/Concentração/
+// Carteira): nome de cliente/subgrupo/item longo agora QUEBRA em até 2 linhas (word-break) em vez de
+// truncar numa linha só com "..." - Felipe reportou coluna "impossível de ler" quando o nome não cabia.
+// title continua no elemento como reforço, pro raro caso de nome passar até das 2 linhas (clamp corta
+// com "..." no fim da 2a linha via -webkit-line-clamp, e o hover mostra o nome completo).
 var _thNW="white-space:nowrap;overflow:hidden;text-overflow:ellipsis";
+var _wrap2="overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;white-space:normal;word-break:break-word;line-height:1.25";
 function _ellCell(txt){
   var esc=(txt||"").replace(/"/g,'&quot;');
-  return "<div style=\"overflow:hidden;text-overflow:ellipsis;white-space:nowrap\" title=\""+esc+"\">"+(txt||"—")+"</div>";
+  return "<div style=\""+_wrap2+"\" title=\""+esc+"\">"+(txt||"—")+"</div>";
 }
 // Cobertura de estoque por CLIENTE (30/09/26, revisado 3x): antes era pré-calculada em Python com janela
 // fixa (RUPT_CLI). Felipe pediu pra seguir o FILTRO DE PERÍODO selecionado no topo do dashboard (mesmo
@@ -1466,6 +1552,13 @@ function _coberturaLbl(mesesNum){
   if(mesesNum>=12)return "12+ meses";
   return _M1(mesesNum)+(mesesNum===1?" mês":" meses");
 }
+// Piso de Sell Out pra entrar nos boards de Ruptura/Estocados (02/10/26). Antes bastava vendeu>0 (R$1 já
+// entrava) - Felipe reportou lista poluída com "itens sem faturamento" aparecendo por causa de sell-out
+// pequeno (poucos milhares) de origem incerta (pode ser cliente vendendo item genérico sob anúncio
+// Dellamed). Cobertura/Saldo continuam usando a janela acumulada desde jan/2025 de qualquer forma (não
+// é o que esse piso filtra) - o piso é só o degrau de entrada: Sell Out do período selecionado precisa
+// ser substancial, não só positivo. Valor escolhido (R$3.000) é ponto de partida, fácil de ajustar.
+var COVERAGE_SO_FLOOR=3000;
 function _rCliCoverage(fR,fC,ms){
   var grpFilter=fC?[fC]:(fR?AG.filter(function(g){return G2R[g]===fR;}):AG);
   var rows=[];
@@ -1473,7 +1566,7 @@ function _rCliCoverage(fR,fC,ms){
     AS.forEach(function(sg){
       if(sg==='-'||sg==='SEM SUBFAMILIA')return;
       var vendeu=_cliSG(g,sg,2026,ms);
-      if(vendeu<=0)return; // sem giro desse cliente nesse subgrupo NO PERÍODO selecionado - fora dos 2 boards
+      if(vendeu<COVERAGE_SO_FLOOR)return; // sell-out no período abaixo do piso - fora dos 2 boards (ver nota acima)
       var comprou=qFP(FAT,"",g,sg,2026,ms);
       var vendeuLY=_cliSG(g,sg,2025,ms);
       var comprouLY=qFP(FAT,"",g,sg,2025,ms);
@@ -1493,15 +1586,16 @@ function rRuptura(fR,fC,ms){
   var cnt=$("rupt-count");
   if(cnt){cnt.innerHTML=rows.length?("<span style='color:var(--red)'>● "+rows.length+" em risco</span>"):"<span style='color:var(--grn3)'>● nenhum risco identificado</span>";}
   if(!rows.length){el.innerHTML="<div style=\"color:var(--t3);padding:16px 0;text-align:center;font-size:12px\">Nenhum cliente com risco de ruptura no período</div>";return;}
+  // Card principal reduzido a Cliente/Produto/Cobertura (01/10/26, 2a rodada - Felipe achou os boards de
+  // Ruptura/Estocados grandes demais). Rep. e a linha "Sell Out X em periodo" saíram do card (ainda
+  // disponíveis no popup, via _coverageModalTable, que não mudou).
   var rowHtml=function(r,i){
     return "<div class=\"rr\"><div class=\"rn\">"+(i+1)+"</div><div style=\"flex:1;min-width:0\"><div class=\"rname clk-name\" onclick='_quickFilterCli(\""+r.grp.replace(/"/g,'&quot;')+"\")'>"+r.grp+"</div>"+
-      "<div style=\"font-size:9.5px;color:var(--t3);margin-top:2px\"><span class=\"clk-name\" onclick='_quickFilterProd(\""+r.sg.replace(/"/g,'&quot;')+"\")'>"+r.sg+"</span>"+(r.rep?" · "+r.rep:"")+"</div></div>"+
-      "<div class=\"rv\"><div style=\"color:var(--red);font-weight:600\">"+_coberturaLbl(r.meses)+"</div><div style=\"font-size:10px;color:var(--t3)\">"+"Sell Out "+M(r.vendeu)+" em "+pL()+"</div></div></div>";
+      "<div style=\"font-size:9.5px;color:var(--t3);margin-top:1px\" class=\"clk-name\" onclick='_quickFilterProd(\""+r.sg.replace(/"/g,'&quot;')+"\")'>"+r.sg+"</div></div>"+
+      "<div class=\"rv\"><div style=\"color:var(--red);font-weight:600\">"+_coberturaLbl(r.meses)+"</div></div></div>";
   };
   var html=rows.slice(0,15).map(rowHtml).join("");
-  if(rows.length>15){
-    html+="<div style=\"text-align:center;padding-top:8px\"><span style=\"font-size:11px;color:var(--blu);cursor:pointer;text-decoration:underline\" onclick=\"openRuptModal()\">ver todos os "+rows.length+"</span></div>";
-  }
+  html+=_verTodosLink(rows.length,15,"openRuptModal()");
   el.innerHTML=html;
 }
 function _coverageModalTable(rows,color){
@@ -1517,7 +1611,7 @@ function _coverageModalTable(rows,color){
       "<td style='text-align:right;font-family:DM Mono,monospace;color:var(--t3);font-size:11px;white-space:nowrap'>"+M(r.ritmo)+"</td>"+
       "<td style='text-align:right;font-family:DM Mono,monospace;color:"+color+";font-weight:700;white-space:nowrap'>"+_coberturaLbl(r.meses)+"</td></tr>";
   }).join("");
-  return "<table style='table-layout:fixed'><colgroup><col style='width:110px'><col style='width:120px'><col style='width:78px'><col style='width:84px'><col style='width:76px'><col style='width:84px'><col style='width:76px'><col style='width:84px'><col style='width:80px'></colgroup>"+
+  return "<table style='table-layout:fixed'><colgroup><col style='width:150px'><col style='width:150px'><col style='width:70px'><col style='width:84px'><col style='width:76px'><col style='width:84px'><col style='width:76px'><col style='width:84px'><col style='width:80px'></colgroup>"+
     "<thead><tr><th>Cliente</th><th style='"+_thNW+"'>Subgrupo</th><th style='"+_thNW+"'>Rep.</th>"+
     "<th style='text-align:right;"+_thNW+"' title='Faturamento (sell-in, mesma fonte do KPI \"Faturado — período\" no topo do dashboard) desse cliente nesse subgrupo, só no período selecionado no filtro ("+pL()+")'>Faturado</th>"+
     "<th style='text-align:right;"+_thNW+"' title='Faturado no período selecionado ("+pL()+") vs. o MESMO período de 2025 — ano contra ano (YoY) no recorte de meses escolhido, não é mês anterior (MoM) nem período anterior dentro de 2026 (PoP)'>vs 2025</th>"+
@@ -1544,15 +1638,14 @@ function rEstocados(fR,fC,ms){
   var cnt=$("estoc-count");
   if(cnt){cnt.innerHTML=rows.length?("<span style='color:var(--blu)'>● "+rows.length+" super estocados</span>"):"<span style='color:var(--t3)'>● nenhum acima de "+EST_LIMIAR_MESES+" meses</span>";}
   if(!rows.length){el.innerHTML="<div style=\"color:var(--t3);padding:16px 0;text-align:center;font-size:12px\">Nenhum cliente com estoque acima de "+EST_LIMIAR_MESES+" meses de cobertura no período</div>";return;}
+  // Mesma redução de campos do card de Ruptura acima (01/10/26, 2a rodada) - só Cliente/Produto/Cobertura.
   var rowHtml=function(r,i){
     return "<div class=\"rr\"><div class=\"rn\">"+(i+1)+"</div><div style=\"flex:1;min-width:0\"><div class=\"rname clk-name\" onclick='_quickFilterCli(\""+r.grp.replace(/"/g,'&quot;')+"\")'>"+r.grp+"</div>"+
-      "<div style=\"font-size:9.5px;color:var(--t3);margin-top:2px\"><span class=\"clk-name\" onclick='_quickFilterProd(\""+r.sg.replace(/"/g,'&quot;')+"\")'>"+r.sg+"</span>"+(r.rep?" · "+r.rep:"")+"</div></div>"+
-      "<div class=\"rv\"><div style=\"color:var(--blu);font-weight:600\">"+_coberturaLbl(r.meses)+"</div><div style=\"font-size:10px;color:var(--t3)\">"+"Sell Out "+M(r.vendeu)+" em "+pL()+"</div></div></div>";
+      "<div style=\"font-size:9.5px;color:var(--t3);margin-top:1px\" class=\"clk-name\" onclick='_quickFilterProd(\""+r.sg.replace(/"/g,'&quot;')+"\")'>"+r.sg+"</div></div>"+
+      "<div class=\"rv\"><div style=\"color:var(--blu);font-weight:600\">"+_coberturaLbl(r.meses)+"</div></div></div>";
   };
   var html=rows.slice(0,15).map(rowHtml).join("");
-  if(rows.length>15){
-    html+="<div style=\"text-align:center;padding-top:8px\"><span style=\"font-size:11px;color:var(--blu);cursor:pointer;text-decoration:underline\" onclick=\"openEstocModal()\">ver todos os "+rows.length+"</span></div>";
-  }
+  html+=_verTodosLink(rows.length,15,"openEstocModal()");
   el.innerHTML=html;
 }
 function openEstocModal(){
@@ -1563,6 +1656,22 @@ function openEstocModal(){
   $("st-modal-bg").classList.add("open");
 }
 
+var _concRowsCache=[];
+// Top N subgrupos por representatividade de faturamento 2026 dentro do cliente (CP[g].sg_data já tem
+// f26/f25 por subgrupo, calculado no pipeline - nada de novo pro Python, só leitura client-side).
+// Felipe pediu "top 3 ou top 5" - uso 5 (mais informativo, ainda cabe numa célula de popup); dá pra
+// reduzir pra 3 se achar poluído.
+function _concTopProdutos(g,n){
+  var c=CP[g]||{};
+  var sgd=c.sg_data||{};
+  var fat26=c.fat26||0;
+  var lista=Object.keys(sgd).map(function(sg){
+    var f26=(sgd[sg]||{}).f26||0;
+    var f25=(sgd[sg]||{}).f25||0;
+    return{sg:sg,f26:f26,f25:f25,pct:fat26>0?f26/fat26:0};
+  }).filter(function(x){return x.f26>0;}).sort(function(a,b){return b.f26-a.f26;});
+  return lista.slice(0,n||5);
+}
 function rConcentracao(fR,fC,ms){
   var el=$("conc-cart");if(!el)return;
   var grpFilter=fC?[fC]:(fR?AG.filter(function(g){return G2R[g]===fR;}):AG);
@@ -1576,16 +1685,45 @@ function rConcentracao(fR,fC,ms){
       if(v>topSgV){topSgV=v;topSg=sg;}
     });
     return{grp:g,conc:c.concentration||0,fat26:c.fat26||0,rep:c.rep||G2R[g]||"",topSg:topSg,topSgV:topSgV};
-  }).filter(function(r){return r.fat26>0;}).sort(function(a,b){return b.conc-a.conc;}).slice(0,15);
+  }).filter(function(r){return r.fat26>0;}).sort(function(a,b){return b.conc-a.conc;});
+  _concRowsCache=rows; // lista completa (todos os clientes ativos) - usada no popup
   if(!rows.length){el.innerHTML="<div style=\"color:var(--t3);padding:16px 0;text-align:center;font-size:12px\">Sem dados de concentração no período</div>";return;}
-  el.innerHTML=rows.map(function(r,i){
+  var rowHtml=function(r,i){
     var pct=Math.round(r.conc*100);
     var c=pct>=60?"var(--red)":pct>=40?"var(--amb)":"var(--grn3)";
     var sgLbl=r.topSg?("<div style=\"font-size:9.5px;color:var(--t3);margin-top:2px\"><span class=\"clk-name\" onclick='_quickFilterProd(\""+r.topSg.replace(/"/g,'&quot;')+"\")'>◻ "+r.topSg+"</span></div>"):"";
     return "<div class=\"rr\"><div class=\"rn\">"+(i+1)+"</div><div style=\"flex:1;min-width:0\"><div class=\"rname clk-name\" onclick='_quickFilterCli(\""+r.grp.replace(/"/g,'&quot;')+"\")'>"+r.grp+"</div>"+sgLbl+
       "<div style=\"height:3px;background:var(--bg);border-radius:2px;overflow:hidden;margin-top:3px\"><div style=\"height:100%;width:"+pct+"%;background:"+c+";border-radius:2px\"></div></div></div>"+
       "<div class=\"rv\"><div style=\"color:"+c+";font-weight:600\">"+pct+"%</div><div style=\"font-size:10px;color:var(--t3)\">"+M(r.fat26)+"</div></div></div>";
+  };
+  // Card agora full-width (ver HTML) - renderiza em 2 colunas (CSS columns) pra aproveitar o espaço que
+  // antes ficava vazio ao lado, mostrando até 20 clientes (era 15 numa coluna só) sem crescer em altura.
+  var shown=rows.slice(0,20);
+  el.innerHTML="<div style=\"columns:2;column-gap:22px\">"+shown.map(rowHtml).join("")+"</div>"+
+    _verTodosLink(rows.length,20,"openConcModal()");
+}
+function openConcModal(){
+  if(!_concRowsCache.length)return;
+  var _sm=document.querySelector(".st-modal");if(_sm)_sm.classList.add("wide");
+  $("st-modal-title").textContent="Concentração de faturamento por subgrupo — todos os clientes ("+_concRowsCache.length+")";
+  var rowsHtml=_concRowsCache.map(function(r){
+    var pct=Math.round(r.conc*100);
+    var cor=pct>=60?"var(--red)":pct>=40?"var(--amb)":"var(--grn3)";
+    var top=_concTopProdutos(r.grp,5);
+    var topHtml=top.length?top.map(function(t){
+      var tp=Math.round(t.pct*100);
+      return "<div style='display:flex;justify-content:space-between;gap:10px;padding:1px 0'><span class='clk-name' style='color:var(--t2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:180px' onclick='_quickFilterProd(\""+t.sg.replace(/"/g,'&quot;')+"\");closeSTModal();' title='"+t.sg.replace(/"/g,'&quot;')+"'>"+t.sg+"</span><span style='color:var(--t3);white-space:nowrap;font-family:DM Mono,monospace;font-size:10.5px'>"+tp+"% · "+M(t.f26)+"</span></div>";
+    }).join(""):"<span style='color:var(--t3)'>—</span>";
+    var nEsc=r.grp.replace(/"/g,'&quot;');
+    return "<tr><td class='clk-name' style='max-width:0' onclick='_quickFilterCli(\""+nEsc+"\");closeSTModal();'>"+_ellCell(r.grp)+"</td>"+
+      "<td style='color:var(--t3);font-size:11px;max-width:0'>"+_ellCell(r.rep||"—")+"</td>"+
+      "<td style='text-align:right;font-family:DM Mono,monospace;white-space:nowrap'>"+M(r.fat26)+"</td>"+
+      "<td style='text-align:right;font-family:DM Mono,monospace;font-weight:700;color:"+cor+";white-space:nowrap'>"+pct+"%</td>"+
+      "<td style='padding:6px 8px'>"+topHtml+"</td></tr>";
   }).join("");
+  $("st-modal-body").innerHTML="<table style='table-layout:fixed'><colgroup><col style='width:170px'><col style='width:70px'><col style='width:105px'><col style='width:110px'><col></colgroup>"+
+    "<thead><tr><th>Cliente</th><th style='"+_thNW+"'>Rep.</th><th style='text-align:right;"+_thNW+"'>Faturado 2026</th><th style='text-align:right;"+_thNW+"' title='Maior fatia de faturamento 2026 do cliente vindo de um único subgrupo'>Concentração</th><th title='Subgrupos do cliente ordenados por faturamento 2026, com % de representatividade sobre o total do cliente'>Top 5 subgrupos (% do cliente)</th></tr></thead><tbody>"+rowsHtml+"</tbody></table>";
+  $("st-modal-bg").classList.add("open");
 }
 
 var _esfData=[];
@@ -1663,7 +1801,7 @@ function _esfRender(){
     if(!queda.length){elQ.innerHTML="<div style='color:var(--t3);padding:8px 0'>Nenhum cliente em queda no período — bom sinal</div>";}
     else{
       var htmlQ=queda.slice(0,8).map(_esfRow).join("");
-      if(queda.length>8)htmlQ+="<div style='text-align:center;padding-top:8px'><span style='font-size:11px;color:var(--blu);cursor:pointer;text-decoration:underline' onclick=\"openEsfModal('queda')\">ver todos os "+queda.length+"</span></div>";
+      htmlQ+=_verTodosLink(queda.length,8,"openEsfModal('queda')");
       elQ.innerHTML=htmlQ;
     }
   }
@@ -1671,7 +1809,7 @@ function _esfRender(){
     if(!cresce.length){elC.innerHTML="<div style='color:var(--t3);padding:8px 0'>Nenhum cliente crescendo no período</div>";}
     else{
       var htmlC=cresce.slice(0,8).map(_esfRow).join("");
-      if(cresce.length>8)htmlC+="<div style='text-align:center;padding-top:8px'><span style='font-size:11px;color:var(--blu);cursor:pointer;text-decoration:underline' onclick=\"openEsfModal('cresce')\">ver todos os "+cresce.length+"</span></div>";
+      htmlC+=_verTodosLink(cresce.length,8,"openEsfModal('cresce')");
       elC.innerHTML=htmlC;
     }
   }
@@ -1699,9 +1837,14 @@ function openEsfModal(which){
     "<th style='text-align:right'>SO YTD</th><th style='text-align:right' title='Sell-out YTD 2026 vs. mesmo período YTD de 2025 — ano contra ano (YoY)'>vs 2025</th></tr></thead><tbody>"+rows+"</tbody></table>";
   $("st-modal-bg").classList.add("open");
 }
-function _destBoard(qFn,fR,fC,ms,key,elAltaId,elBaixaId,qtyFn){
+function _destBoard(qFn,fR,fC,ms,key,elAltaId,elBaixaId,qtyFn,ticketOpt){
   var alta=$(elAltaId), baixa=$(elBaixaId);
   if(!alta&&!baixa)return;
+  // ticketOpt (01/10/26, 2a rodada): só true pra variante Sell-out (ver rDestaques) - Faturamento não
+  // ganhou ticket médio porque o pedido do Felipe foi especificamente sobre "boards de sell out de
+  // produtos". prevPeriod é a mesma janela PoP (período imediatamente anterior, mesmo tamanho) já usada
+  // em Top Subgrupos SO.
+  var prevPeriod=ticketOpt?_prevPeriodMonths(ms):null;
   var dados=AS.map(function(sg){
     var v26=qFn(fR,fC,sg,2026,ms);
     var v25=qFn(fR,fC,sg,2025,ms);
@@ -1710,7 +1853,15 @@ function _destBoard(qFn,fR,fC,ms,key,elAltaId,elBaixaId,qtyFn){
     var q26=qtyFn?qtyFn(fR,fC,sg,2026,ms):0;
     var q25=qtyFn?qtyFn(fR,fC,sg,2025,ms):0;
     var ytd=qFn(fR,fC,sg,2026,_ytdMs());
-    return{sg:sg,v26:v26,v25:v25,yoy:yoy,q26:q26,q25:q25,ytd:ytd};
+    var ticket=null,ticketPop=null;
+    if(ticketOpt){
+      ticket=q26>0?v26/q26:null;
+      var vPrev=0,qPrev=0;
+      prevPeriod.forEach(function(pm){vPrev+=qFn(fR,fC,sg,pm.y,[pm.m]);qPrev+=qtyFn?qtyFn(fR,fC,sg,pm.y,[pm.m]):0;});
+      var ticketPrev=qPrev>0?vPrev/qPrev:null;
+      ticketPop=_ticketPct(ticket,ticketPrev);
+    }
+    return{sg:sg,v26:v26,v25:v25,yoy:yoy,q26:q26,q25:q25,ytd:ytd,ticket:ticket,ticketPop:ticketPop};
   }).filter(function(x){return x&&x.yoy!==null;});
   if(!dados.length){
     if(alta)alta.innerHTML="<div style='color:var(--t3);padding:8px 0'>Sem dados suficientes no período</div>";
@@ -1730,10 +1881,15 @@ function _destBoard(qFn,fR,fC,ms,key,elAltaId,elBaixaId,qtyFn){
   var emBaixa=todosBaixa.slice(0,5);
   function linha(x,cor){
     var qtdTxt=x.q26>0?(" · "+Math.round(x.q26).toLocaleString('pt-BR')+" un"):"";
-    return "<div class='rr'><div style='flex:1;min-width:0'><div class='rname clk-name' onclick='_quickFilterProd(\""+x.sg.replace(/"/g,'&quot;')+"\")'>"+x.sg+"</div><div style='font-size:9.5px;color:var(--t3);margin-top:1px'>"+M(x.v26)+qtdTxt+" no período</div></div><div style='text-align:right;font-family:DM Mono,monospace;font-weight:700;color:"+cor+"'>"+(x.yoy>=0?"+":"")+x.yoy+"%</div></div>";
+    var ticketTxt="";
+    if(ticketOpt&&x.ticket!=null){
+      var popTxt=x.ticketPop===null?"":(" <span style='color:"+(x.ticketPop>=0?"var(--grn)":"var(--red)")+"'>("+(x.ticketPop>=0?"+":"")+x.ticketPop+"%)</span>");
+      ticketTxt=" · Ticket "+_MTicket(x.ticket)+popTxt;
+    }
+    return "<div class='rr'><div style='flex:1;min-width:0'><div class='rname clk-name' onclick='_quickFilterProd(\""+x.sg.replace(/"/g,'&quot;')+"\")'>"+x.sg+"</div><div style='font-size:9.5px;color:var(--t3);margin-top:1px'>"+M(x.v26)+qtdTxt+" no período"+ticketTxt+"</div></div><div style='text-align:right;font-family:DM Mono,monospace;font-weight:700;color:"+cor+"'>"+(x.yoy>=0?"+":"")+x.yoy+"%</div></div>";
   }
   function verTodos(k,total){
-    return total>5?"<div style='text-align:center;padding-top:8px'><span style='font-size:11px;color:var(--blu);cursor:pointer;text-decoration:underline' onclick=\"openDestModal('"+k+"')\">ver todos os "+total+"</span></div>":"";
+    return _verTodosLink(total,5,"openDestModal('"+k+"')");
   }
   if(alta)alta.innerHTML=(emAlta.length?emAlta.map(function(x){return linha(x,"var(--grn)");}).join(""):"<div style='color:var(--t3);padding:8px 0'>Nenhum destaque no período</div>")+verTodos(key+"-alta",todosAlta.length);
   if(baixa)baixa.innerHTML=(emBaixa.length?emBaixa.map(function(x){return linha(x,"var(--red)");}).join(""):"<div style='color:var(--t3);padding:8px 0'>Nenhum subgrupo relevante em queda no período — bom sinal</div>")+verTodos(key+"-baixa",todosBaixa.length);
@@ -1741,7 +1897,7 @@ function _destBoard(qFn,fR,fC,ms,key,elAltaId,elBaixaId,qtyFn){
 function rDestaques(fR,fC,ms){
   _destBoard(function(r,c,sg,a,m){return qFP(FAT,r,c,sg,a,m);},fR,fC,ms,"fat","destaque-alta","destaque-baixa",
     function(r,c,sg,a,m){return qFP(FQ,r,c,sg,a,m);});
-  _destBoard(qSS,fR,fC,ms,"so","destaque-so-alta","destaque-so-baixa",qSQ);
+  _destBoard(qSS,fR,fC,ms,"so","destaque-so-alta","destaque-so-baixa",qSQ,true);
 }
 
 function rPainelOrto(fR,fC,ms){
@@ -2072,67 +2228,118 @@ function buildCartTable(grps,fS,currMk,byClient){
   return {html:hdr+body+ftr,totIm:totIm,totPr:totPr,totDVl:totDVl,totChVl:totChVl,totNxtVl:totNxtVl,totPend:totPend};
 }
 
+var _topItensCartCache=[];
 function rTopItensCart(fR,fC,fS,grps){
   var el=$("top-itens-cart");if(!el)return;
-  var itemMap={};var itemQtMap={};
+  // Imediata/Programada agora rastreados separados (02/10/26, popup novo) - card segue mostrando s\u00f3 o
+  // total somado (igual sempre foi), popup abre o detalhamento dos dois.
+  var itemImed={};var itemProg={};var itemQtMap={};
   grps.forEach(function(g){
     Object.entries(CGSIM[g]||{}).forEach(function(kv){
       var item=kv[0];
       if(fS){var itemSg=(ITEM_SG&&ITEM_SG[item.toUpperCase()])||item;if(itemSg!==fS&&item!==fS)return;}
-      itemMap[item]=(itemMap[item]||0)+(kv[1].vl||0);
+      itemImed[item]=(itemImed[item]||0)+(kv[1].vl||0);
       itemQtMap[item]=(itemQtMap[item]||0)+(kv[1].qt||0);
     });
     Object.entries(CGSPR[g]||{}).forEach(function(kv){
       var item=kv[0];
       if(fS){var itemSg=(ITEM_SG&&ITEM_SG[item.toUpperCase()])||item;if(itemSg!==fS&&item!==fS)return;}
-      itemMap[item]=(itemMap[item]||0)+(kv[1].vl||0);
+      itemProg[item]=(itemProg[item]||0)+(kv[1].vl||0);
       itemQtMap[item]=(itemQtMap[item]||0)+(kv[1].qt||0);
     });
   });
-  var items=Object.entries(itemMap).filter(function(e){return e[1]>0;}).sort(function(a,b){return b[1]-a[1];}).slice(0,10);
-  if(!items.length){el.innerHTML="<div style='color:var(--t3);padding:16px 0;text-align:center;font-size:12px'>Sem carteira em aberto no per\u00edodo</div>";return;}
-  var mx=items[0][1];
+  var allKeys={};
+  Object.keys(itemImed).forEach(function(k){allKeys[k]=1;});
+  Object.keys(itemProg).forEach(function(k){allKeys[k]=1;});
+  var allItems=Object.keys(allKeys).map(function(item){
+    var imed=itemImed[item]||0,prog=itemProg[item]||0;
+    return{item:item,imed:imed,prog:prog,tot:imed+prog,qt:itemQtMap[item]||0};
+  }).filter(function(x){return x.tot>0;}).sort(function(a,b){return b.tot-a.tot;});
+  _topItensCartCache=allItems;
+  if(!allItems.length){el.innerHTML="<div style='color:var(--t3);padding:16px 0;text-align:center;font-size:12px'>Sem carteira em aberto no per\u00edodo</div>";return;}
+  var items=allItems.slice(0,10);
+  var mx=items[0].tot;
   el.innerHTML=items.map(function(e,i){
-    var w=Math.round(e[1]/mx*100);
-    var est=EST_SG[e[0]]||EST[e[0]]||{};
-    var qt=itemQtMap[e[0]]||0;
+    var w=Math.round(e.tot/mx*100);
+    var est=EST_SG[e.item]||EST[e.item]||{};
     var mpTag=est.h>0?"<span style='color:var(--grn3);font-size:9.5px'>\u2713 dispon\u00edvel</span>":(est.mp?"<span style='color:var(--amb);font-size:9.5px'>Chega "+est.mp+"</span>":"<span style='color:var(--red);font-size:9.5px'>sem previs\u00e3o</span>");
-    var sgResolved=(ITEM_SG&&ITEM_SG[e[0].toUpperCase()])||e[0];
-    return "<div class='rr'><div class='rn'>"+(i+1)+"</div><div style='flex:1;min-width:0'><div class='rname clk-name' onclick='_quickFilterProd(\""+sgResolved.replace(/"/g,"&quot;")+"\")'>"+e[0]+"</div>"+
-      "<div style='margin-top:2px;display:flex;gap:6px;align-items:center'>"+mpTag+(qt>0?"<span style='color:var(--t3);font-size:9.5px'>"+Math.round(qt).toLocaleString("pt-BR")+" un</span>":"")+"</div>"+
+    var sgResolved=(ITEM_SG&&ITEM_SG[e.item.toUpperCase()])||e.item;
+    return "<div class='rr'><div class='rn'>"+(i+1)+"</div><div style='flex:1;min-width:0'><div class='rname clk-name' onclick='_quickFilterProd(\""+sgResolved.replace(/"/g,"&quot;")+"\")'>"+e.item+"</div>"+
+      "<div style='margin-top:2px;display:flex;gap:6px;align-items:center'>"+mpTag+(e.qt>0?"<span style='color:var(--t3);font-size:9.5px'>"+Math.round(e.qt).toLocaleString("pt-BR")+" un</span>":"")+"</div>"+
       "<div style='height:3px;background:var(--bg);border-radius:2px;overflow:hidden;margin-top:3px'><div style='height:100%;width:"+w+"%;background:var(--red);border-radius:2px'></div></div></div>"+
-      "<div class='rv'><div style='color:var(--red);font-weight:600'>"+M(e[1])+"</div><div style='color:var(--t3);font-size:10px'>"+(qt>0?Math.round(qt).toLocaleString("pt-BR")+" un":"")+"</div></div></div>";
+      "<div class='rv'><div style='color:var(--red);font-weight:600'>"+M(e.tot)+"</div><div style='color:var(--t3);font-size:10px'>"+(e.qt>0?Math.round(e.qt).toLocaleString("pt-BR")+" un":"")+"</div></div></div>";
+  }).join("")+_verTodosLink(allItems.length,10,"openTopItensCartModal()");
+}
+function openTopItensCartModal(){
+  if(!_topItensCartCache.length)return;
+  var _sm=document.querySelector(".st-modal");if(_sm)_sm.classList.add("wide");
+  $("st-modal-title").textContent="Top itens \u2014 maior carteira em aberto ("+_topItensCartCache.length+")";
+  var rowsHtml=_topItensCartCache.map(function(e){
+    var est=EST_SG[e.item]||EST[e.item]||{};
+    var statusTxt=est.h>0?"<span style='color:var(--grn3)'>Dispon\u00edvel</span>":(est.mp?"<span style='color:var(--amb)'>Chega "+est.mp+"</span>":"<span style='color:var(--red)'>Sem previs\u00e3o</span>");
+    var sgResolved=(ITEM_SG&&ITEM_SG[e.item.toUpperCase()])||e.item;
+    var sgEsc=sgResolved.replace(/"/g,'&quot;');
+    return "<tr><td class='clk-name' style='cursor:pointer' onclick='_quickFilterProd(\""+sgEsc+"\");closeSTModal();'>"+_ellCell(e.item)+"</td>"+
+      "<td style='color:var(--t3);font-size:11px;white-space:nowrap'>"+(e.qt>0?Math.round(e.qt).toLocaleString('pt-BR')+" un":"\u2014")+"</td>"+
+      "<td style='text-align:right;font-family:DM Mono,monospace;white-space:nowrap'>"+M(e.imed)+"</td>"+
+      "<td style='text-align:right;font-family:DM Mono,monospace;color:var(--t3);white-space:nowrap'>"+M(e.prog)+"</td>"+
+      "<td style='text-align:right;font-family:DM Mono,monospace;font-weight:700;white-space:nowrap'>"+M(e.tot)+"</td>"+
+      "<td style='font-size:11px;white-space:nowrap'>"+statusTxt+"</td></tr>";
   }).join("");
+  $("st-modal-body").innerHTML="<table style='table-layout:fixed'><colgroup><col style='width:230px'><col style='width:76px'><col style='width:92px'><col style='width:92px'><col style='width:92px'><col style='width:110px'></colgroup>"+
+    "<thead><tr><th>Item</th><th style='"+_thNW+"'>Qtd</th><th style='text-align:right;"+_thNW+"' title='Carteira com Data Entrega \u2264 hoje'>Imediata</th><th style='text-align:right;"+_thNW+"' title='Carteira com Data Entrega futura'>Programada</th><th style='text-align:right;"+_thNW+"'>Total</th><th>Estoque</th></tr></thead><tbody>"+rowsHtml+"</tbody></table>";
+  $("st-modal-bg").classList.add("open");
 }
 
+var _topClientesCartCache=[];
 function rTopClientesCart(fR,fC,fS,grps){
   var el=$("top-clientes-cart");if(!el)return;
-  var grpMap={};
+  var grpImed={};var grpProg={};
   grps.forEach(function(g){
-    var tot=0;
+    var imed=0,prog=0;
     Object.entries(CGSIM[g]||{}).forEach(function(kv){
       var item=kv[0];
       if(fS){var itemSg=(ITEM_SG&&ITEM_SG[item.toUpperCase()])||item;if(itemSg!==fS&&item!==fS)return;}
-      tot+=kv[1].vl||0;
+      imed+=kv[1].vl||0;
     });
     Object.entries(CGSPR[g]||{}).forEach(function(kv){
       var item=kv[0];
       if(fS){var itemSg=(ITEM_SG&&ITEM_SG[item.toUpperCase()])||item;if(itemSg!==fS&&item!==fS)return;}
-      tot+=kv[1].vl||0;
+      prog+=kv[1].vl||0;
     });
-    if(tot>0)grpMap[g]=tot;
+    if(imed+prog>0){grpImed[g]=imed;grpProg[g]=prog;}
   });
-  var items=Object.entries(grpMap).sort(function(a,b){return b[1]-a[1];}).slice(0,10);
-  if(!items.length){el.innerHTML="<div style='color:var(--t3);padding:16px 0;text-align:center;font-size:12px'>Sem carteira em aberto no per\u00edodo</div>";return;}
-  var mx=items[0][1];
+  var allItems=Object.keys(grpImed).map(function(g){
+    return{grp:g,imed:grpImed[g]||0,prog:grpProg[g]||0,tot:(grpImed[g]||0)+(grpProg[g]||0),rep:G2R[g]||""};
+  }).sort(function(a,b){return b.tot-a.tot;});
+  _topClientesCartCache=allItems;
+  if(!allItems.length){el.innerHTML="<div style='color:var(--t3);padding:16px 0;text-align:center;font-size:12px'>Sem carteira em aberto no per\u00edodo</div>";return;}
+  var items=allItems.slice(0,10);
+  var mx=items[0].tot;
   el.innerHTML=items.map(function(e,i){
-    var w=Math.round(e[1]/mx*100);
-    var rep=G2R[e[0]]||"";
-    return "<div class='rr'><div class='rn'>"+(i+1)+"</div><div style='flex:1;min-width:0'><div class='rname clk-name' onclick='_quickFilterCli(\""+e[0].replace(/"/g,"&quot;")+"\")'>"+e[0]+"</div>"+
+    var w=Math.round(e.tot/mx*100);
+    var rep=e.rep;
+    return "<div class='rr'><div class='rn'>"+(i+1)+"</div><div style='flex:1;min-width:0'><div class='rname clk-name' onclick='_quickFilterCli(\""+e.grp.replace(/"/g,"&quot;")+"\")'>"+e.grp+"</div>"+
       (rep?"<div style='font-size:9.5px;color:var(--t3);margin-top:1px'>Rep: "+rep+"</div>":"")+
       "<div style='height:3px;background:var(--bg);border-radius:2px;overflow:hidden;margin-top:3px'><div style='height:100%;width:"+w+"%;background:var(--red);border-radius:2px'></div></div></div>"+
-      "<div class='rv'><div style='color:var(--red);font-weight:600'>"+M(e[1])+"</div></div></div>";
+      "<div class='rv'><div style='color:var(--red);font-weight:600'>"+M(e.tot)+"</div></div></div>";
+  }).join("")+_verTodosLink(allItems.length,10,"openTopClientesCartModal()");
+}
+function openTopClientesCartModal(){
+  if(!_topClientesCartCache.length)return;
+  var _sm=document.querySelector(".st-modal");if(_sm)_sm.classList.add("wide");
+  $("st-modal-title").textContent="Top clientes — maior carteira em aberto ("+_topClientesCartCache.length+")";
+  var rowsHtml=_topClientesCartCache.map(function(e){
+    var nEsc=e.grp.replace(/"/g,'&quot;');
+    return "<tr><td class='clk-name' style='cursor:pointer' onclick='_quickFilterCli(\""+nEsc+"\");closeSTModal();'>"+_ellCell(e.grp)+"</td>"+
+      "<td style='color:var(--t3);font-size:11px;white-space:nowrap'>"+(e.rep||"—")+"</td>"+
+      "<td style='text-align:right;font-family:DM Mono,monospace;white-space:nowrap'>"+M(e.imed)+"</td>"+
+      "<td style='text-align:right;font-family:DM Mono,monospace;color:var(--t3);white-space:nowrap'>"+M(e.prog)+"</td>"+
+      "<td style='text-align:right;font-family:DM Mono,monospace;font-weight:700;white-space:nowrap'>"+M(e.tot)+"</td></tr>";
   }).join("");
+  $("st-modal-body").innerHTML="<table style='table-layout:fixed'><colgroup><col style='width:250px'><col style='width:90px'><col style='width:100px'><col style='width:100px'><col style='width:100px'></colgroup>"+
+    "<thead><tr><th>Cliente</th><th style='"+_thNW+"'>Rep.</th><th style='text-align:right;"+_thNW+"' title='Carteira com Data Entrega ≤ hoje'>Imediata</th><th style='text-align:right;"+_thNW+"' title='Carteira com Data Entrega futura'>Programada</th><th style='text-align:right;"+_thNW+"'>Total</th></tr></thead><tbody>"+rowsHtml+"</tbody></table>";
+  $("st-modal-bg").classList.add("open");
 }
 
 function rCartTop(fR,fC,fS,grpsOverride){var el=$("cart-top10");if(!el)return;
@@ -3558,6 +3765,134 @@ function exportPDF(){
 window.addEventListener("beforeprint",function(){
   Object.keys(CH).forEach(function(k){var c=CH[k];if(c&&typeof c.resize==='function'){try{c.resize();}catch(e){}}});
 });
+// Contexto compartilhado (titulo do board + filtro ativo + periodo + data/hora) usado tanto pela
+// exportacao em PDF quanto pela exportacao em imagem (01/10/26, 2a rodada - Felipe pediu as duas opcoes
+// de exportar, antes so tinha PDF). Fatorado pra nao duplicar a logica de "qual filtro esta ativo" nos
+// dois lugares.
+function _buildExportContext(){
+  var titulo=$("st-modal-title")?$("st-modal-title").textContent:"";
+  var linhas=[];
+  if(CF&&CF.rep&&CF.rep.length)linhas.push("Representante: "+CF.rep.join(", "));
+  if(CF&&CF.cli&&CF.cli.length)linhas.push("Cliente: "+CF.cli.join(", "));
+  if(CF&&CF.sg&&CF.sg.length)linhas.push("Produto/Subgrupo: "+CF.sg.join(", "));
+  linhas.push("Período: "+pL());
+  var emitido="Emitido em "+new Date().toLocaleDateString('pt-BR')+" às "+new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
+  return {titulo:titulo,linhas:linhas,emitido:emitido};
+}
+function exportModalPDF(){
+  var ctx=_buildExportContext();
+  var hdr="<div class='print-hdr-brand'>Dell<em>amed</em><span>· TurbOn Canal Online B2B</span></div>"+
+    "<h3 style='margin:8px 0 4px;font-size:16px'>"+ctx.titulo+"</h3>"+
+    "<div class='print-hdr-info'>"+ctx.linhas.map(function(l){return "<b>"+l+"</b>";}).join(" &nbsp;·&nbsp; ")+" &nbsp;·&nbsp; "+ctx.emitido+"</div>";
+  if($("st-modal-print-hdr"))$("st-modal-print-hdr").innerHTML=hdr;
+  document.body.classList.add("printing-modal");
+  window.print();
+}
+window.addEventListener("afterprint",function(){
+  document.body.classList.remove("printing-modal");
+});
+// Exportar o popup aberto como imagem PNG (01/10/26, 2a rodada, a pedido do Felipe - alternativa ao PDF
+// pra compartilhar mais facil, ex. por WhatsApp). Desenha a tabela do modal num <canvas> do zero (sem
+// depender de html2canvas/lib externa - mantem o dashboard self-contained) usando a largura REAL de cada
+// coluna renderizada (getBoundingClientRect), pra ficar fiel ao layout que ja esta na tela em vez de
+// recalcular a largura por conta propria. Baixa o PNG direto (sem diálogo), nome do arquivo derivado do
+// título do board.
+function _truncCanvasText(c,txt,maxW){
+  if(c.measureText(txt).width<=maxW)return txt;
+  var t=txt;
+  while(t.length>1&&c.measureText(t+"…").width>maxW){t=t.slice(0,-1);}
+  return t+"…";
+}
+function exportModalImage(){
+  var table=document.querySelector("#st-modal-body table");
+  if(!table){alert("Nada pra exportar neste popup.");return;}
+  var ctx=_buildExportContext();
+  var ths=[],colW=[];
+  table.querySelectorAll("thead th").forEach(function(th){
+    ths.push(th.textContent.trim());
+    colW.push(Math.max(70,Math.round(th.getBoundingClientRect().width)));
+  });
+  var rows=[];
+  table.querySelectorAll("tbody tr").forEach(function(tr){
+    var tds=tr.querySelectorAll("td");
+    if(!tds.length)return;
+    var r=[]; tds.forEach(function(td){r.push(td.textContent.trim());});
+    rows.push(r);
+  });
+  if(!ths.length||!rows.length){alert("Nada pra exportar neste popup.");return;}
+  var padX=18,padY=16,rowH=23,headRowH=27;
+  var ctxTxt=ctx.linhas.join("   ·   ");
+  var tableW=colW.reduce(function(a,b){return a+b;},0);
+  var totalW=tableW+padX*2;
+  var headerH=26+20+15+16+10; // marca + titulo + contexto + emitido + respiro antes da tabela
+  var totalH=padY+headerH+headRowH+rows.length*rowH+padY;
+  var scale=2;
+  var canvas=document.createElement("canvas");
+  canvas.width=Math.round(totalW*scale);
+  canvas.height=Math.round(totalH*scale);
+  var c=canvas.getContext("2d");
+  c.scale(scale,scale);
+  c.fillStyle="#ffffff";
+  c.fillRect(0,0,totalW,totalH);
+  var y=padY;
+  c.fillStyle="#1856a3";
+  c.font="700 15px DM Sans, Arial, sans-serif";
+  c.fillText("Dellamed · TurbOn Canal Online B2B",padX,y+12);
+  y+=26;
+  c.fillStyle="#15182a";
+  c.font="700 14px DM Sans, Arial, sans-serif";
+  c.fillText(ctx.titulo,padX,y+10);
+  y+=20;
+  c.fillStyle="#444860";
+  c.font="10.5px DM Sans, Arial, sans-serif";
+  c.fillText(_truncCanvasText(c,ctxTxt,tableW),padX,y+8);
+  y+=15;
+  c.fillStyle="#8b8fa8";
+  c.font="9.5px DM Sans, Arial, sans-serif";
+  c.fillText(ctx.emitido,padX,y+8);
+  y+=16;
+  c.fillStyle="#f1f3f8";
+  c.fillRect(padX,y,tableW,headRowH);
+  c.fillStyle="#15182a";
+  c.font="700 10.5px DM Sans, Arial, sans-serif";
+  var x=padX;
+  ths.forEach(function(h,ci){
+    c.fillText(_truncCanvasText(c,h,colW[ci]-12),x+8,y+headRowH/2+4);
+    x+=colW[ci];
+  });
+  y+=headRowH;
+  c.font="10.5px DM Sans, Arial, sans-serif";
+  rows.forEach(function(r,ri){
+    if(ri%2===1){c.fillStyle="#f8f9fc";c.fillRect(padX,y,tableW,rowH);}
+    c.fillStyle="#15182a";
+    var x2=padX;
+    r.forEach(function(val,ci){
+      c.fillText(_truncCanvasText(c,val,colW[ci]-12),x2+8,y+rowH/2+4);
+      x2+=colW[ci];
+    });
+    c.strokeStyle="#e9ebf2";c.lineWidth=1;
+    c.beginPath();c.moveTo(padX,y+rowH);c.lineTo(padX+tableW,y+rowH);c.stroke();
+    y+=rowH;
+  });
+  var dataUrl=canvas.toDataURL("image/png");
+  var fname=(ctx.titulo||"turbon").toLowerCase().replace(/[áàâã]/g,"a").replace(/[éê]/g,"e").replace(/í/g,"i").replace(/[óô]/g,"o").replace(/ú/g,"u").replace(/ç/g,"c").replace(/[^a-z0-9]+/g,"_").replace(/^_+|_+$/g,"").slice(0,60)||"turbon_export";
+  var a=document.createElement("a");
+  a.href=dataUrl;
+  a.download=fname+".png";
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+}
+function toggleExportMenu(e){
+  if(e)e.stopPropagation();
+  var m=$("st-export-menu");
+  if(m)m.classList.toggle("open");
+}
+function closeExportMenu(){
+  var m=$("st-export-menu");
+  if(m)m.classList.remove("open");
+}
+document.addEventListener("click",function(){closeExportMenu();});
 function _buildCfOptions(fid, values){
   var dd=document.getElementById('cfd-'+fid);
   if(!dd)return;
@@ -3809,7 +4144,8 @@ function _onChartLoad(){if(typeof render==="function"){Object.keys(CH).forEach(f
 </script>
 <div class="st-modal-bg" id="st-modal-bg" onclick="if(event.target===this)closeSTModal()">
   <div class="st-modal">
-    <div class="st-modal-hdr"><h3 id="st-modal-title">Sell-through — todos os subgrupos</h3><button class="st-modal-close" onclick="closeSTModal()">&times;</button></div>
+    <div class="st-modal-hdr"><h3 id="st-modal-title">Sell-through — todos os subgrupos</h3><div class="st-modal-actions"><div class="st-export-wrap"><button class="st-modal-export" onclick="toggleExportMenu(event)">Exportar <i class="ti ti-chevron-down" style="font-size:11px"></i></button><div class="st-export-menu" id="st-export-menu"><div class="st-export-opt" onclick="closeExportMenu();exportModalPDF()"><i class="ti ti-file-type-pdf"></i> Exportar PDF</div><div class="st-export-opt" onclick="closeExportMenu();exportModalImage()"><i class="ti ti-photo"></i> Exportar Imagem (PNG)</div></div></div><button class="st-modal-close" onclick="closeSTModal()">&times;</button></div></div>
+    <div class="modal-print-hdr" id="st-modal-print-hdr"></div>
     <div class="st-modal-body" id="st-modal-body"></div>
   </div>
 </div>

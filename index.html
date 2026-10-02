@@ -63,6 +63,11 @@ html,body{height:100%;overflow:hidden;background:var(--sb)}
 .k2sub{font-size:10px;margin-top:3px;color:var(--t3)}
 .cd{background:var(--card);border-radius:var(--rl);border:1px solid var(--brd);padding:16px;margin-bottom:12px}
 .ct2{font-size:12.5px;font-weight:600;color:var(--t1);margin-bottom:12px;display:flex;align-items:center;gap:6px}
+.sec-div{display:flex;align-items:center;gap:10px;margin:22px 0 12px}
+.sec-div .sec-ico{width:26px;height:26px;border-radius:7px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.sec-div .sec-tt{font-size:14px;font-weight:800;color:var(--t1);letter-spacing:.2px;white-space:nowrap}
+.sec-div .sec-ln{flex:1;height:1px;background:var(--brd)}
+.sec-div:first-of-type{margin-top:4px}
 .c2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
 .c3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:12px}
 .lg{display:flex;gap:12px;margin-bottom:9px;font-size:10.5px;color:var(--t2);flex-wrap:wrap}
@@ -110,6 +115,8 @@ html,body{height:100%;overflow:hidden;background:var(--sb)}
 .ce{font-size:12px;color:var(--t3);text-align:center;padding:20px}
 .pp{display:flex;gap:8px;flex-wrap:wrap}
 .pill{padding:6px 12px;border-radius:20px;font-size:11px;font-weight:600;display:flex;align-items:center;gap:5px}
+.pill-clk{cursor:pointer;transition:transform .12s,box-shadow .12s}
+.pill-clk:hover{transform:translateY(-1px);box-shadow:0 2px 8px rgba(0,0,0,.12)}
 
 /* ── Filtro customizado com busca ─────────────────────── */
 .cf-wrap{position:relative;width:100%}
@@ -501,17 +508,31 @@ html,body{height:100%;overflow:hidden;background:var(--sb)}
       <div class="kc" id="kpi-meta-hero"></div>
       <div class="kc" id="kpi-compact" style="display:grid;grid-template-columns:repeat(4,1fr);grid-template-rows:repeat(2,1fr);gap:0;padding:0"></div>
     </div>
-    <!-- Positivação por linha -->
+    <!-- Positivação por linha (02/10/26: cada pill abre popup "Painel <linha>" - ver_painelLinhaHTML/openPainelLinhaModal.
+         Board fixo "Painel Orto" abaixo da Positivação (desde 21/09/26) foi descontinuado - Felipe pediu pra virar
+         popup sob demanda, e generalizado pras 4 linhas, não só Orto, pra deixar o War Room mais enxuto.) -->
     <div class="cd" style="margin-bottom:12px">
-      <div class="ct2"><i class="ti ti-chart-pie" style="color:var(--amb)"></i>Positivação por linha</div>
+      <div class="ct2"><i class="ti ti-chart-pie" style="color:var(--amb)"></i>Positivação por linha<span style="font-size:10px;font-weight:400;color:var(--t3);margin-left:8px">clique numa linha pra ver o painel de expansão</span></div>
       <div id="pos-linha" class="pp" style="display:grid;grid-template-columns:repeat(4,1fr)"></div>
     </div>
-    <!-- Painel Orto - expansao estrategica (movido para junto de Positivacao por linha em 21/09/26) -->
-    <div class="cd" style="margin-bottom:12px">
-      <div class="ct2"><i class="ti ti-bone" style="color:#7b4bbf"></i>Painel Orto — expansão estratégica</div>
-      <div id="painel-orto"></div>
+    <!-- Radar de clientes: em queda / crescendo, sempre visíveis, sem seletor (30/09/26) - reposicionado
+         (02/10/26, rodada 15) pra logo abaixo de Positivação por linha, por pedido do Felipe: é o board
+         mais "olhe aqui primeiro" do War Room, antes de entrar nos clusters de Pedido/Faturamento/SO. -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px">
+      <div class="cd">
+        <div class="ct2"><i class="ti ti-trending-down" style="color:var(--red)"></i>Clientes em queda <span id="radar-queda-count" style="font-size:11px;font-weight:700;margin-left:6px"></span></div>
+        <div style="font-size:10.5px;color:var(--t3);margin:-6px 0 8px">Faturamento do período selecionado no filtro vs. o mesmo período de 2025 (YoY), maior queda primeiro. "Parou há 1+ mês" é o alerta mais forte: cliente regular (5+ dos últimos 6 meses, janela fixa) que zerou no último mês fechado — não depende do filtro de período.</div>
+        <div id="radar-queda"></div>
+      </div>
+      <div class="cd">
+        <div class="ct2"><i class="ti ti-trending-up" style="color:var(--grn3)"></i>Clientes crescendo <span id="radar-cresce-count" style="font-size:11px;font-weight:700;margin-left:6px"></span></div>
+        <div style="font-size:10.5px;color:var(--t3);margin:-6px 0 8px">Espelho do board ao lado: faturamento do período selecionado no filtro vs. o mesmo período de 2025 (YoY), maior alta primeiro.</div>
+        <div id="radar-cresce"></div>
+      </div>
     </div>
-    <!-- Evolução mensal: 3 boards separados por métrica (28/09/26) -->
+
+    <!-- ============ PEDIDOS ============ (agrupamento 02/10/26, rodada 15) -->
+    <div class="sec-div"><div class="sec-ico" style="background:#eef0f4"><i class="ti ti-shopping-cart" style="color:#666;font-size:14px"></i></div><div class="sec-tt">Pedidos</div><div class="sec-ln"></div></div>
     <div class="cd" style="margin-bottom:12px">
       <div class="ct2"><i class="ti ti-shopping-cart" style="color:#888"></i>Pedido — evolução mensal<span id="evol-pedido-badge" style="margin-left:8px"></span></div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
@@ -524,8 +545,23 @@ html,body{height:100%;overflow:hidden;background:var(--sb)}
           <div class="st-chart-wrap" style="position:relative;height:170px" onclick="openEvolModal('pedido')"><canvas id="c-evol-pedido-qt"></canvas></div>
         </div>
       </div>
-      <div style="font-size:10px;color:var(--t3);text-align:right;margin-top:4px">clique no gráfico para ver a tabela mês a mês · segue os filtros de cliente, representante e produto</div>
+      <div style="font-size:10px;color:var(--t3);text-align:right;margin-top:4px">clique no gráfico para ver a tabela mês a mês · linha preta = variação % frente ao mesmo mês de 2025 (YoY) · segue os filtros de cliente, representante e produto</div>
     </div>
+    <!-- Top clientes/subgrupos - Pedido (02/10/26: separados do par Pedido/Faturamento, cada métrica
+         agora vive dentro do seu próprio cluster) -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px">
+      <div class="cd">
+        <div class="ct2"><i class="ti ti-trophy" style="color:#888"></i>Top clientes — Pedido</div>
+        <div id="top-cli-ped"></div>
+      </div>
+      <div class="cd">
+        <div class="ct2"><i class="ti ti-chart-bar-2" style="color:#888"></i>Top subgrupos — Pedido</div>
+        <div id="top-sg-ped"></div>
+      </div>
+    </div>
+
+    <!-- ============ FATURAMENTO ============ (agrupamento 02/10/26, rodada 15) -->
+    <div class="sec-div"><div class="sec-ico" style="background:var(--blu2)"><i class="ti ti-receipt" style="color:var(--blu);font-size:14px"></i></div><div class="sec-tt">Faturamento</div><div class="sec-ln"></div></div>
     <div class="cd" style="margin-bottom:12px">
       <div class="ct2"><i class="ti ti-receipt" style="color:#1856a3"></i>Faturamento — evolução mensal<span id="evol-faturado-badge" style="margin-left:8px"></span></div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
@@ -538,8 +574,43 @@ html,body{height:100%;overflow:hidden;background:var(--sb)}
           <div class="st-chart-wrap" style="position:relative;height:170px" onclick="openEvolModal('faturado')"><canvas id="c-evol-faturado-qt"></canvas></div>
         </div>
       </div>
-      <div style="font-size:10px;color:var(--t3);text-align:right;margin-top:4px">clique no gráfico para ver a tabela mês a mês · segue os filtros de cliente, representante e produto</div>
+      <div style="font-size:10px;color:var(--t3);text-align:right;margin-top:4px">clique no gráfico para ver a tabela mês a mês · linha preta = variação % frente ao mesmo mês de 2025 (YoY) · segue os filtros de cliente, representante e produto</div>
     </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px">
+      <div class="cd">
+        <div class="ct2"><i class="ti ti-trophy" style="color:var(--blu)"></i>Top clientes — Faturamento</div>
+        <div id="top-cli-fat"></div>
+      </div>
+      <div class="cd">
+        <div class="ct2"><i class="ti ti-chart-bar-2" style="color:var(--blu)"></i>Top subgrupos — Faturamento</div>
+        <div id="top-sg-fat"></div>
+      </div>
+    </div>
+    <!-- Destaques do mix: crescimento e atenção (Faturamento) -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px">
+      <div class="cd">
+        <div class="ct2"><i class="ti ti-trending-up" style="color:var(--grn)"></i>Em alta (Faturamento) — maior crescimento YoY</div>
+        <div style="font-size:10.5px;color:var(--t3);margin:-6px 0 8px">Subgrupos com faturamento relevante no período e crescimento acima da média do canal — oportunidade de empurrar mais</div>
+        <div id="destaque-alta"></div>
+      </div>
+      <div class="cd">
+        <div class="ct2"><i class="ti ti-trending-down" style="color:var(--red)"></i>Atenção (Faturamento) — maior queda YoY</div>
+        <div style="font-size:10.5px;color:var(--t3);margin:-6px 0 8px">Subgrupos com faturamento relevante caindo frente ao mesmo período de 2025 — vale investigar antes que piore</div>
+        <div id="destaque-baixa"></div>
+      </div>
+    </div>
+    <!-- Full-width (01/10/26, 2a rodada): antes essa div ficava dentro de um grid 1fr/1fr sozinha,
+         deixando a segunda coluna inteira vazia ao lado - exatamente o "espaço vazio" que o Felipe
+         reportou. Virou card isolado, igual "Carteira em aberto" mais abaixo, e o conteúdo passou a
+         usar 2 colunas internas (CSS columns) pra aproveitar a largura extra. -->
+    <div class="cd" style="margin-bottom:12px">
+      <div class="ct2"><i class="ti ti-chart-donut" style="color:var(--amb)"></i>Concentração de faturamento por subgrupo</div>
+      <div style="font-size:10.5px;color:var(--t3);margin:-6px 0 8px">% do faturamento 2026 do cliente que vem do subgrupo mais forte dele (nome do subgrupo abaixo do cliente) — quanto maior, mais dependente de um produto só. Board usa o faturamento acumulado do ano (sempre anual), filtra só por cliente e representante — não reage ao período selecionado na lateral. "ver detalhes" abre todos os clientes com o top 5 de subgrupos de cada um.</div>
+      <div id="conc-cart"></div>
+    </div>
+
+    <!-- ============ SELL-OUT ============ (agrupamento 02/10/26, rodada 15) -->
+    <div class="sec-div"><div class="sec-ico" style="background:var(--grn2)"><i class="ti ti-trending-up" style="color:var(--grn);font-size:14px"></i></div><div class="sec-tt">Sell-out</div><div class="sec-ln"></div></div>
     <div class="cd" style="margin-bottom:12px">
       <div class="ct2"><i class="ti ti-trending-up" style="color:#0f9e72"></i>Sell-out — evolução mensal<span id="evol-sellout-badge" style="margin-left:8px"></span></div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
@@ -552,45 +623,7 @@ html,body{height:100%;overflow:hidden;background:var(--sb)}
           <div class="st-chart-wrap" style="position:relative;height:170px" onclick="openEvolModal('sellout')"><canvas id="c-evol-sellout-qt"></canvas></div>
         </div>
       </div>
-      <div style="font-size:10px;color:var(--t3);text-align:right;margin-top:4px">clique no gráfico para ver a tabela mês a mês · segue os filtros de cliente, representante e produto</div>
-    </div>
-    <!-- Sell-through -->
-    <div class="cd" style="margin-bottom:12px">
-      <div class="ct2"><i class="ti ti-activity" style="color:var(--red)"></i>Sell-through por subgrupo — itens mais críticos</div>
-      <div class="lg">
-        <span style="display:flex;align-items:center;gap:3px"><span style="width:8px;height:8px;border-radius:2px;background:#d45228"></span>&gt;90% ruptura</span>
-        <span style="display:flex;align-items:center;gap:3px"><span style="width:8px;height:8px;border-radius:2px;background:#0f9e72"></span>60-90% saudável</span>
-        <span style="display:flex;align-items:center;gap:3px"><span style="width:8px;height:8px;border-radius:2px;background:#e89a20"></span>30-60% confortável</span>
-        <span style="display:flex;align-items:center;gap:3px"><span style="width:8px;height:8px;border-radius:2px;background:#1856a3"></span>&lt;30% super estocado</span>
-      </div>
-      <div class="st-chart-wrap" style="position:relative;height:210px" onclick="openSTModal('c-abs')"><canvas id="c-abs"></canvas></div><div style="font-size:10px;color:var(--t3);text-align:right;margin-top:4px">clique no gráfico para ver todos os subgrupos</div>
-    </div>
-    <!-- Top clientes SO + Top subgrupos SO -->
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px">
-      <div class="cd">
-        <div class="ct2"><i class="ti ti-users" style="color:var(--grn)"></i>Top clientes — Sell-out ML</div>
-        <div id="kpi-so-cli"></div>
-      </div>
-      <div class="cd">
-        <div class="ct2"><i class="ti ti-brand-apple-arcade" style="color:var(--grn)"></i>Top subgrupos Sell-out ML</div>
-        <div id="kpi-so-sg"></div>
-      </div>
-    </div>
-    <!-- Matriz de performance -- movida para linha própria, cheia largura (21/09/26) -->
-    <div class="cd" style="margin-bottom:12px">
-      <div class="ct2"><i class="ti ti-circles-relation" style="color:var(--red)"></i>Matriz de performance — Sell-through corrigido (ML=80%)</div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
-        <div class="mx-cell mx-grn"><div class="mx-lbl">● Saudável (ST 60-90%)</div><div id="mx-ok" class="mx-body"></div></div>
-        <div class="mx-cell mx-amb"><div class="mx-lbl">● Estoque alto (ST &lt;60%)</div><div id="mx-alto" class="mx-body"></div></div>
-        <div class="mx-cell mx-red"><div class="mx-lbl">● Ruptura iminente (ST &gt;90%)</div><div id="mx-risco" class="mx-body"></div></div>
-        <div class="mx-cell mx-blu"><div class="mx-lbl">● Sem SO mapeado</div><div id="mx-sem" class="mx-body"></div></div>
-      </div>
-    </div>
-    <!-- Cobertura de sell-out mapeado (movido para o cluster de sell-out em 21/09/26) -->
-    <div class="cd" style="margin-bottom:12px">
-      <div class="ct2"><i class="ti ti-trending-up" style="color:var(--blu)"></i>Cobertura de sell-out mapeado</div>
-      <div style="font-size:10.5px;color:var(--t3);margin:-6px 0 8px">% de todo o sell-out do Mercado Livre (todos os vendedores) que dá pra atribuir a um cliente conhecido da Dellamed — mede a qualidade do mapeamento, não market share</div>
-      <div id="so-cov-trend"></div>
+      <div style="font-size:10px;color:var(--t3);text-align:right;margin-top:4px">clique no gráfico para ver a tabela mês a mês · linha preta = variação % frente ao mesmo mês de 2025 (YoY) · segue os filtros de cliente, representante e produto</div>
     </div>
     <!-- Destaques do mix: crescimento e atenção (Sell-out) -->
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px">
@@ -605,42 +638,50 @@ html,body{height:100%;overflow:hidden;background:var(--sb)}
         <div id="destaque-so-baixa"></div>
       </div>
     </div>
-    <!-- Top clientes - Pedido e Faturamento separados (29/09/26), mesmo molde do Top subgrupos -->
+    <!-- Top clientes SO + Top subgrupos SO -->
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px">
       <div class="cd">
-        <div class="ct2"><i class="ti ti-trophy" style="color:#888"></i>Top clientes — Pedido</div>
-        <div id="top-cli-ped"></div>
+        <div class="ct2"><i class="ti ti-users" style="color:var(--grn)"></i>Top clientes — Sell-out ML</div>
+        <div id="kpi-so-cli"></div>
       </div>
       <div class="cd">
-        <div class="ct2"><i class="ti ti-trophy" style="color:var(--blu)"></i>Top clientes — Faturamento</div>
-        <div id="top-cli-fat"></div>
+        <div class="ct2"><i class="ti ti-brand-apple-arcade" style="color:var(--grn)"></i>Top subgrupos Sell-out ML</div>
+        <div id="kpi-so-sg"></div>
       </div>
     </div>
-    <!-- Top subgrupos - Pedido e Faturamento separados (28/09/26) -->
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px">
-      <div class="cd">
-        <div class="ct2"><i class="ti ti-chart-bar-2" style="color:#888"></i>Top subgrupos — Pedido</div>
-        <div id="top-sg-ped"></div>
+    <!-- Cobertura de sell-out mapeado -- métrica global da empresa (todos os vendedores do ML), não
+         reage a nenhum filtro da lateral (cliente/rep/produto/período) por desenho - confirmado com o
+         Felipe em 02/10/26. -->
+    <div class="cd" style="margin-bottom:12px">
+      <div class="ct2"><i class="ti ti-trending-up" style="color:var(--blu)"></i>Cobertura de sell-out mapeado</div>
+      <div style="font-size:10.5px;color:var(--t3);margin:-6px 0 8px">% de todo o sell-out do Mercado Livre (todos os vendedores) que dá pra atribuir a um cliente conhecido da Dellamed — mede a qualidade do mapeamento, não market share. Métrica global da empresa, não segue os filtros da lateral.</div>
+      <div id="so-cov-trend"></div>
+    </div>
+
+    <!-- ============ SELL-THROUGH & CARTEIRA ============ (agrupamento 02/10/26, rodada 15) -->
+    <div class="sec-div"><div class="sec-ico" style="background:var(--red2)"><i class="ti ti-activity" style="color:var(--red);font-size:14px"></i></div><div class="sec-tt">Sell-through &amp; Carteira</div><div class="sec-ln"></div></div>
+    <div class="cd" style="margin-bottom:12px">
+      <div class="ct2"><i class="ti ti-activity" style="color:var(--red)"></i>Sell-through por subgrupo — itens mais críticos</div>
+      <div class="lg">
+        <span style="display:flex;align-items:center;gap:3px"><span style="width:8px;height:8px;border-radius:2px;background:#d45228"></span>&gt;90% ruptura</span>
+        <span style="display:flex;align-items:center;gap:3px"><span style="width:8px;height:8px;border-radius:2px;background:#0f9e72"></span>60-90% saudável</span>
+        <span style="display:flex;align-items:center;gap:3px"><span style="width:8px;height:8px;border-radius:2px;background:#e89a20"></span>30-60% confortável</span>
+        <span style="display:flex;align-items:center;gap:3px"><span style="width:8px;height:8px;border-radius:2px;background:#1856a3"></span>&lt;30% super estocado</span>
       </div>
-      <div class="cd">
-        <div class="ct2"><i class="ti ti-chart-bar-2" style="color:var(--blu)"></i>Top subgrupos — Faturamento</div>
-        <div id="top-sg-fat"></div>
+      <div class="st-chart-wrap" style="position:relative;height:210px" onclick="openSTModal('c-abs')"><canvas id="c-abs"></canvas></div><div style="font-size:10px;color:var(--t3);text-align:right;margin-top:4px">clique no gráfico para ver todos os subgrupos</div>
+    </div>
+    <!-- Matriz de performance -- cada quadrante mostra os 5 principais, clique em "ver detalhes" traz
+         todos os clientes daquele quadrante com Faturado + Sell-out + Sell-through % (02/10/26, rodada 15) -->
+    <div class="cd" style="margin-bottom:12px">
+      <div class="ct2"><i class="ti ti-circles-relation" style="color:var(--red)"></i>Matriz de performance — Sell-through corrigido (ML=80%)</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <div class="mx-cell mx-grn"><div class="mx-lbl">● Saudável (ST 60-90%)</div><div id="mx-ok" class="mx-body"></div></div>
+        <div class="mx-cell mx-amb"><div class="mx-lbl">● Estoque alto (ST &lt;60%)</div><div id="mx-alto" class="mx-body"></div></div>
+        <div class="mx-cell mx-red"><div class="mx-lbl">● Ruptura iminente (ST &gt;90%)</div><div id="mx-risco" class="mx-body"></div></div>
+        <div class="mx-cell mx-blu"><div class="mx-lbl">● Sem SO mapeado</div><div id="mx-sem" class="mx-body"></div></div>
       </div>
     </div>
-    <!-- Destaques do mix: crescimento e atenção (Faturamento) -->
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:4px">
-      <div class="cd">
-        <div class="ct2"><i class="ti ti-trending-up" style="color:var(--grn)"></i>Em alta (Faturamento) — maior crescimento YoY</div>
-        <div style="font-size:10.5px;color:var(--t3);margin:-6px 0 8px">Subgrupos com faturamento relevante no período e crescimento acima da média do canal — oportunidade de empurrar mais</div>
-        <div id="destaque-alta"></div>
-      </div>
-      <div class="cd">
-        <div class="ct2"><i class="ti ti-trending-down" style="color:var(--red)"></i>Atenção (Faturamento) — maior queda YoY</div>
-        <div style="font-size:10.5px;color:var(--t3);margin:-6px 0 8px">Subgrupos com faturamento relevante caindo frente ao mesmo período de 2025 — vale investigar antes que piore</div>
-        <div id="destaque-baixa"></div>
-      </div>
-    </div>
-    <!-- Risco de ruptura por cliente + Super estocados + Concentração de carteira -->
+    <!-- Risco de ruptura por cliente + Super estocados -->
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px">
       <div class="cd">
         <div class="ct2"><i class="ti ti-alert-triangle" style="color:var(--red)"></i>Risco de ruptura por cliente <span id="rupt-count" style="font-size:11px;font-weight:700;margin-left:6px"></span></div>
@@ -651,28 +692,6 @@ html,body{height:100%;overflow:hidden;background:var(--sb)}
         <div class="ct2"><i class="ti ti-building-warehouse" style="color:var(--blu)"></i>Super estocados <span id="estoc-count" style="font-size:11px;font-weight:700;margin-left:6px"></span></div>
         <div style="font-size:10.5px;color:var(--t3);margin:-6px 0 8px">Espelho do board ao lado: cliente com mais de 6 meses de cobertura no subgrupo (mesmo cálculo) — oportunidade de empurrar mais ou reduzir reposição. Cobertura ≥12 meses aparece como "12+ meses". Mesma regra: cliente sem sell-out mapeado no Mercado Livre no período selecionado, ou com Sell Out abaixo de R$3.000 no período, não aparece aqui.</div>
         <div id="estoc-cli"></div>
-      </div>
-    </div>
-    <!-- Full-width (01/10/26, 2a rodada): antes essa div ficava dentro de um grid 1fr/1fr sozinha,
-         deixando a segunda coluna inteira vazia ao lado - exatamente o "espaço vazio" que o Felipe
-         reportou. Virou card isolado, igual "Carteira em aberto" mais abaixo, e o conteúdo passou a
-         usar 2 colunas internas (CSS columns) pra aproveitar a largura extra. -->
-    <div class="cd" style="margin-bottom:12px">
-      <div class="ct2"><i class="ti ti-chart-donut" style="color:var(--amb)"></i>Concentração de faturamento por subgrupo</div>
-      <div style="font-size:10.5px;color:var(--t3);margin:-6px 0 8px">% do faturamento 2026 do cliente que vem do subgrupo mais forte dele (nome do subgrupo abaixo do cliente) — quanto maior, mais dependente de um produto só. "ver detalhes" abre todos os clientes com o top 5 de subgrupos de cada um.</div>
-      <div id="conc-cart"></div>
-    </div>
-    <!-- Radar de clientes: em queda / crescendo, sempre visíveis, sem seletor (30/09/26) -->
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px">
-      <div class="cd">
-        <div class="ct2"><i class="ti ti-trending-down" style="color:var(--red)"></i>Clientes em queda <span id="radar-queda-count" style="font-size:11px;font-weight:700;margin-left:6px"></span></div>
-        <div style="font-size:10.5px;color:var(--t3);margin:-6px 0 8px">Faturamento dos últimos 3 meses fechados vs. os 3 meses anteriores (PoP). "Parou de comprar" é o alerta mais forte: cliente regular (5+ dos últimos 6 meses) que zerou no último mês fechado.</div>
-        <div id="radar-queda"></div>
-      </div>
-      <div class="cd">
-        <div class="ct2"><i class="ti ti-trending-up" style="color:var(--grn3)"></i>Clientes crescendo <span id="radar-cresce-count" style="font-size:11px;font-weight:700;margin-left:6px"></span></div>
-        <div style="font-size:10.5px;color:var(--t3);margin:-6px 0 8px">Espelho do board ao lado: faturamento dos últimos 3 meses fechados vs. os 3 meses anteriores (PoP), maior alta primeiro.</div>
-        <div id="radar-cresce"></div>
       </div>
     </div>
     <!-- Top itens com mais carteira + Top clientes com mais carteira -->
@@ -686,7 +705,9 @@ html,body{height:100%;overflow:hidden;background:var(--sb)}
         <div id="top-clientes-cart"></div>
       </div>
     </div>
-    <!-- Carteira em aberto -->
+    <!-- Carteira em aberto -- 10 principais itens disponíveis ou com chegada no mês, resto no popup
+         "ver detalhes" (02/10/26, rodada 15). Somatório/cards abaixo seguem sempre o total, não o recorte
+         exibido. -->
     <div class="cd" style="margin-bottom:12px">
       <div class="ct2"><i class="ti ti-shopping-cart" style="color:var(--blu)"></i>Carteira em aberto</div>
       <div id="cart-top10"></div>
@@ -940,17 +961,16 @@ function render(){
   }
 
   var pp=$("pos-linha");
-  var pp=$("pos-linha");
   if(pp){var lc={"HOME":"#1856a3","HEALTH":"#0f9e72","BEAUTY":"#e89a20","ORTHO":"#7b4bbf"};
   pp.innerHTML=["HOME","HEALTH","BEAUTY","ORTHO"].map(function(ln){
     var cnt=_grpsRep.filter(function(g){return AS.some(function(sg){return S2L[sg]===ln&&(qFP(FAT,G2R[g],g,sg,2026,ms)>0||qFP_PEDH(G2R[g],g,sg,2026,ms)>0);});}).length;
-    return "<div class=\"pill\" style=\"background:"+lc[ln]+"15;color:"+lc[ln]+";border:1px solid "+lc[ln]+"30\"><i class=\"ti ti-"+(ln==="HOME"?"home":ln==="HEALTH"?"heartbeat":ln==="BEAUTY"?"sparkles":"bone")+"\" style=\"font-size:14px\"></i>"+ln+" — "+cnt+"</div>";
+    return "<div class=\"pill pill-clk\" title=\"Clique para ver o painel de expansão\" onclick='openPainelLinhaModal(\""+ln+"\")' style=\"background:"+lc[ln]+"15;color:"+lc[ln]+";border:1px solid "+lc[ln]+"30\"><i class=\"ti ti-"+(ln==="HOME"?"home":ln==="HEALTH"?"heartbeat":ln==="BEAUTY"?"sparkles":"bone")+"\" style=\"font-size:14px\"></i>"+ln+" — "+cnt+"</div>";
   }).join("");}
 
   rEvolBoards(fR,fC,fS,ms);
   rAbsChart("c-abs",fR,fC,fS,ms);
   rTopCliPF('ped',fR,fC,fS,ms);rTopCliPF('fat',fR,fC,fS,ms);rTopSgPF('ped',fR,fC,fS,ms);rTopSgPF('fat',fR,fC,fS,ms);rTopSgSO(fR,fC,fS,ms);rTopCliSO(fR,fC,fS,ms);
-  rRuptura(fR,fC,ms);rEstocados(fR,fC,ms);rConcentracao(fR,fC,ms);rPainelOrto(fR,fC,ms);rSoCovTrend();rDestaques(fR,fC,ms);rEsfriando(fR,fC,fS,ms);
+  rRuptura(fR,fC,fS,ms);rEstocados(fR,fC,fS,ms);rConcentracao(fR,fC,ms);_cachePainelLinhas(fR,fC,ms);rSoCovTrend();rDestaques(fR,fC,fS,ms);rEsfriando(fR,fC,fS,ms);
   rRepBars("rep-bars",fR,fC,fS,ms);rRepBars("rep-bars2",fR,fC,fS,ms);
   rOpps(fR,fC,fS,ms);// Montar grps considerando multi-seleção
   var _grpsAll = fCs ? AG.filter(function(g){return fCs.includes(g);}) :
@@ -964,7 +984,7 @@ function render(){
   rRepMain(fR,fC,fS,ms);
   rResultMain();
   rKpiOpp(fR,fC,fS,ms);rOppMotor(fR,fC,fS,ms);
-  rMatrix(fR,fC,ms);
+  rMatrix(fR,fC,fS,ms);
   rEstLists();
   S("kv-est-cart",M(Object.values(CG).reduce(function(a,v){return a+v;},0)));
   var topC=Object.entries(CS).sort(function(a,b){return b[1]-a[1];})[0];
@@ -1010,13 +1030,32 @@ function rEvolBoards(fR,fC,fS,ms){
   }
   function _seriesG(fn){
     var data=m12.map(function(k){var p=k.split('-');return fn(parseInt(p[0]),parseInt(p[1]));});
-    var mom=m12.map(function(k,i){var pk=_shiftKeyG(k,-1).split('-');var prev=fn(parseInt(pk[0]),parseInt(pk[1]));return prev?Math.round((data[i]-prev)/prev*100):null;});
-    var yoy=m12.map(function(k,i){var yk=_shiftKeyG(k,-12).split('-');var py=fn(parseInt(yk[0]),parseInt(yk[1]));return py?Math.round((data[i]-py)/py*100):null;});
+    // Guard contra base negativa (02/10/26, rodada 15 - bug reportado pelo Felipe): mês anterior com
+    // cancelamento líquido maior que pedido novo fecha negativo (ex.: dez/25 = -R$2.692,79). "prev?"
+    // (truthy) deixava passar qualquer valor != 0, inclusive negativo - dividir por uma base negativa
+    // inverte o sinal e explode a magnitude (dez/25 negativo + jan/26 positivo virava -316194% em vez de
+    // "sem comparação"). Troca pra "prev>0", mesmo critério que _pct() já usa (linha ~1582) pro resto do
+    // dashboard - variação % só faz sentido partindo de uma base positiva.
+    var mom=m12.map(function(k,i){var pk=_shiftKeyG(k,-1).split('-');var prev=fn(parseInt(pk[0]),parseInt(pk[1]));return prev>0?Math.round((data[i]-prev)/prev*100):null;});
+    var yoy=m12.map(function(k,i){var yk=_shiftKeyG(k,-12).split('-');var py=fn(parseInt(yk[0]),parseInt(yk[1]));return py>0?Math.round((data[i]-py)/py*100):null;});
     return {data:data,mom:mom,yoy:yoy};
   }
   function _tipG(fmt){
     return {callbacks:{label:function(ctx){
       var ds=ctx.dataset,i=ctx.dataIndex;
+      // Dataset da linha YoY% (02/10/26, rodada 15 - trocado de MoM pra YoY depois de discussão com o
+      // Felipe: MoM é instável demais pro perfil do canal - pedido B2B "lumpy" (um pedido grande de
+      // cadeira/colchão vira +400%/-80% de um mês pro outro sem mudança real de tendência), sazonalidade
+      // de campanha (Set-Dez) distorce mês-a-mês, e mês com cancelamento líquido > pedido novo fica com
+      // base negativa, que mesmo corrigida (Seção 43.8) vira "sem comparação" bem nos meses mais
+      // turbulentos. YoY já é o padrão usado no resto do dashboard - Em alta/Atenção, radar de clientes,
+      // Concentração. MoM continua disponível no badge do cabeçalho e no texto do tooltip abaixo, só
+      // não é mais a linha desenhada no gráfico) tem yAxisID "y1" e seu "raw" já É o %, não dá pra passar
+      // pelo fmt() de moeda/quantidade do dataset de barras - tooltip próprio, mais simples.
+      if(ds.yAxisID==="y1"){
+        var v=ctx.raw;
+        return "YoY: "+(v===null||v===undefined?"s/ comp.":(v>=0?"+":"")+v+"%");
+      }
       var mom=ds._mom?ds._mom[i]:null, yoy=ds._yoy?ds._yoy[i]:null;
       var momS=mom===null||mom===undefined?"s/ comp.":(mom>=0?"+":"")+mom+"%";
       var yoyS=yoy===null||yoy===undefined?"s/ comp.":(yoy>=0?"+":"")+yoy+"%";
@@ -1055,23 +1094,34 @@ function rEvolBoards(fR,fC,fS,ms){
     };
     _evolCtx[mt.key]={lbl12:lbl12,fR:fR,fC:fC,fS:fS,label:mt.label,vl:vlS,qt:qtS,pop:pop};
     var badgeEl=$("evol-"+mt.key+"-badge"); if(badgeEl)badgeEl.innerHTML=_evolBadge(vlS,lbl12[lbl12.length-1]);
+    // Linha de YoY% sobreposta ao gráfico (02/10/26, rodada 15 - trocado de MoM pra YoY, ver comentário
+    // em _tipG acima). Dataset tipo "line" num eixo Y secundário (y1, % à direita), mesmo array _yoy já
+    // calculado em _seriesG. Pontos sem comparação (mês sem dado no mesmo mês do ano anterior) ficam
+    // null - Chart.js abre um vão ali em vez de inventar uma linha (spanGaps:false).
+    var yoyLineOpt=function(yoyArr){return{type:"line",label:"YoY %",data:yoyArr,yAxisID:"y1",borderColor:"#333",
+      backgroundColor:"#333",borderWidth:1.5,pointRadius:2,pointHoverRadius:4,tension:.25,spanGaps:false,order:0};};
+    var y1Opt={position:"right",ticks:{callback:function(v){return (v>=0?"+":"")+v+"%";},font:{size:9},color:"#333"},grid:{display:false}};
     var ctxVl=$("c-evol-"+mt.key+"-vl");
     if(ctxVl){
       if(CH["evol-"+mt.key+"-vl"])CH["evol-"+mt.key+"-vl"].destroy();
       CH["evol-"+mt.key+"-vl"]=new Chart(ctxVl,{type:"bar",data:{labels:lbl12,datasets:[
-        {label:mt.label,data:vlS.data,backgroundColor:mt.color,borderRadius:3,_mom:vlS.mom,_yoy:vlS.yoy}
-      ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:_tipG(function(v){return M(v);})},
+        {label:mt.label,data:vlS.data,backgroundColor:mt.color,borderRadius:3,_mom:vlS.mom,_yoy:vlS.yoy,order:1},
+        yoyLineOpt(vlS.yoy)
+      ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true,labels:{font:{size:8.5},boxWidth:10,boxHeight:2}},tooltip:_tipG(function(v){return M(v);})},
         scales:{x:{ticks:{font:{size:8},maxRotation:40},grid:{display:false}},
-                y:{ticks:{callback:function(v){return _axisKK(v);},font:{size:9}},grid:{color:"rgba(0,0,0,.04)"}}}}});
+                y:{ticks:{callback:function(v){return _axisKK(v);},font:{size:9}},grid:{color:"rgba(0,0,0,.04)"}},
+                y1:y1Opt}}});
     }
     var ctxQt=$("c-evol-"+mt.key+"-qt");
     if(ctxQt){
       if(CH["evol-"+mt.key+"-qt"])CH["evol-"+mt.key+"-qt"].destroy();
       CH["evol-"+mt.key+"-qt"]=new Chart(ctxQt,{type:"bar",data:{labels:lbl12,datasets:[
-        {label:"Qtd "+mt.label,data:qtS.data,backgroundColor:mt.color+"99",borderRadius:3,_mom:qtS.mom,_yoy:qtS.yoy}
-      ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:_tipG(function(v){return Math.round(v).toLocaleString('pt-BR')+" un";})},
+        {label:"Qtd "+mt.label,data:qtS.data,backgroundColor:mt.color+"99",borderRadius:3,_mom:qtS.mom,_yoy:qtS.yoy,order:1},
+        yoyLineOpt(qtS.yoy)
+      ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true,labels:{font:{size:8.5},boxWidth:10,boxHeight:2}},tooltip:_tipG(function(v){return Math.round(v).toLocaleString('pt-BR')+" un";})},
         scales:{x:{ticks:{font:{size:8},maxRotation:40},grid:{display:false}},
-                y:{ticks:{callback:function(v){return v.toLocaleString('pt-BR')+" un";},font:{size:9}},grid:{color:"rgba(0,0,0,.05)"}}}}});
+                y:{ticks:{callback:function(v){return v.toLocaleString('pt-BR')+" un";},font:{size:9}},grid:{color:"rgba(0,0,0,.05)"}},
+                y1:y1Opt}}});
     }
   });
 }
@@ -1321,7 +1371,7 @@ var all=gs.map(function(g){
 _topCliPFCache[key]=all;
 _topCliPFPeriod[key]=ms||[];
 if(!all.length){el.innerHTML="<div style=\"color:var(--t3);padding:16px 0;text-align:center;font-size:12px\">Sem "+(metric==='ped'?"pedido":"faturamento")+" no período</div>";return;}
-var items=all.slice(0,10);
+var items=all.slice(0,5);
 var mx=items[0].v;
 var color=metric==='ped'?'#888':'#1856a3';
 el.innerHTML=items.map(function(r,i){return _topPFRow(r,i,mx,'_quickFilterCli',color);}).join("")+_topPFLink(key,all.length,'openTopCliPFModal');
@@ -1397,7 +1447,7 @@ var all=sgs.map(function(sg){
 _topSgPFCache[key]=all;
 _topSgPFPeriod[key]=ms||[];
 if(!all.length){el.innerHTML="<div style=\"color:var(--t3);padding:16px 0;text-align:center;font-size:12px\">Sem "+(metric==='ped'?"pedido":"faturamento")+" no período</div>";return;}
-var items=all.slice(0,10);
+var items=all.slice(0,5);
 var mx=items[0].v;
 var color=metric==='ped'?'#888':'#1856a3';
 el.innerHTML=items.map(function(r,i){return _topPFRow(r,i,mx,'_quickFilterProd',color);}).join("")+_topPFLink(key,all.length,'openTopSgPFModal');
@@ -1464,7 +1514,7 @@ function rTopSgSO(fR,fC,fS,ms){
   }).filter(function(x){return x;}).sort(function(a,b){return b.v-a.v;});
   _topSOCache.sg=all;
   if(!all.length){el.innerHTML="<div style=\"color:var(--t3);padding:16px 0;text-align:center;font-size:12px\">Sem sell-out no per\u00edodo</div>";return;}
-  var items=all.slice(0,10);
+  var items=all.slice(0,5);
   var mx=items[0].v;
   el.innerHTML=items.map(function(r,i){return _topSORow(r,i,mx,'_quickFilterProd');}).join("")+_topSOLink('sg',all.length);
 }
@@ -1483,7 +1533,7 @@ function rTopCliSO(fR,fC,fS,ms){
   }).filter(function(x){return x;}).sort(function(a,b){return b.v-a.v;});
   _topSOCache.cli=all;
   if(!all.length){el.innerHTML="<div style=\"color:var(--t3);padding:16px 0;text-align:center;font-size:12px\">Sem sell-out no per\u00edodo</div>";return;}
-  var items=all.slice(0,10);
+  var items=all.slice(0,5);
   var mx=items[0].v;
   el.innerHTML=items.map(function(r,i){return _topSORow(r,i,mx,'_quickFilterCli');}).join("")+_topSOLink('cli',all.length);
 }
@@ -1559,11 +1609,16 @@ function _coberturaLbl(mesesNum){
 // é o que esse piso filtra) - o piso é só o degrau de entrada: Sell Out do período selecionado precisa
 // ser substancial, não só positivo. Valor escolhido (R$3.000) é ponto de partida, fácil de ajustar.
 var COVERAGE_SO_FLOOR=3000;
-function _rCliCoverage(fR,fC,ms){
+function _rCliCoverage(fR,fC,fS,ms){
   var grpFilter=fC?[fC]:(fR?AG.filter(function(g){return G2R[g]===fR;}):AG);
+  // Filtro de produto (02/10/26, rodada 15): antes ignorava fS por completo, sempre varria TODOS os
+  // subgrupos (AS) mesmo com um produto selecionado na lateral - Felipe pediu que Ruptura/Estocados
+  // respeitem o filtro de produto como os demais boards. Mesmo padrão já usado em rTopSgPF/rTopSgSO
+  // (var sgs = fS ? [fS] : AS).
+  var sgUniverse=fS?[fS]:AS;
   var rows=[];
   grpFilter.forEach(function(g){
-    AS.forEach(function(sg){
+    sgUniverse.forEach(function(sg){
       if(sg==='-'||sg==='SEM SUBFAMILIA')return;
       var vendeu=_cliSG(g,sg,2026,ms);
       if(vendeu<COVERAGE_SO_FLOOR)return; // sell-out no período abaixo do piso - fora dos 2 boards (ver nota acima)
@@ -1578,9 +1633,9 @@ function _rCliCoverage(fR,fC,ms){
   });
   return rows;
 }
-function rRuptura(fR,fC,ms){
+function rRuptura(fR,fC,fS,ms){
   var el=$("rupt-cli");if(!el)return;
-  var rows=_rCliCoverage(fR,fC,ms).filter(function(r){return r.meses!==null&&r.meses<3;});
+  var rows=_rCliCoverage(fR,fC,fS,ms).filter(function(r){return r.meses!==null&&r.meses<3;});
   rows.sort(function(a,b){return a.meses-b.meses||b.comprou-a.comprou;}); // mais urgente (menor cobertura) primeiro
   _ruptRowsCache=rows;
   var cnt=$("rupt-count");
@@ -1594,8 +1649,8 @@ function rRuptura(fR,fC,ms){
       "<div style=\"font-size:9.5px;color:var(--t3);margin-top:1px\" class=\"clk-name\" onclick='_quickFilterProd(\""+r.sg.replace(/"/g,'&quot;')+"\")'>"+r.sg+"</div></div>"+
       "<div class=\"rv\"><div style=\"color:var(--red);font-weight:600\">"+_coberturaLbl(r.meses)+"</div></div></div>";
   };
-  var html=rows.slice(0,15).map(rowHtml).join("");
-  html+=_verTodosLink(rows.length,15,"openRuptModal()");
+  var html=rows.slice(0,5).map(rowHtml).join("");
+  html+=_verTodosLink(rows.length,5,"openRuptModal()");
   el.innerHTML=html;
 }
 function _coverageModalTable(rows,color){
@@ -1630,9 +1685,9 @@ function openRuptModal(){
 
 // Espelho do board de ruptura: mesmo cruzamento, cobertura alta (≥EST_LIMIAR_MESES) em vez de baixa.
 var EST_LIMIAR_MESES=6;
-function rEstocados(fR,fC,ms){
+function rEstocados(fR,fC,fS,ms){
   var el=$("estoc-cli");if(!el)return;
-  var rows=_rCliCoverage(fR,fC,ms).filter(function(r){return r.meses!==null&&r.meses>=EST_LIMIAR_MESES;});
+  var rows=_rCliCoverage(fR,fC,fS,ms).filter(function(r){return r.meses!==null&&r.meses>=EST_LIMIAR_MESES;});
   rows.sort(function(a,b){return b.meses-a.meses||b.comprou-a.comprou;}); // maior cobertura primeiro
   _estocRowsCache=rows;
   var cnt=$("estoc-count");
@@ -1644,8 +1699,8 @@ function rEstocados(fR,fC,ms){
       "<div style=\"font-size:9.5px;color:var(--t3);margin-top:1px\" class=\"clk-name\" onclick='_quickFilterProd(\""+r.sg.replace(/"/g,'&quot;')+"\")'>"+r.sg+"</div></div>"+
       "<div class=\"rv\"><div style=\"color:var(--blu);font-weight:600\">"+_coberturaLbl(r.meses)+"</div></div></div>";
   };
-  var html=rows.slice(0,15).map(rowHtml).join("");
-  html+=_verTodosLink(rows.length,15,"openEstocModal()");
+  var html=rows.slice(0,5).map(rowHtml).join("");
+  html+=_verTodosLink(rows.length,5,"openEstocModal()");
   el.innerHTML=html;
 }
 function openEstocModal(){
@@ -1696,11 +1751,11 @@ function rConcentracao(fR,fC,ms){
       "<div style=\"height:3px;background:var(--bg);border-radius:2px;overflow:hidden;margin-top:3px\"><div style=\"height:100%;width:"+pct+"%;background:"+c+";border-radius:2px\"></div></div></div>"+
       "<div class=\"rv\"><div style=\"color:"+c+";font-weight:600\">"+pct+"%</div><div style=\"font-size:10px;color:var(--t3)\">"+M(r.fat26)+"</div></div></div>";
   };
-  // Card agora full-width (ver HTML) - renderiza em 2 colunas (CSS columns) pra aproveitar o espaço que
-  // antes ficava vazio ao lado, mostrando até 20 clientes (era 15 numa coluna só) sem crescer em altura.
-  var shown=rows.slice(0,20);
+  // Card full-width, 2 colunas (CSS columns). Reduzido de 20 pra 10 clientes (5+5, pedido do Felipe
+  // 02/10/26 rodada 15) - resto só no popup "ver detalhes".
+  var shown=rows.slice(0,10);
   el.innerHTML="<div style=\"columns:2;column-gap:22px\">"+shown.map(rowHtml).join("")+"</div>"+
-    _verTodosLink(rows.length,20,"openConcModal()");
+    _verTodosLink(rows.length,10,"openConcModal()");
 }
 function openConcModal(){
   if(!_concRowsCache.length)return;
@@ -1800,16 +1855,16 @@ function _esfRender(){
   if(elQ){
     if(!queda.length){elQ.innerHTML="<div style='color:var(--t3);padding:8px 0'>Nenhum cliente em queda no período — bom sinal</div>";}
     else{
-      var htmlQ=queda.slice(0,8).map(_esfRow).join("");
-      htmlQ+=_verTodosLink(queda.length,8,"openEsfModal('queda')");
+      var htmlQ=queda.slice(0,5).map(_esfRow).join("");
+      htmlQ+=_verTodosLink(queda.length,5,"openEsfModal('queda')");
       elQ.innerHTML=htmlQ;
     }
   }
   if(elC){
     if(!cresce.length){elC.innerHTML="<div style='color:var(--t3);padding:8px 0'>Nenhum cliente crescendo no período</div>";}
     else{
-      var htmlC=cresce.slice(0,8).map(_esfRow).join("");
-      htmlC+=_verTodosLink(cresce.length,8,"openEsfModal('cresce')");
+      var htmlC=cresce.slice(0,5).map(_esfRow).join("");
+      htmlC+=_verTodosLink(cresce.length,5,"openEsfModal('cresce')");
       elC.innerHTML=htmlC;
     }
   }
@@ -1837,7 +1892,7 @@ function openEsfModal(which){
     "<th style='text-align:right'>SO YTD</th><th style='text-align:right' title='Sell-out YTD 2026 vs. mesmo período YTD de 2025 — ano contra ano (YoY)'>vs 2025</th></tr></thead><tbody>"+rows+"</tbody></table>";
   $("st-modal-bg").classList.add("open");
 }
-function _destBoard(qFn,fR,fC,ms,key,elAltaId,elBaixaId,qtyFn,ticketOpt){
+function _destBoard(qFn,fR,fC,fS,ms,key,elAltaId,elBaixaId,qtyFn,ticketOpt){
   var alta=$(elAltaId), baixa=$(elBaixaId);
   if(!alta&&!baixa)return;
   // ticketOpt (01/10/26, 2a rodada): só true pra variante Sell-out (ver rDestaques) - Faturamento não
@@ -1845,7 +1900,12 @@ function _destBoard(qFn,fR,fC,ms,key,elAltaId,elBaixaId,qtyFn,ticketOpt){
   // produtos". prevPeriod é a mesma janela PoP (período imediatamente anterior, mesmo tamanho) já usada
   // em Top Subgrupos SO.
   var prevPeriod=ticketOpt?_prevPeriodMonths(ms):null;
-  var dados=AS.map(function(sg){
+  // Filtro de produto (02/10/26, rodada 15): antes ignorava fS, sempre ranqueava TODOS os subgrupos -
+  // com um produto selecionado na lateral o board continuava mostrando a lista inteira, sem filtrar.
+  // Mesmo padrão de rTopSgPF/rTopSgSO: com fS setado o "ranking" vira um único subgrupo (trivial, mas
+  // consistente com o resto do dashboard).
+  var sgUniverse=fS?[fS]:AS;
+  var dados=sgUniverse.map(function(sg){
     var v26=qFn(fR,fC,sg,2026,ms);
     var v25=qFn(fR,fC,sg,2025,ms);
     if(v26<=0)return null;
@@ -1894,18 +1954,24 @@ function _destBoard(qFn,fR,fC,ms,key,elAltaId,elBaixaId,qtyFn,ticketOpt){
   if(alta)alta.innerHTML=(emAlta.length?emAlta.map(function(x){return linha(x,"var(--grn)");}).join(""):"<div style='color:var(--t3);padding:8px 0'>Nenhum destaque no período</div>")+verTodos(key+"-alta",todosAlta.length);
   if(baixa)baixa.innerHTML=(emBaixa.length?emBaixa.map(function(x){return linha(x,"var(--red)");}).join(""):"<div style='color:var(--t3);padding:8px 0'>Nenhum subgrupo relevante em queda no período — bom sinal</div>")+verTodos(key+"-baixa",todosBaixa.length);
 }
-function rDestaques(fR,fC,ms){
-  _destBoard(function(r,c,sg,a,m){return qFP(FAT,r,c,sg,a,m);},fR,fC,ms,"fat","destaque-alta","destaque-baixa",
+function rDestaques(fR,fC,fS,ms){
+  _destBoard(function(r,c,sg,a,m){return qFP(FAT,r,c,sg,a,m);},fR,fC,fS,ms,"fat","destaque-alta","destaque-baixa",
     function(r,c,sg,a,m){return qFP(FQ,r,c,sg,a,m);});
-  _destBoard(qSS,fR,fC,ms,"so","destaque-so-alta","destaque-so-baixa",qSQ,true);
+  _destBoard(qSS,fR,fC,fS,ms,"so","destaque-so-alta","destaque-so-baixa",qSQ,true);
 }
 
-function rPainelOrto(fR,fC,ms){
-  var el=$("painel-orto");if(!el)return;
-  var orthoSgs=AS.filter(function(sg){return S2L[sg]==="ORTHO";});
+// Painel de expansão estratégica por linha (02/10/26). Até 01/10/26 isso só existia pra ORTHO, fixo e sempre
+// visível logo abaixo de "Positivação por linha" (ver histórico: era rPainelOrto(), renderizando em #painel-orto).
+// Felipe pediu pra virar popup sob demanda - clica na pill da linha em "Positivação por linha" e abre o painel
+// daquela linha - e pediu que funcionasse pras 4 linhas (Home/Health/Beauty/Orto), não só Orto. Lógica de cálculo
+// idêntica à antiga rPainelOrto, só parametrizada por `linha` no lugar do "ORTHO" fixo.
+var _painelLinhaCache={};
+var _linhaDisplay={"HOME":"Home","HEALTH":"Health","BEAUTY":"Beauty","ORTHO":"Orto"};
+function _painelLinhaCompute(linha,fR,fC,ms){
+  var sgs=AS.filter(function(sg){return S2L[sg]===linha;});
   var grpFilter=fC?[fC]:(fR?AG.filter(function(g){return G2R[g]===fR;}):AG);
   var si26=0,si25=0,so26mkt=0,so26map=0;
-  orthoSgs.forEach(function(sg){
+  sgs.forEach(function(sg){
     si26+=qFP(FAT,fR,fC,sg,2026,ms);
     si25+=qFP(FAT,fR,fC,sg,2025,ms);
     so26mkt+=qSS("","",sg,2026,ms);
@@ -1914,44 +1980,57 @@ function rPainelOrto(fR,fC,ms){
     var yrD=(SG[g]||{})["2026"]||{};
     ms.forEach(function(m){
       var moD=yrD[String(m)]||{};
-      orthoSgs.forEach(function(sg){so26map+=moD[sg]||0;});
+      sgs.forEach(function(sg){so26map+=moD[sg]||0;});
     });
   });
   var yoy=si25>0?Math.round((si26-si25)/si25*100):0;
   var compraram=grpFilter.map(function(g){
-    var ortoV=orthoSgs.reduce(function(a,sg){return a+qFP(FAT,G2R[g],g,sg,2026,ms);},0);
-    return{g:g,v:ortoV};
+    var v=sgs.reduce(function(a,sg){return a+qFP(FAT,G2R[g],g,sg,2026,ms);},0);
+    return{g:g,v:v};
   }).filter(function(x){return x.v>0;}).sort(function(a,b){return b.v-a.v;});
-  var cross=grpFilter.filter(function(g){
-    var f26g=qFP(FAT,G2R[g],g,"",2026,ms);
-    if(!(f26g>0))return false;
-    var hasOrto=orthoSgs.some(function(sg){return qFP(FAT,G2R[g],g,sg,2026,ms)>0;});
-    return!hasOrto;
-  }).sort(function(a,b){return qFP(FAT,G2R[b],b,"",2026,ms)-qFP(FAT,G2R[a],a,"",2026,ms);}).slice(0,15);
-  var h="<div style=\"display:flex;gap:10px;margin-bottom:12px;flex-wrap:wrap\">"+
-    "<div style=\"padding:9px 13px;background:var(--bg);border-radius:8px;min-width:130px\"><div class=\"kl\">Sell-in Orto — período</div><div style=\"font-size:18px;font-weight:800;font-family:DM Mono,monospace\">"+M(si26)+"</div><div class=\"ks\" style=\"color:"+(yoy>=0?"var(--grn)":"var(--red)")+"\">"+(yoy>=0?"+":"")+yoy+"% vs 2025</div></div>"+
-    "<div style=\"padding:9px 13px;background:var(--bg);border-radius:8px;min-width:130px\"><div class=\"kl\">Sell-out ML mercado (Orto)</div><div style=\"font-size:18px;font-weight:800;font-family:DM Mono,monospace\">"+M(so26mkt)+"</div><div class=\"ks\" style=\"color:var(--t3)\">"+(so26map>0?M(so26map)+" mapeado Dellamed":"sem mapeamento")+"</div></div>"+
-    "<div style=\"padding:9px 13px;background:var(--bg);border-radius:8px;min-width:130px\"><div class=\"kl\">Clientes com Orto</div><div style=\"font-size:18px;font-weight:800;font-family:DM Mono,monospace;color:var(--grn3)\">"+compraram.length+"</div><div class=\"ks\">já compram a linha</div></div>"+
-    "<div style=\"padding:9px 13px;background:var(--bg);border-radius:8px;min-width:130px\"><div class=\"kl\">Clientes sem Orto</div><div style=\"font-size:18px;font-weight:800;font-family:DM Mono,monospace;color:var(--amb)\">"+cross.length+"</div><div class=\"ks\">oportunidade cross-sell</div></div>"+
+  var cross=grpFilter.map(function(g){
+    var f=qFP(FAT,G2R[g],g,"",2026,ms);
+    var has=sgs.some(function(sg){return qFP(FAT,G2R[g],g,sg,2026,ms)>0;});
+    return{g:g,f:f,has:has};
+  }).filter(function(x){return x.f>0&&!x.has;}).sort(function(a,b){return b.f-a.f;}).slice(0,15);
+  return{linha:linha,si26:si26,si25:si25,so26mkt:so26mkt,so26map:so26map,yoy:yoy,compraram:compraram,cross:cross};
+}
+function _cachePainelLinhas(fR,fC,ms){
+  ["HOME","HEALTH","BEAUTY","ORTHO"].forEach(function(ln){_painelLinhaCache[ln]=_painelLinhaCompute(ln,fR,fC,ms);});
+}
+function _painelLinhaHTML(d){
+  var dn=_linhaDisplay[d.linha]||d.linha;
+  var compraram=d.compraram,cross=d.cross;
+  return "<div style=\"display:flex;gap:10px;margin-bottom:12px;flex-wrap:wrap\">"+
+    "<div style=\"padding:9px 13px;background:var(--bg);border-radius:8px;min-width:130px\"><div class=\"kl\">Sell-in "+dn+" — período</div><div style=\"font-size:18px;font-weight:800;font-family:DM Mono,monospace\">"+M(d.si26)+"</div><div class=\"ks\" style=\"color:"+(d.yoy>=0?"var(--grn)":"var(--red)")+"\">"+(d.yoy>=0?"+":"")+d.yoy+"% vs 2025</div></div>"+
+    "<div style=\"padding:9px 13px;background:var(--bg);border-radius:8px;min-width:130px\"><div class=\"kl\">Sell-out ML mercado ("+dn+")</div><div style=\"font-size:18px;font-weight:800;font-family:DM Mono,monospace\">"+M(d.so26mkt)+"</div><div class=\"ks\" style=\"color:var(--t3)\">"+(d.so26map>0?M(d.so26map)+" mapeado Dellamed":"sem mapeamento")+"</div></div>"+
+    "<div style=\"padding:9px 13px;background:var(--bg);border-radius:8px;min-width:130px\"><div class=\"kl\">Clientes com "+dn+"</div><div style=\"font-size:18px;font-weight:800;font-family:DM Mono,monospace;color:var(--grn3)\">"+compraram.length+"</div><div class=\"ks\">já compram a linha</div></div>"+
+    "<div style=\"padding:9px 13px;background:var(--bg);border-radius:8px;min-width:130px\"><div class=\"kl\">Clientes sem "+dn+"</div><div style=\"font-size:18px;font-weight:800;font-family:DM Mono,monospace;color:var(--amb)\">"+cross.length+"</div><div class=\"ks\">oportunidade cross-sell</div></div>"+
     "</div>"+
     "<div style=\"display:grid;grid-template-columns:1fr 1fr;gap:14px\">"+
-    "<div><div style=\"font-size:11px;font-weight:700;color:var(--t3);text-transform:uppercase;margin-bottom:6px\">Clientes que compram Orto (por faturamento Orto)</div>"+
+    "<div><div style=\"font-size:11px;font-weight:700;color:var(--t3);text-transform:uppercase;margin-bottom:6px\">Clientes que compram "+dn+" (por faturamento "+dn+")</div>"+
     "<div style=\"max-height:280px;overflow-y:auto\">"+
     (compraram.length?compraram.slice(0,15).map(function(x,i){
       return "<div class=\"rr\"><div class=\"rn\">"+(i+1)+"</div><div style=\"flex:1;min-width:0\"><div class=\"rname\">"+x.g+"</div><div style=\"font-size:9.5px;color:var(--t3);margin-top:2px\">"+(G2R[x.g]||"")+"</div></div>"+
         "<div class=\"rv\"><div style=\"color:var(--grn3)\">"+M(x.v)+"</div></div></div>";
-    }).join(""):"<div style=\"color:var(--t3);padding:8px 0;text-align:center;font-size:12px\">Nenhum cliente com compra de Orto no período</div>")+
+    }).join(""):"<div style=\"color:var(--t3);padding:8px 0;text-align:center;font-size:12px\">Nenhum cliente com compra de "+dn+" no período</div>")+
     "</div></div>"+
-    "<div><div style=\"font-size:11px;font-weight:700;color:var(--t3);text-transform:uppercase;margin-bottom:6px\">Ativos sem Orto (por faturamento total — oportunidade)</div>"+
+    "<div><div style=\"font-size:11px;font-weight:700;color:var(--t3);text-transform:uppercase;margin-bottom:6px\">Ativos sem "+dn+" (por faturamento total — oportunidade)</div>"+
     "<div style=\"max-height:280px;overflow-y:auto\">"+
-    (cross.length?cross.map(function(g,i){
-      var f=qFP(FAT,G2R[g],g,"",2026,ms);
-      return "<div class=\"rr\"><div class=\"rn\">"+(i+1)+"</div><div style=\"flex:1;min-width:0\"><div class=\"rname\">"+g+"</div><div style=\"font-size:9.5px;color:var(--t3);margin-top:2px\">"+(G2R[g]||"")+"</div></div>"+
-        "<div class=\"rv\"><div style=\"color:var(--t1)\">"+M(f)+"</div></div></div>";
-    }).join(""):"<div style=\"color:var(--t3);padding:8px 0;text-align:center;font-size:12px\">Todos os clientes ativos já compram Orto</div>")+
+    (cross.length?cross.map(function(x,i){
+      return "<div class=\"rr\"><div class=\"rn\">"+(i+1)+"</div><div style=\"flex:1;min-width:0\"><div class=\"rname\">"+x.g+"</div><div style=\"font-size:9.5px;color:var(--t3);margin-top:2px\">"+(G2R[x.g]||"")+"</div></div>"+
+        "<div class=\"rv\"><div style=\"color:var(--t1)\">"+M(x.f)+"</div></div></div>";
+    }).join(""):"<div style=\"color:var(--t3);padding:8px 0;text-align:center;font-size:12px\">Todos os clientes ativos já compram "+dn+"</div>")+
     "</div></div>"+
     "</div>";
-  el.innerHTML=h;
+}
+function openPainelLinhaModal(linha){
+  var d=_painelLinhaCache[linha];if(!d)return;
+  var dn=_linhaDisplay[linha]||linha;
+  var _sm=document.querySelector(".st-modal");if(_sm)_sm.classList.add("wide");
+  $("st-modal-title").textContent="Painel "+dn+" — expansão estratégica";
+  $("st-modal-body").innerHTML=_painelLinhaHTML(d);
+  $("st-modal-bg").classList.add("open");
 }
 
 function rSoCovTrend(){
@@ -2066,6 +2145,48 @@ function _buildFifoCoverage(){
 }
 var _fifoCache=null,_fifoLeftover={};
 
+// Helpers extraídos do bloco "por item" de buildCartTable (02/10/26, rodada 15) - antes a tabela item-mode
+// era montada inline, sem expor os `rows` crus, então não dava pra reaproveitar a mesma linha/header/footer
+// num board truncado (War Room: "10 principais itens" + popup com todos). Pura extração, HTML idêntico -
+// os outros 4 call-sites de buildCartTable (Por Cliente/Produto/Representante, KPI "sem cobertura") não
+// mudam em nada, só passaram a usar estas 3 funções por baixo.
+function _cartItemHdr(){
+  return '<div style="overflow-x:auto"><table class="ctb"><thead><tr>'+
+    '<th>Item</th>'+
+    '<th style="text-align:right">Qtd total</th>'+
+    '<th style="text-align:right">Imediata</th>'+
+    '<th style="text-align:right;color:var(--t3)">Prog. '+_month2AheadLbl()+'+</th>'+
+    '<th style="text-align:right;color:var(--grn3)">Fat. imediato (FIFO)</th>'+
+    '<th style="text-align:right;color:var(--amb)">Fat. c/chegada</th>'+
+    '<th style="text-align:right;color:var(--blu3)">Fat. próx. mês</th>'+
+    '<th style="text-align:right;color:var(--red)">Pendente</th>'+
+    '</tr></thead><tbody>';
+}
+function _cartItemRowHtml(r){
+  var totQt=(r.imQt||0)+(r.prQt||0);
+  return '<tr style="'+r.rowBg+'">'+
+    '<td style="font-weight:500" class="clk-name" onclick=\'_quickFilterProd("'+r.item.replace(/"/g,'&quot;')+'")\'>'+r.item+'</td>'+
+    '<td style="text-align:right;font-family:DM Mono,monospace;font-weight:700">'+(totQt>0?Math.round(totQt).toLocaleString('pt-BR')+' un':'—')+'</td>'+
+    '<td style="text-align:right;font-family:DM Mono,monospace;color:'+(r.imVl>0?'var(--t1)':'var(--t3)')+'">'+(r.imVl>0?M(r.imVl):'—')+(r.imQt>0?'<div style="font-size:9.5px;color:var(--t3);font-weight:400">'+Math.round(r.imQt).toLocaleString('pt-BR')+' un</div>':'')+'</td>'+
+    '<td style="text-align:right;font-family:DM Mono,monospace;color:var(--t3)">'+(r.prVl>0?M(r.prVl):'—')+(r.prQt>0?'<div style="font-size:9.5px;color:var(--t3);font-weight:400">'+Math.round(r.prQt).toLocaleString('pt-BR')+' un</div>':'')+'</td>'+
+    '<td style="text-align:right;font-family:DM Mono,monospace;color:var(--grn3);font-weight:600">'+(r.dVl>0?M(r.dVl):'—')+'</td>'+
+    '<td style="text-align:right;font-family:DM Mono,monospace;color:var(--amb)">'+(r.cChVl>0?M(r.cChVl)+(r.estMp?' ('+r.estMp+')':''):(r.estMp?'Chega '+r.estMp:'—'))+'</td>'+
+    '<td style="text-align:right;font-family:DM Mono,monospace;color:var(--blu3)">'+(r.nxtVl>0?M(r.nxtVl):'—')+'</td>'+
+    '<td style="text-align:right;font-family:DM Mono,monospace;color:var(--red)">'+(r.pendVl>0?M(r.pendVl):'—')+'</td>'+
+    '</tr>';
+}
+function _cartItemFtr(totIm,totPr,totDVl,totChVl,totNxtVl,totPend,totImQt,totPrQt){
+  return '<tr style="border-top:2px solid var(--brd);font-weight:700">'+
+    '<td>TOTAL</td>'+
+    '<td style="text-align:right;font-family:DM Mono,monospace">'+((totImQt+totPrQt)>0?Math.round(totImQt+totPrQt).toLocaleString('pt-BR')+' un':'—')+'</td>'+
+    '<td style="text-align:right;font-family:DM Mono,monospace">'+M(totIm)+(totImQt>0?'<div style="font-size:9.5px;color:var(--t3);font-weight:500">'+Math.round(totImQt).toLocaleString('pt-BR')+' un</div>':'')+'</td>'+
+    '<td style="text-align:right;font-family:DM Mono,monospace;color:var(--t3)">'+M(totPr)+(totPrQt>0?'<div style="font-size:9.5px;color:var(--t3);font-weight:500">'+Math.round(totPrQt).toLocaleString('pt-BR')+' un</div>':'')+'</td>'+
+    '<td style="text-align:right;font-family:DM Mono,monospace;color:var(--grn3);font-weight:700">'+M(totDVl)+'</td>'+
+    '<td style="text-align:right;font-family:DM Mono,monospace;color:var(--amb)">'+M(totChVl)+'</td>'+
+    '<td style="text-align:right;font-family:DM Mono,monospace;color:var(--blu3)">'+M(totNxtVl)+'</td>'+
+    '<td style="text-align:right;font-family:DM Mono,monospace;color:var(--red)">'+M(totPend)+'</td>'+
+    '</tr></tbody></table></div>';
+}
 function buildCartTable(grps,fS,currMk,byClient){
   var fifoCov=_buildFifoCoverage();
   if(byClient&&fS){
@@ -2187,45 +2308,12 @@ function buildCartTable(grps,fS,currMk,byClient){
   // Ordenar por imediata desc, depois por programada desc
   rows.sort(function(a,b){return (b.imVl+b.prVl)-(a.imVl+a.prVl);});
 
-  var hdr='<div style="overflow-x:auto"><table class="ctb"><thead><tr>'+
-    '<th>Item</th>'+
-    '<th style="text-align:right">Qtd total</th>'+
-    '<th style="text-align:right">Imediata</th>'+
-    '<th style="text-align:right;color:var(--t3)">Prog. '+_month2AheadLbl()+'+</th>'+
-    '<th style="text-align:right;color:var(--grn3)">Fat. imediato (FIFO)</th>'+
-    '<th style="text-align:right;color:var(--amb)">Fat. c/chegada</th>'+
-    '<th style="text-align:right;color:var(--blu3)">Fat. próx. mês</th>'+
-    '<th style="text-align:right;color:var(--red)">Pendente</th>'+
-    '</tr></thead><tbody>';
+  var hdr=_cartItemHdr();
+  var body=rows.map(_cartItemRowHtml).join("");
+  var ftr=_cartItemFtr(totIm,totPr,totDVl,totChVl,totNxtVl,totPend,totImQt,totPrQt);
 
-  var body='';
-  rows.forEach(function(r){
-    var totQt=(r.imQt||0)+(r.prQt||0);
-    body+='<tr style="'+r.rowBg+'">'+
-      '<td style="font-weight:500" class="clk-name" onclick=\'_quickFilterProd("'+r.item.replace(/"/g,'&quot;')+'")\'>'+r.item+'</td>'+
-      '<td style="text-align:right;font-family:DM Mono,monospace;font-weight:700">'+(totQt>0?Math.round(totQt).toLocaleString('pt-BR')+' un':'—')+'</td>'+
-      '<td style="text-align:right;font-family:DM Mono,monospace;color:'+(r.imVl>0?'var(--t1)':'var(--t3)')+'">'+(r.imVl>0?M(r.imVl):'—')+(r.imQt>0?'<div style="font-size:9.5px;color:var(--t3);font-weight:400">'+Math.round(r.imQt).toLocaleString('pt-BR')+' un</div>':'')+'</td>'+
-      '<td style="text-align:right;font-family:DM Mono,monospace;color:var(--t3)">'+(r.prVl>0?M(r.prVl):'—')+(r.prQt>0?'<div style="font-size:9.5px;color:var(--t3);font-weight:400">'+Math.round(r.prQt).toLocaleString('pt-BR')+' un</div>':'')+'</td>'+
-      '<td style="text-align:right;font-family:DM Mono,monospace;color:var(--grn3);font-weight:600">'+(r.dVl>0?M(r.dVl):'—')+'</td>'+
-      '<td style="text-align:right;font-family:DM Mono,monospace;color:var(--amb)">'+(r.cChVl>0?M(r.cChVl)+(r.estMp?' ('+r.estMp+')':''):(r.estMp?'Chega '+r.estMp:'—'))+'</td>'+
-      '<td style="text-align:right;font-family:DM Mono,monospace;color:var(--blu3)">'+(r.nxtVl>0?M(r.nxtVl):'—')+'</td>'+
-      '<td style="text-align:right;font-family:DM Mono,monospace;color:var(--red)">'+(r.pendVl>0?M(r.pendVl):'—')+'</td>'+
-      '</tr>';
-  });
-
-  var ftr='<tr style="border-top:2px solid var(--brd);font-weight:700">'+
-    '<td>TOTAL</td>'+
-    '<td style="text-align:right;font-family:DM Mono,monospace">'+((totImQt+totPrQt)>0?Math.round(totImQt+totPrQt).toLocaleString('pt-BR')+' un':'—')+'</td>'+
-    '<td style="text-align:right;font-family:DM Mono,monospace">'+M(totIm)+(totImQt>0?'<div style="font-size:9.5px;color:var(--t3);font-weight:500">'+Math.round(totImQt).toLocaleString('pt-BR')+' un</div>':'')+'</td>'+
-    '<td style="text-align:right;font-family:DM Mono,monospace;color:var(--t3)">'+M(totPr)+(totPrQt>0?'<div style="font-size:9.5px;color:var(--t3);font-weight:500">'+Math.round(totPrQt).toLocaleString('pt-BR')+' un</div>':'')+'</td>'+
-    '<td style="text-align:right;font-family:DM Mono,monospace;color:var(--grn3);font-weight:700">'+M(totDVl)+'</td>'+
-    '<td style="text-align:right;font-family:DM Mono,monospace;color:var(--amb)">'+M(totChVl)+'</td>'+
-    '<td style="text-align:right;font-family:DM Mono,monospace;color:var(--blu3)">'+M(totNxtVl)+'</td>'+
-    '<td style="text-align:right;font-family:DM Mono,monospace;color:var(--red)">'+M(totPend)+'</td>'+
-    '</tr></tbody></table></div>';
-
-  if(rows.length===0)return {html:'<div style="color:var(--t3);padding:8px 0">Sem carteira em aberto</div>',totIm:0,totPr:0,totDVl:0,totChVl:0,totNxtVl:0,totPend:0};
-  return {html:hdr+body+ftr,totIm:totIm,totPr:totPr,totDVl:totDVl,totChVl:totChVl,totNxtVl:totNxtVl,totPend:totPend};
+  if(rows.length===0)return {html:'<div style="color:var(--t3);padding:8px 0">Sem carteira em aberto</div>',totIm:0,totPr:0,totDVl:0,totChVl:0,totNxtVl:0,totPend:0,rows:[]};
+  return {html:hdr+body+ftr,totIm:totIm,totPr:totPr,totDVl:totDVl,totChVl:totChVl,totNxtVl:totNxtVl,totPend:totPend,rows:rows};
 }
 
 var _topItensCartCache=[];
@@ -2342,26 +2430,82 @@ function openTopClientesCartModal(){
   $("st-modal-bg").classList.add("open");
 }
 
+var _cartTopCache={rows:[],totIm:0,totPr:0,totDVl:0,totChVl:0,totNxtVl:0,totPend:0,totImQt:0,totPrQt:0};
 function rCartTop(fR,fC,fS,grpsOverride){var el=$("cart-top10");if(!el)return;
 var grps=grpsOverride||( fC?[fC]:(fR?AG.filter(function(g){return G2R[g]===fR;}):AG) );
 var _ct=buildCartTable(grps,fS,CURR_MK);
-var h=_ct.html;
+var allRows=_ct.rows||[];
+var totImQt=allRows.reduce(function(a,r){return a+(r.imQt||0);},0);
+var totPrQt=allRows.reduce(function(a,r){return a+(r.prQt||0);},0);
+_cartTopCache={rows:allRows,totIm:_ct.totIm,totPr:_ct.totPr,totDVl:_ct.totDVl,totChVl:_ct.totChVl,totNxtVl:_ct.totNxtVl,totPend:_ct.totPend,totImQt:totImQt,totPrQt:totPrQt};
+// "10 principais itens disponíveis ou com chegada para o mês atual" (02/10/26, rodada 15, pedido do
+// Felipe): a lista ficou extensa demais mostrando TODO item com carteira aberta, inclusive os sem
+// nenhuma cobertura (puro "Pendente", nada acionável agora). Tela inicial agora só com itens que têm
+// estoque pra faturar já (dVl>0) OU chegada ainda este mês (cChVl>0), no mesmo critério de ordenação de
+// sempre (imediata+programada desc, já vem assim de buildCartTable). O resto (inclusive os sem cobertura
+// nenhuma) só aparece no popup "ver todos os itens". Somatório abaixo (buildCartCards) e o rodapé TOTAL
+// da própria tabela continuam batendo com TODOS os itens, não só os 10 mostrados.
+var actionable=allRows.filter(function(r){return r.dVl>0||r.cChVl>0;});
+var shown=actionable.slice(0,10);
+var h;
+if(!allRows.length){
+  h='<div style="color:var(--t3);padding:8px 0">Sem carteira em aberto</div>';
+}else{
+  h=_cartItemHdr()+shown.map(_cartItemRowHtml).join("")+_cartItemFtr(_ct.totIm,_ct.totPr,_ct.totDVl,_ct.totChVl,_ct.totNxtVl,_ct.totPend,totImQt,totPrQt)+
+    '<div style="font-size:10px;color:var(--t3);margin-top:4px">mostrando os '+shown.length+' principais itens disponíveis ou com chegada este mês, de '+allRows.length+' itens com carteira aberta no total</div>'+
+    _verTodosLink(allRows.length,10,"openCartTopModal()");
+}
 h+=buildCartCards(_ct.totDVl,_ct.totChVl,_ct.totPr,_ct.totPend,_ct.totNxtVl);
 el.innerHTML=h;}
-function rMatrix(fR,fC,ms){var el={"ok":$("mx-ok"),"alto":$("mx-alto"),"risco":$("mx-risco"),"sem":$("mx-sem")};
+function openCartTopModal(){
+  if(!_cartTopCache.rows.length)return;
+  var _sm=document.querySelector(".st-modal");if(_sm)_sm.classList.add("wide");
+  $("st-modal-title").textContent="Carteira em aberto — todos os itens ("+_cartTopCache.rows.length+")";
+  $("st-modal-body").innerHTML=_cartItemHdr()+_cartTopCache.rows.map(_cartItemRowHtml).join("")+
+    _cartItemFtr(_cartTopCache.totIm,_cartTopCache.totPr,_cartTopCache.totDVl,_cartTopCache.totChVl,_cartTopCache.totNxtVl,_cartTopCache.totPend,_cartTopCache.totImQt,_cartTopCache.totPrQt);
+  $("st-modal-bg").classList.add("open");
+}
+// Matriz de performance (02/10/26, rodada 15): antes hardcoded ""(sem filtro de produto) nas 4 chamadas
+// de qFP/qSS/qSQ dentro de `calc` - com um produto selecionado na lateral o quadro continuava calculando
+// sell-through sobre o cliente INTEIRO, ignorando o filtro. Agora recebe fS e repassa, igual ao resto do
+// dashboard. Tamb\u00e9m ganhou popup por quadrante (Felipe pediu "s\u00f3 os 5 principais, mas clic\u00e1vel pra ver
+// todos") - cada quadrante guarda sua lista completa em _matrixCache e abre via openMatrixModal(key),
+// mesmo padr\u00e3o _verTodosLink usado em todo o resto. Colunas do popup (Faturado/Sell-out/Sell-through%)
+// s\u00e3o as 3 m\u00e9tricas que a pr\u00f3pria matriz j\u00e1 calcula - Felipe optou por n\u00e3o adicionar Cobertura/Ritmo aqui
+// pra n\u00e3o misturar o conceito de estoque com o board que \u00e9 especificamente sobre sell-through.
+var _matrixCache={ok:[],alto:[],risco:[],sem:[]};
+var _matrixLabel={ok:"Saud\u00e1vel (ST 60-90%)",alto:"Estoque alto (ST <60%)",risco:"Ruptura iminente (ST >90%)",sem:"Sem SO mapeado"};
+function rMatrix(fR,fC,fS,ms){var el={"ok":$("mx-ok"),"alto":$("mx-alto"),"risco":$("mx-risco"),"sem":$("mx-sem")};
 if(!el.ok)return;
 var gs=fC?[fC]:AG.filter(function(g){return!fR||G2R[g]===fR;});
-var calc=gs.map(function(g){var r=G2R[g],f=qFP(FAT,r,g,"",2026,ms),s=qSS(r,g,"",2026,ms),fq=qFP(FQ,r,g,"",2026,ms),sq=qSQ(r,g,"",2026,ms);var ab=fq>0?Math.round(sq/0.8/fq*100):0;return{g:g,f:f,s:s,ab:ab};}).filter(function(x){return x.f>0||x.s>0;});
+var calc=gs.map(function(g){var r=G2R[g],f=qFP(FAT,r,g,fS,2026,ms),s=qSS(r,g,fS,2026,ms),fq=qFP(FQ,r,g,fS,2026,ms),sq=qSQ(r,g,fS,2026,ms);var ab=fq>0?Math.round(sq/0.8/fq*100):0;return{g:g,rep:r||"",f:f,s:s,ab:ab};}).filter(function(x){return x.f>0||x.s>0;});
 function qi(txt,g){return"<div class=\"qi clk-name\" onclick='_quickFilterCli(\""+g.replace(/"/g,'&quot;')+"\")'>"+txt+"</div>";}
-function fill(el,list,mapFn){
-  var shown=list.slice(0,8).map(mapFn).join("")||"<div class=\"qi\">\u2014</div>";
-  var rest=list.length-8;
-  el.innerHTML=shown+(rest>0?"<div class=\"qi\" style=\"color:var(--t3);font-size:10.5px\">+"+rest+" mais</div>":"");
+function fill(elx,list,mapFn,key){
+  _matrixCache[key]=list;
+  var shown=list.slice(0,5).map(mapFn).join("")||"<div class=\"qi\">\u2014</div>";
+  elx.innerHTML=shown+_verTodosLink(list.length,5,"openMatrixModal('"+key+"')");
 }
-fill(el.ok,calc.filter(function(x){return x.ab>=60&&x.ab<=90;}).sort(function(a,b){return b.f-a.f;}),function(x){return qi(x.g+" \u00b7 Fat "+M(x.f)+" \u00b7 ST "+x.ab+"%",x.g);});
-fill(el.alto,calc.filter(function(x){return x.ab<60&&x.ab>0;}).sort(function(a,b){return b.f-a.f;}),function(x){return qi(x.g+" \u00b7 Fat "+M(x.f)+" \u00b7 ST "+x.ab+"%",x.g);});
-fill(el.risco,calc.filter(function(x){return x.ab>90;}).sort(function(a,b){return b.ab-a.ab;}),function(x){return qi(x.g+" \u00b7 ST "+x.ab+"% \u26a0",x.g);});
-fill(el.sem,calc.filter(function(x){return x.s===0&&x.f>0;}).sort(function(a,b){return b.f-a.f;}),function(x){return qi(x.g+" \u00b7 Fat "+M(x.f),x.g);});}
+fill(el.ok,calc.filter(function(x){return x.ab>=60&&x.ab<=90;}).sort(function(a,b){return b.f-a.f;}),function(x){return qi(x.g+" \u00b7 Fat "+M(x.f)+" \u00b7 ST "+x.ab+"%",x.g);},"ok");
+fill(el.alto,calc.filter(function(x){return x.ab<60&&x.ab>0;}).sort(function(a,b){return b.f-a.f;}),function(x){return qi(x.g+" \u00b7 Fat "+M(x.f)+" \u00b7 ST "+x.ab+"%",x.g);},"alto");
+fill(el.risco,calc.filter(function(x){return x.ab>90;}).sort(function(a,b){return b.ab-a.ab;}),function(x){return qi(x.g+" \u00b7 ST "+x.ab+"% \u26a0",x.g);},"risco");
+fill(el.sem,calc.filter(function(x){return x.s===0&&x.f>0;}).sort(function(a,b){return b.f-a.f;}),function(x){return qi(x.g+" \u00b7 Fat "+M(x.f),x.g);},"sem");}
+function openMatrixModal(key){
+  var rows=_matrixCache[key]||[];
+  if(!rows.length)return;
+  var _sm=document.querySelector(".st-modal");if(_sm)_sm.classList.add("wide");
+  $("st-modal-title").textContent="Matriz de performance \u2014 "+(_matrixLabel[key]||key)+" ("+rows.length+") \u2014 "+pL();
+  var rowsHtml=rows.map(function(x){
+    var nEsc=x.g.replace(/"/g,'&quot;');
+    return "<tr><td class='clk-name' style='max-width:0' onclick='_quickFilterCli(\""+nEsc+"\");closeSTModal();'>"+_ellCell(x.g)+"</td>"+
+      "<td style='color:var(--t3);font-size:11px;white-space:nowrap'>"+(x.rep||"\u2014")+"</td>"+
+      "<td style='text-align:right;font-family:DM Mono,monospace;white-space:nowrap'>"+M(x.f)+"</td>"+
+      "<td style='text-align:right;font-family:DM Mono,monospace;white-space:nowrap'>"+M(x.s)+"</td>"+
+      "<td style='text-align:right;font-family:DM Mono,monospace;font-weight:700;white-space:nowrap'>"+x.ab+"%</td></tr>";
+  }).join("");
+  $("st-modal-body").innerHTML="<table style='table-layout:fixed'><colgroup><col><col style='width:90px'><col style='width:100px'><col style='width:100px'><col style='width:90px'></colgroup>"+
+    "<thead><tr><th>Cliente</th><th style='"+_thNW+"'>Rep.</th><th style='text-align:right;"+_thNW+"'>Faturado</th><th style='text-align:right;"+_thNW+"'>Sell-out</th><th style='text-align:right;"+_thNW+"'>Sell-through</th></tr></thead><tbody>"+rowsHtml+"</tbody></table>";
+  $("st-modal-bg").classList.add("open");
+}
 
 // ── POR CLIENTE — constrói innerHTML direto, sem toggle de divs ──
 function rCliMain(fR,fC,fS,ms){
@@ -2733,8 +2877,9 @@ function rCliMain(fR,fC,fS,ms){
     }
     function _seriesC(fn){
       var data=m12.map(function(k){var p=k.split('-');return fn(parseInt(p[0]),parseInt(p[1]));});
-      var mom=m12.map(function(k,i){var pk=_shiftKeyC(k,-1).split('-');var prev=fn(parseInt(pk[0]),parseInt(pk[1]));return prev?Math.round((data[i]-prev)/prev*100):null;});
-      var yoy=m12.map(function(k,i){var yk=_shiftKeyC(k,-12).split('-');var py=fn(parseInt(yk[0]),parseInt(yk[1]));return py?Math.round((data[i]-py)/py*100):null;});
+      // Guard contra base negativa (02/10/26, rodada 15) - ver comentário completo em _seriesG (rEvolBoards).
+      var mom=m12.map(function(k,i){var pk=_shiftKeyC(k,-1).split('-');var prev=fn(parseInt(pk[0]),parseInt(pk[1]));return prev>0?Math.round((data[i]-prev)/prev*100):null;});
+      var yoy=m12.map(function(k,i){var yk=_shiftKeyC(k,-12).split('-');var py=fn(parseInt(yk[0]),parseInt(yk[1]));return py>0?Math.round((data[i]-py)/py*100):null;});
       return {data:data,mom:mom,yoy:yoy};
     }
     function _tipC(fmt){
@@ -3145,13 +3290,14 @@ function rProdMain(fR,fC,fS,ms){
     }
     function _series(fn){
       var data=m12.map(function(k){var p=k.split('-');return fn(parseInt(p[0]),parseInt(p[1]));});
+      // Guard contra base negativa (02/10/26, rodada 15) - ver comentário completo em _seriesG (rEvolBoards).
       var mom=m12.map(function(k,i){
         var pk=_shiftKey(k,-1).split('-');var prev=fn(parseInt(pk[0]),parseInt(pk[1]));
-        return prev?Math.round((data[i]-prev)/prev*100):null;
+        return prev>0?Math.round((data[i]-prev)/prev*100):null;
       });
       var yoy=m12.map(function(k,i){
         var yk=_shiftKey(k,-12).split('-');var py=fn(parseInt(yk[0]),parseInt(yk[1]));
-        return py?Math.round((data[i]-py)/py*100):null;
+        return py>0?Math.round((data[i]-py)/py*100):null;
       });
       return {data:data,mom:mom,yoy:yoy};
     }
@@ -3480,8 +3626,9 @@ function rRepMain(fR,fC,fS,ms){
     }
     function _seriesR(fn){
       var data=m12.map(function(k){var p=k.split('-');return fn(parseInt(p[0]),parseInt(p[1]));});
-      var mom=m12.map(function(k,i){var pk=_shiftKeyR(k,-1).split('-');var prev=fn(parseInt(pk[0]),parseInt(pk[1]));return prev?Math.round((data[i]-prev)/prev*100):null;});
-      var yoy=m12.map(function(k,i){var yk=_shiftKeyR(k,-12).split('-');var py=fn(parseInt(yk[0]),parseInt(yk[1]));return py?Math.round((data[i]-py)/py*100):null;});
+      // Guard contra base negativa (02/10/26, rodada 15) - ver comentário completo em _seriesG (rEvolBoards).
+      var mom=m12.map(function(k,i){var pk=_shiftKeyR(k,-1).split('-');var prev=fn(parseInt(pk[0]),parseInt(pk[1]));return prev>0?Math.round((data[i]-prev)/prev*100):null;});
+      var yoy=m12.map(function(k,i){var yk=_shiftKeyR(k,-12).split('-');var py=fn(parseInt(yk[0]),parseInt(yk[1]));return py>0?Math.round((data[i]-py)/py*100):null;});
       return {data:data,mom:mom,yoy:yoy};
     }
     var fdD=_seriesR(function(a,m){return qFP(FAT,fR,fC,fS,a,[m]);});
